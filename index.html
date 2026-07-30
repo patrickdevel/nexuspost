@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>NexusPost</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231877f2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='12 2 2 7 12 12 22 7 12 2'></polygon><polyline points='2 17 12 22 22 17'></polyline><polyline points='2 12 12 17 22 12'></polyline></svg>">
+    <title>cliq.</title>
+    <link rel="icon" href="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -791,7 +791,7 @@
 <nav id="navbar" class="hidden">
     <div class="logo" id="nav-logo">
         <div class="logo-icon"><i data-lucide="layers" style="width:18px;"></i></div>
-        NexusPost
+        cliq.
     </div>
     <div class="search-wrapper" id="search-wrapper">
         <div class="search-container" onclick="expandSearch()">
@@ -823,7 +823,7 @@
 <div id="login-screen">
     <div class="login-card">
         <div class="login-logo-container"><i data-lucide="layers" style="width:48px;height:48px;color:white;"></i></div>
-        <div class="login-title">NexusPost</div>
+        <div class="login-title">cliq.</div>
         <div class="login-subtitle">Verbinde dich mit der Welt.
             Teile deine Momente.</div>
         <button id="btn-login">
@@ -960,7 +960,7 @@
     </div>
     <div class="settings-section-title">Info</div>
     <div class="settings-card">
-        <div class="settings-row" onclick="showToast('NexusPost v155.0 – Danke fürs Nutzen!
+        <div class="settings-row" onclick="showToast('cliq. v155.0 – Danke fürs Nutzen!
             💙')">
             <div class="settings-row-icon" style="background:#1877f2;"><i data-lucide="info" style="width:16px;color:white;"></i></div>
             <span class="settings-row-label">Version</span>
@@ -1023,7 +1023,7 @@
     <div id="ai-overlay-container" onclick="event.stopPropagation()">
         <div style="padding:14px 16px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--header-bg);backdrop-filter:blur(10px);">
             <div style="display:flex;align-items:center;gap:9px;font-weight:700;font-family:'Syne',sans-serif;font-size:16px;">
-                <i data-lucide="bot" style="color:var(--nexus);animation:pulse 2s infinite;"></i> Nexus KI Assistent
+                <i data-lucide="bot" style="color:var(--nexus);animation:pulse 2s infinite;"></i> cliq. KI Assistent
             </div>
             <button onclick="toggleAiAssistant()" class="nav-btn"><i data-lucide="x"></i></button>
         </div>
@@ -1144,7 +1144,7 @@
     const provider = new GoogleAuthProvider();
     const imgbbKey = "1cb3871dd6829d7133f3285c289ffc0a";
     const adminEmail = "boxenjob5@gmail.com";
-    const verifiedIcon = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Roblox_Verification_Badge.svg/3840px-Roblox_Verification_Badge.svg.png";
+    const verifiedIcon = "https://lh3.googleusercontent.com/d/1OqVoJrTHfr_EXG520w5ES9ugrgQPzHNa";
     const REACTIONS = ['👍','❤️','😂','😮','😢','😡','🔥','👏','🙌','🎉','💯','✨','😍','🥰','😎','🤔','🤮','💔','🤫','🙄','🤤','🥴','🥳','🤯','🤗','💩','💀','👽','👀','🧠'];
     const MAX_CHARS = 500;
     let userData = null;
@@ -1863,7 +1863,7 @@
         const viewsCount = p.views || 0;
         return `
             ${p.isPinned ?
-            `<div class="pinned-label"><i data-lucide="pin" style="width:13px;"></i> Von NEXUS fixiert</div>` : ''}
+            `<div class="pinned-label"><i data-lucide="pin" style="width:13px;"></i> Von cliq. fixiert</div>` : ''}
             ${repostLabelHTML}
             <div class="post-header">
                 <img src="${u.photoURL||''}" class="user-img" onclick="openProfileModal('${uid}')">
@@ -2102,7 +2102,7 @@
     };
     window.sharePost = async (id) => {
         const url = location.href.split('#')[0]+'#post-'+id;
-        if (navigator.share) navigator.share({ title: 'NexusPost', url });
+        if (navigator.share) navigator.share({ title: 'cliq.', url });
         else { navigator.clipboard?.writeText(url); showToast('Link kopiert 🔗'); }
     };
     // ── COMMENTS ──
