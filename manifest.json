@@ -1,0 +1,21 @@
+{
+  "name": "cliq.",
+  "short_name": "cliq.",
+  "description": "Verbinde dich mit der Welt. Teile deine Momente.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f0f2f5",
+  "theme_color": "#1877f2",
+  "icons": [
+    {
+      "src": "https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
