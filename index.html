@@ -7,7 +7,12 @@
     <link rel="icon" href="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW">
     <link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+   <script>
+  if (window.location.hostname === 'nexuspost.vercel.app') {
+    window.location.replace('https://cliqposts.vercel.app' + window.location.pathname + window.location.search + window.location.hash);
+  }
+</script>
+ <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         :root {
             --nexus: #1877f2;
