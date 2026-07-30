@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -50,13 +51,9 @@
         /* ── FEATURE 2: BILDER-DOWNLOAD / POPUP BLOCKIEREN ── */
         img {
             -webkit-touch-callout: none;
-            /* Deaktiviert das Halten-Menü unter iOS */
             -webkit-user-select: none;
-            /* Safari */
             user-select: none;
-            /* Deaktiviert die Markierbarkeit */
             -webkit-user-drag: none;
-            /* Verhindert das Ziehen (Drag & Drop) */
         }
 
         /* ── LOGIN ── */
@@ -74,12 +71,9 @@
         }
         
         @keyframes logoPulse {
-            0% { transform: scale(1) translateY(0);
-            }
-            50% { transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
-            100% { transform: scale(1) translateY(0);
-            }
+            0% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.05) translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
+            100% { transform: scale(1) translateY(0); }
         }
         .login-logo-container {
             background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
@@ -88,6 +82,11 @@
             border: 2px solid rgba(255,255,255,0.5);
             box-shadow: 0 8px 32px rgba(0,0,0,0.15);
             animation: logoPulse 4s infinite ease-in-out;
+        }
+        .login-logo-container img {
+            width: 48px;
+            height: 48px;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
         }
         .login-title { color: white; font-family: 'Syne', sans-serif;
             font-size: 32px; font-weight: 800;
@@ -102,8 +101,7 @@
             font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s;
             border: none; cursor: pointer; font-size: 16px; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 12px;
         }
-        #btn-login:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        }
+        #btn-login:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
 
         /* ── NAV ── */
         nav {
@@ -121,27 +119,24 @@
         .logo-icon { background: var(--nexus); color: white; width: 28px; height: 28px; border-radius: 8px;
             display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease;
         }
-        .logo:hover .logo-icon { transform: rotate(-10deg) scale(1.1);
+        .logo-icon img {
+            width: 18px;
+            height: 18px;
         }
+        .logo:hover .logo-icon { transform: rotate(-10deg) scale(1.1); }
         .nav-btn { background: none; border: none;
             color: var(--text); cursor: pointer; padding: 6px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.2s; position: relative;
         }
-        .nav-btn i { transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .nav-btn:hover i { transform: scale(1.15);
-        }
-        .nav-btn:hover { background: var(--ios-input);
-        }
+        .nav-btn i { transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .nav-btn:hover i { transform: scale(1.15); }
+        .nav-btn:hover { background: var(--ios-input); }
 
         /* ── NOTIF BADGE ── */
         @keyframes badgePop {
-            0% { transform: scale(0);
-            }
-            50% { transform: scale(1.4);
-            }
-            100% { transform: scale(1);
-            }
+            0% { transform: scale(0); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
         }
         .notif-badge {
             position: absolute;
@@ -154,23 +149,18 @@
         }
 
         /* ── SEARCH ── */
-        .search-wrapper { display: flex;
-            align-items: center; }
-        .search-wrapper.active { flex-grow: 1;
-        }
+        .search-wrapper { display: flex; align-items: center; }
+        .search-wrapper.active { flex-grow: 1; }
         .search-container { display: flex; align-items: center; background: var(--ios-input); border-radius: 10px;
             padding: 0 10px; height: 34px; width: 36px; cursor: pointer; overflow: hidden; transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        .search-wrapper.active .search-container { width: 100%;
-        }
+        .search-wrapper.active .search-container { width: 100%; }
         .search-input { border: none; background: none; color: var(--text); font-size: 15px; width: 0;
             outline: none; font-family: inherit; }
-        .search-wrapper.active .search-input { width: 100%; padding-left: 8px;
-        }
+        .search-wrapper.active .search-input { width: 100%; padding-left: 8px; }
 
         /* ── CONTAINER ── */
-        .container { max-width: 600px;
-            margin: 0 auto; padding: 0 12px; }
+        .container { max-width: 600px; margin: 0 auto; padding: 0 12px; }
 
         /* ── TABS ── */
         .feed-tabs { display: flex;
@@ -185,35 +175,27 @@
             transition: width 0.3s ease, left 0.3s ease;
             border-radius: 3px 3px 0 0;
         }
-        .feed-tab.active { color: var(--nexus); background: var(--nexus-soft);
-        }
-        .feed-tab.active::after { width: 100%; left: 0;
-        }
+        .feed-tab.active { color: var(--nexus); background: var(--nexus-soft); }
+        .feed-tab.active::after { width: 100%; left: 0; }
 
         /* ── STORIES ── */
         #stories-bar { overflow-x: auto;
             display: flex; gap: 12px; padding: 14px 12px 8px; max-width: 600px; margin: 0 auto; scrollbar-width: none;
         }
-        #stories-bar::-webkit-scrollbar { display: none;
-        }
+        #stories-bar::-webkit-scrollbar { display: none; }
         .story-item { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer;
             flex-shrink: 0; transition: transform 0.2s; }
-        .story-item:hover { transform: translateY(-2px);
-        }
+        .story-item:hover { transform: translateY(-2px); }
         .story-ring { width: 58px; height: 58px; border-radius: 50%; padding: 2.5px;
             background: conic-gradient(var(--nexus), #a78bfa, #f43f5e, var(--nexus)); transition: transform 0.3s ease; }
-        .story-ring.unseen { background: conic-gradient(var(--nexus), #a78bfa, var(--nexus));
-        }
-        .story-ring.seen { background: var(--border);
-        }
-        .story-item:hover .story-ring { transform: scale(1.05);
-        }
+        .story-ring.unseen { background: conic-gradient(var(--nexus), #a78bfa, var(--nexus)); }
+        .story-ring.seen { background: var(--border); }
+        .story-item:hover .story-ring { transform: scale(1.05); }
         .story-ring-inner { width: 100%; height: 100%; border-radius: 50%; background: var(--card); padding: 2px;
             overflow: hidden; }
         .story-ring-inner img { width: 100%; height: 100%; border-radius: 50%;
             object-fit: cover; transition: transform 0.3s ease; }
-        .story-item:hover .story-ring-inner img { transform: scale(1.1);
-        }
+        .story-item:hover .story-ring-inner img { transform: scale(1.1); }
         .story-label { font-size: 11px; color: var(--sub); max-width: 60px; text-align: center;
             white-space: nowrap;
             overflow: hidden; text-overflow: ellipsis; }
@@ -223,20 +205,16 @@
             border-radius: var(--radius); padding: 16px; margin-bottom: 10px; border: 0.5px solid var(--border); box-shadow: var(--shadow); position: relative;
             transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
         }
-        .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-        }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
 
         /* ── ALERTS ── */
         .alert-banner { display: flex;
             align-items: flex-start; gap: 12px; padding: 13px 14px; border-radius: 13px; margin-bottom: 10px; border: 1.5px solid;
             animation: postSlideIn 0.4s ease;
         }
-        .alert-warning { border-color: var(--warning); background: rgba(255,149,0,0.09); color: var(--warning);
-        }
-        .alert-info { border-color: #8e8e93; background: rgba(142,142,147,0.09); color: #8e8e93;
-        }
-        .alert-success { border-color: var(--green); background: rgba(52,199,89,0.09); color: var(--green);
-        }
+        .alert-warning { border-color: var(--warning); background: rgba(255,149,0,0.09); color: var(--warning); }
+        .alert-info { border-color: #8e8e93; background: rgba(142,142,147,0.09); color: #8e8e93; }
+        .alert-success { border-color: var(--green); background: rgba(52,199,89,0.09); color: var(--green); }
 
         /* ── POST CARD ── */
         .pinned-label { display: flex;
@@ -248,28 +226,19 @@
             margin-bottom: 12px; position: relative; }
         .user-img { width: 42px; height: 42px; border-radius: 50%;
             object-fit: cover; cursor: pointer; transition: opacity 0.15s, transform 0.2s; }
-        .user-img:hover { opacity: 0.85;
-            transform: scale(1.05); }
+        .user-img:hover { opacity: 0.85; transform: scale(1.05); }
         .display-name { font-weight: 600; font-size: 15px; display: flex; align-items: center;
             gap: 4px;
             cursor: pointer; }
-        .display-name:hover { text-decoration: underline;
-        }
-        .verified-badge { width: 16px; height: 16px; flex-shrink: 0;
-        }
-        .post-text { font-size: 15.5px; white-space: pre-wrap; line-height: 1.55;
-        }
-        .hashtag { color: var(--nexus); cursor: pointer; font-weight: 500; transition: color 0.2s;
-        }
-        .hashtag:hover { text-decoration: underline; color: var(--text);
-        }
-        .mention { color: var(--nexus); cursor: pointer; font-weight: 500;
-        }
+        .display-name:hover { text-decoration: underline; }
+        .verified-badge { width: 16px; height: 16px; flex-shrink: 0; }
+        .post-text { font-size: 15.5px; white-space: pre-wrap; line-height: 1.55; }
+        .hashtag { color: var(--nexus); cursor: pointer; font-weight: 500; transition: color 0.2s; }
+        .hashtag:hover { text-decoration: underline; color: var(--text); }
+        .mention { color: var(--nexus); cursor: pointer; font-weight: 500; }
 
         /* ── VIEWS COUNTER ── */
-        .post-views { font-size: 12px;
-            color: var(--sub); display: flex; align-items: center; gap: 4px; margin-top: 8px;
-        }
+        .post-views { font-size: 12px; color: var(--sub); display: flex; align-items: center; gap: 4px; margin-top: 8px; }
 
         /* ── POST IMAGE ── */
         .post-img-wrap { width: calc(100% + 32px);
@@ -277,10 +246,8 @@
         }
         .post-img { width: 100%; display: block; cursor: zoom-in; max-height: 500px; object-fit: cover;
             transition: transform 0.3s ease; }
-        .post-img:hover { transform: scale(1.02);
-        }
-        .post-video { width: 100%; display: block; max-height: 500px; object-fit: cover; background: #000;
-        }
+        .post-img:hover { transform: scale(1.02); }
+        .post-video { width: 100%; display: block; max-height: 500px; object-fit: cover; background: #000; }
 
         /* ── REACTION BAR ── */
         .reaction-bar { display: flex;
@@ -290,39 +257,26 @@
             align-items: center; gap: 5px; font-size: 13.5px; font-weight: 500; padding: 6px 10px; border-radius: 20px; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
             font-family: inherit;
             position: relative; }
-        .react-btn:hover { background: var(--ios-input); transform: translateY(-1px);
-        }
-        .react-btn:active { transform: scale(0.95);
-        }
-        .react-btn.active { color: var(--nexus); background: var(--nexus-soft);
-        }
-        .react-btn.liked { color: #ff3b30; background: rgba(255,59,48,0.1);
-        }
-        .react-btn.bookmarked { color: var(--nexus); background: var(--nexus-soft);
-        }
+        .react-btn:hover { background: var(--ios-input); transform: translateY(-1px); }
+        .react-btn:active { transform: scale(0.95); }
+        .react-btn.active { color: var(--nexus); background: var(--nexus-soft); }
+        .react-btn.liked { color: #ff3b30; background: rgba(255,59,48,0.1); }
+        .react-btn.bookmarked { color: var(--nexus); background: var(--nexus-soft); }
         
         @keyframes heartBounce {
-            0% { transform: scale(1);
-            }
-            30% { transform: scale(1.4);
-            }
-            50% { transform: scale(0.9);
-            }
-            70% { transform: scale(1.15);
-            }
-            100% { transform: scale(1);
-            }
+            0% { transform: scale(1); }
+            30% { transform: scale(1.4); }
+            50% { transform: scale(0.9); }
+            70% { transform: scale(1.15); }
+            100% { transform: scale(1); }
         }
-        .react-btn.liked i { animation: heartBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        .react-btn.liked i { animation: heartBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-        .emoji-reaction-bar { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap;
-        }
+        .emoji-reaction-bar { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
         .emoji-count { font-size: 13px; display: flex; align-items: center; gap: 3px; background: var(--ios-input);
             padding: 3px 8px; border-radius: 20px; cursor: pointer; user-select: none; transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        .emoji-count:hover { transform: scale(1.15) rotate(5deg);
-        }
+        .emoji-count:hover { transform: scale(1.15) rotate(5deg); }
 
         /* ── ADMIN MENU ── */
         .admin-menu { position: absolute;
@@ -330,10 +284,8 @@
             min-width: 200px; overflow: hidden; transform-origin: top right; animation: scaleIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         @keyframes scaleIn {
-            from { opacity: 0;
-            transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
         .admin-menu button { width: 100%;
             padding: 13px 16px; text-align: left;
@@ -341,49 +293,34 @@
             cursor: pointer; border-bottom: 0.5px solid var(--border);
             font-family: inherit; transition: background 0.15s, padding-left 0.2s;
         }
-        .admin-menu button:last-child { border-bottom: none;
-        }
-        .admin-menu button:hover { background: var(--ios-input); padding-left: 20px;
-        }
+        .admin-menu button:last-child { border-bottom: none; }
+        .admin-menu button:hover { background: var(--ios-input); padding-left: 20px; }
 
         /* ── EDIT POST INLINE ── */
         .edit-post-area { width: 100%;
             padding: 10px 12px; border: 1.5px solid var(--nexus); border-radius: var(--radius-sm); background: var(--ios-input); color: var(--text); font-size: 15px; font-family: inherit; outline: none;
             resize: none; min-height: 80px; margin: 8px 0; transition: box-shadow 0.3s;
         }
-        .edit-post-area:focus { box-shadow: 0 0 0 3px var(--nexus-soft);
-        }
+        .edit-post-area:focus { box-shadow: 0 0 0 3px var(--nexus-soft); }
 
         /* ── COMMENTS ── */
         .comment-card { background: var(--ios-input);
             border-radius: 12px; padding: 10px 12px; margin-bottom: 7px; position: relative; animation: postSlideIn 0.3s ease;
         }
-        .comment-header { display: flex;
-            align-items: center; gap: 8px; margin-bottom: 5px;
-        }
-        .comment-user-img { width: 24px; height: 24px;
-            border-radius: 50%; object-fit: cover;
-        }
-        .comment-display-name { font-weight: 600; font-size: 13px; display: flex;
-            align-items: center; gap: 3px;
-        }
-        .comment-text { font-size: 14px; line-height: 1.45; padding-left: 32px;
-            white-space: pre-wrap;
-        }
-        .comment-time { font-size: 11px; color: var(--sub); margin-left: auto;
-        }
+        .comment-header { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+        .comment-user-img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+        .comment-display-name { font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 3px; }
+        .comment-text { font-size: 14px; line-height: 1.45; padding-left: 32px; white-space: pre-wrap; }
+        .comment-time { font-size: 11px; color: var(--sub); margin-left: auto; }
         .comment-input-area { display: flex; gap: 8px; margin-top: 12px; background: var(--ios-input); border-radius: 22px;
             padding: 8px 12px; align-items: center; transition: box-shadow 0.3s, transform 0.2s;
         }
-        .comment-input-area:focus-within { transform: scale(1.01); box-shadow: 0 4px 15px rgba(24, 119, 242, 0.1);
-        }
-        .comment-delete-btn { position: absolute; top: 8px;
-            right: 8px; background: none; border: none;
+        .comment-input-area:focus-within { transform: scale(1.01); box-shadow: 0 4px 15px rgba(24, 119, 242, 0.1); }
+        .comment-delete-btn { position: absolute; top: 8px; right: 8px; background: none; border: none;
             color: var(--sub); cursor: pointer; padding: 2px; border-radius: 50%;
             transition: color 0.2s, transform 0.2s;
         }
-        .comment-delete-btn:hover { color: var(--danger); transform: scale(1.2);
-        }
+        .comment-delete-btn:hover { color: var(--danger); transform: scale(1.2); }
 
         /* ── INPUT BAR ── */
         .ios-footer { position: fixed;
@@ -398,21 +335,16 @@
             padding: 9px 16px; color: var(--text); font-size: 15.5px; outline: none; min-height: 22px; max-height: 140px; overflow-y: auto;
             font-family: inherit; line-height: 1.4;
             transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s; }
-        .ios-input-container:focus { transform: scale(1.01);
-            box-shadow: 0 4px 15px rgba(24, 119, 242, 0.1); }
-        .ios-input-container:empty:before { content: attr(placeholder);
-            color: var(--sub); }
+        .ios-input-container:focus { transform: scale(1.01); box-shadow: 0 4px 15px rgba(24, 119, 242, 0.1); }
+        .ios-input-container:empty:before { content: attr(placeholder); color: var(--sub); }
         .send-btn { background: var(--nexus); color: white; border: none; width: 34px;
             height: 34px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
             transition: transform 0.15s, opacity 0.15s, box-shadow 0.2s;
         }
-        .send-btn:hover { transform: scale(1.05);
-            box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3); }
-        .send-btn:active { transform: scale(0.92) translateY(-2px);
-        }
-        .media-btn-group { display: flex; align-items: center; gap: 4px;
-        }
+        .send-btn:hover { transform: scale(1.05); box-shadow: 0 4px 10px rgba(24, 119, 242, 0.3); }
+        .send-btn:active { transform: scale(0.92) translateY(-2px); }
+        .media-btn-group { display: flex; align-items: center; gap: 4px; }
 
         /* ── LIGHTBOX ── */
         .lightbox { position: fixed;
@@ -425,8 +357,7 @@
             color: white; border: none; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
             transition: transform 0.2s, background 0.2s;
         }
-        .close-lightbox-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.1);
-        }
+        .close-lightbox-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.1); }
 
         /* ── PROFILE MODAL ── */
         #profile-modal { position: fixed;
@@ -438,77 +369,49 @@
             padding: 24px 20px calc(24px + env(safe-area-inset-bottom)); border-top: 0.5px solid var(--border);
             max-height: 85vh; overflow-y: auto; animation: slideUp 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0);
-        } }
-        .profile-modal-header { display: flex; align-items: center;
-            gap: 16px; margin-bottom: 20px;
-        }
-        .profile-modal-avatar { width: 72px; height: 72px; border-radius: 50%;
-            object-fit: cover;
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .profile-modal-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+        .profile-modal-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover;
             border: 3px solid var(--nexus); transition: transform 0.3s ease; }
-        .profile-modal-avatar:hover { transform: scale(1.05) rotate(-5deg);
-        }
-        .profile-modal-name { font-family: 'Syne', sans-serif;
-            font-size: 20px; font-weight: 800; display: flex;
-            align-items: center; gap: 5px;
-        }
-        .profile-modal-username { font-size: 14px; color: var(--sub); margin-top: 2px;
-        }
-        .profile-modal-bio { font-size: 14px; line-height: 1.55; color: var(--text); margin-top: 8px;
-        }
-        .profile-modal-posts { margin-top: 16px;
-        }
-        .profile-modal-posts-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--sub);
-            margin-bottom: 12px; }
-        .profile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px;
-            border-radius: 12px; overflow: hidden; }
-        .profile-grid-item { aspect-ratio: 1; overflow: hidden; cursor: pointer;
-            background: var(--ios-input); position: relative; }
-        .profile-grid-item img { width: 100%; height: 100%;
-            object-fit: cover; transition: transform 0.4s ease; }
-        .profile-grid-item:hover img { transform: scale(1.1);
-        }
+        .profile-modal-avatar:hover { transform: scale(1.05) rotate(-5deg); }
+        .profile-modal-name { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 5px; }
+        .profile-modal-username { font-size: 14px; color: var(--sub); margin-top: 2px; }
+        .profile-modal-bio { font-size: 14px; line-height: 1.55; color: var(--text); margin-top: 8px; }
+        .profile-modal-posts { margin-top: 16px; }
+        .profile-modal-posts-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--sub); margin-bottom: 12px; }
+        .profile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; border-radius: 12px; overflow: hidden; }
+        .profile-grid-item { aspect-ratio: 1; overflow: hidden; cursor: pointer; background: var(--ios-input); position: relative; }
+        .profile-grid-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+        .profile-grid-item:hover img { transform: scale(1.1); }
 
         /* ── NOTIFICATIONS PANEL ── */
         #notif-panel { position: fixed;
             top: 54px; right: 0; width: min(360px, 100vw); height: calc(100vh - 54px); background: var(--card); border-left: 0.5px solid var(--border); z-index: 1500;
             transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); overflow-y: auto; box-shadow: -8px 0 30px rgba(0,0,0,0.15);
         }
-        #notif-panel.open { transform: translateX(0);
-        }
+        #notif-panel.open { transform: translateX(0); }
         .notif-panel-header { padding: 16px 16px 12px; border-bottom: 0.5px solid var(--border); display: flex;
             justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--card); z-index: 10;
         }
-        .notif-panel-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800;
-        }
+        .notif-panel-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; }
         .notif-item { padding: 12px 16px; display: flex; align-items: flex-start; gap: 12px;
             border-bottom: 0.5px solid var(--border); cursor: pointer; transition: background 0.15s, transform 0.2s;
         }
-        .notif-item:hover { background: var(--ios-input); transform: translateX(-5px);
-        }
-        .notif-item.unread { background: var(--nexus-soft);
-        }
-        .notif-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
-        }
+        .notif-item:hover { background: var(--ios-input); transform: translateX(-5px); }
+        .notif-item.unread { background: var(--nexus-soft); }
+        .notif-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
         .notif-icon-badge { position: absolute; bottom: -2px; right: -2px; width: 18px; height: 18px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--card); font-size: 9px;
         }
-        .notif-text { font-size: 14px; line-height: 1.4;
-        }
-        .notif-text strong { font-weight: 600;
-        }
-        .notif-time { font-size: 12px; color: var(--sub); margin-top: 3px;
-        }
-        .notif-empty { padding: 40px 20px; text-align: center; color: var(--sub); font-size: 15px;
-        }
+        .notif-text { font-size: 14px; line-height: 1.4; }
+        .notif-text strong { font-weight: 600; }
+        .notif-time { font-size: 12px; color: var(--sub); margin-top: 3px; }
+        .notif-empty { padding: 40px 20px; text-align: center; color: var(--sub); font-size: 15px; }
 
         /* ── BOOKMARKS SCREEN ── */
-        #bookmarks-screen { display: none;
-            padding-top: 16px; animation: fadeIn 0.3s ease; }
-        .bookmarks-header { display: flex; align-items: center;
-            gap: 14px; padding: 0 0 20px; }
-        .bookmarks-header h2 { font-family: 'Syne', sans-serif;
-            font-size: 24px; font-weight: 800; margin: 0; }
+        #bookmarks-screen { display: none; padding-top: 16px; animation: fadeIn 0.3s ease; }
+        .bookmarks-header { display: flex; align-items: center; gap: 14px; padding: 0 0 20px; }
+        .bookmarks-header h2 { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin: 0; }
 
         /* ── TRENDING ── */
         .trending-card { background: var(--card);
@@ -520,30 +423,21 @@
         .trending-item { display: flex; align-items: center;
             gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--border); cursor: pointer; transition: background 0.15s, transform 0.2s ease;
         }
-        .trending-item:last-child { border-bottom: none;
-        }
-        .trending-item:hover { background: var(--ios-input); transform: translateX(6px); border-radius: 8px; padding-left: 8px;
-        }
-        .trending-item:hover .trending-tag { text-decoration: underline;
-        }
-        .trending-tag { font-weight: 700; font-size: 15px; color: var(--nexus);
-        }
-        .trending-count { font-size: 12px; color: var(--sub); margin-top: 1px;
-        }
+        .trending-item:last-child { border-bottom: none; }
+        .trending-item:hover { background: var(--ios-input); transform: translateX(6px); border-radius: 8px; padding-left: 8px; }
+        .trending-item:hover .trending-tag { text-decoration: underline; }
+        .trending-tag { font-weight: 700; font-size: 15px; color: var(--nexus); }
+        .trending-count { font-size: 12px; color: var(--sub); margin-top: 1px; }
 
         /* ── SETTINGS SCREEN ── */
-        #settings-screen { padding-top: 16px;
-            animation: fadeIn 0.3s ease; }
-        .settings-header { display: flex; align-items: center; gap: 14px;
-            padding: 0 0 20px; }
-        .settings-header h2 { font-family: 'Syne', sans-serif; font-size: 24px;
-            font-weight: 800; margin: 0; }
+        #settings-screen { padding-top: 16px; animation: fadeIn 0.3s ease; }
+        .settings-header { display: flex; align-items: center; gap: 14px; padding: 0 0 20px; }
+        .settings-header h2 { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin: 0; }
         .settings-back-btn { background: var(--ios-input); border: none; color: var(--text);
             width: 34px; height: 34px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s;
         }
-        .settings-back-btn:hover { transform: scale(1.1);
-        }
+        .settings-back-btn:hover { transform: scale(1.1); }
         .settings-section-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--sub);
             margin: 20px 0 8px 4px; }
         .settings-card { background: var(--card); border-radius: var(--radius);
@@ -551,73 +445,54 @@
         .settings-row { display: flex;
             align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 0.5px solid var(--border); cursor: pointer; transition: background 0.15s;
         }
-        .settings-row:last-child { border-bottom: none;
-        }
-        .settings-row:hover { background: var(--ios-input);
-        }
+        .settings-row:last-child { border-bottom: none; }
+        .settings-row:hover { background: var(--ios-input); }
         .settings-row-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center;
             justify-content: center; flex-shrink: 0; transition: transform 0.2s; }
-        .settings-row:hover .settings-row-icon { transform: scale(1.1);
-        }
-        .settings-row-label { flex-grow: 1; font-size: 15px; font-weight: 500;
-        }
-        .settings-row-value { font-size: 14px; color: var(--sub);
-        }
-        .settings-row-chevron { color: var(--sub); transition: transform 0.2s;
-        }
-        .settings-row:hover .settings-row-chevron { transform: translateX(3px);
-        }
+        .settings-row:hover .settings-row-icon { transform: scale(1.1); }
+        .settings-row-label { flex-grow: 1; font-size: 15px; font-weight: 500; }
+        .settings-row-value { font-size: 14px; color: var(--sub); }
+        .settings-row-chevron { color: var(--sub); transition: transform 0.2s; }
+        .settings-row:hover .settings-row-chevron { transform: translateX(3px); }
         .settings-toggle { width: 46px; height: 26px; border-radius: 13px; background: #ccc; position: relative;
             cursor: pointer; transition: background 0.25s; border: none; flex-shrink: 0; }
-        .settings-toggle.on { background: var(--green);
-        }
+        .settings-toggle.on { background: var(--green); }
         .settings-toggle::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px;
             height: 20px; border-radius: 50%; background: white; transition: left 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        .settings-toggle.on::after { left: 23px;
-        }
-        .theme-picker { display: flex; gap: 10px; padding: 14px 16px;
-        }
+        .settings-toggle.on::after { left: 23px; }
+        .theme-picker { display: flex; gap: 10px; padding: 14px 16px; }
         .theme-dot { width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
             border: 3px solid transparent; transition: border-color 0.2s, transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        .theme-dot:hover { transform: scale(1.15);
-        }
-        .theme-dot.selected { border-color: var(--text); transform: scale(1.1);
-        }
+        .theme-dot:hover { transform: scale(1.15); }
+        .theme-dot.selected { border-color: var(--text); transform: scale(1.1); }
         .profile-preview { display: flex; flex-direction: column; align-items: center; gap: 10px;
             padding: 24px 16px 20px; }
         .profile-preview-img { width: 80px; height: 80px; border-radius: 50%;
             object-fit: cover; border: 3px solid var(--nexus); transition: transform 0.3s; }
-        .profile-preview-img:hover { transform: scale(1.05);
-        }
+        .profile-preview-img:hover { transform: scale(1.05); }
         .profile-preview-name { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-top: 6px;
             display: flex; align-items: center; justify-content: center; gap: 4px; }
-        .profile-preview-username { font-size: 13px;
-            color: var(--sub); }
+        .profile-preview-username { font-size: 13px; color: var(--sub); }
 
         /* ── MODAL ── */
         @keyframes modalScale {
-            from { opacity: 0;
-            transform: scale(0.85); }
-            to { opacity: 1; transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
         }
         .modal-inner { background: var(--card);
             border-radius: 20px; padding: 22px; width: 92%; max-width: 420px; border: 0.5px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.25);
             animation: modalScale 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .modal-title { font-family: 'Syne', sans-serif;
-            font-size: 18px; font-weight: 800; margin: 0 0 16px; }
+        .modal-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; margin: 0 0 16px; }
         .modal-input { width: 100%;
             padding: 12px 14px;
             border: none; border-radius: var(--radius-sm); background: var(--ios-input); color: var(--text); font-size: 15px; font-family: inherit; outline: none; margin-bottom: 10px;
             transition: box-shadow 0.3s;
         }
-        .modal-input:focus { box-shadow: 0 0 0 2px var(--nexus-soft);
-        }
-        select.modal-input { appearance: none; cursor: pointer;
-        }
+        .modal-input:focus { box-shadow: 0 0 0 2px var(--nexus-soft); }
+        select.modal-input { appearance: none; cursor: pointer; }
         
         .btn-primary { background: var(--nexus);
             color: white; border: none; padding: 13px; border-radius: var(--radius-sm);
@@ -631,22 +506,17 @@
             background: rgba(255,255,255,0.2); transform: translate(-50%, -50%) scale(0); border-radius: 50%;
             transition: transform 0.5s ease-out;
         }
-        .btn-primary:active::after { transform: translate(-50%, -50%) scale(1); transition: 0s;
-        }
-        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(24,119,242,0.2);
-        }
+        .btn-primary:active::after { transform: translate(-50%, -50%) scale(1); transition: 0s; }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(24,119,242,0.2); }
         .btn-ghost { background: none; border: none; color: var(--danger); font-size: 15px; font-weight: 600;
             cursor: pointer; width: 100%; padding: 12px; font-family: inherit; transition: transform 0.15s, background 0.15s; border-radius: var(--radius-sm);
         }
-        .btn-ghost:hover { background: rgba(255,59,48,0.1); transform: translateY(-1px);
-        }
+        .btn-ghost:hover { background: rgba(255,59,48,0.1); transform: translateY(-1px); }
 
         /* ── AI OVERLAY ── */
         @keyframes overlaySlideUp {
-            from { opacity: 0;
-            transform: translateY(40px) scale(0.95); }
-            to { opacity: 1;
-            transform: translateY(0) scale(1); }
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
         #ai-overlay-container { width: 96%;
             max-width: 820px; height: 88vh; background: var(--card); border-radius: 20px; position: relative; overflow: hidden; display: flex; flex-direction: column; border: 0.5px solid var(--border);
@@ -658,33 +528,22 @@
             border-radius: 0; width: 100%; max-width: 400px; height: 100%; display: flex; flex-direction: column; position: relative; overflow: hidden;
             animation: modalScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        #story-progress { position: absolute;
-            top: 10px; left: 10px; right: 10px; display: flex; gap: 4px; z-index: 10;
-        }
-        .story-prog-bar { height: 3px; background: rgba(255,255,255,0.4); border-radius: 2px; flex: 1; overflow: hidden;
-        }
-        .story-prog-fill { height: 100%; background: white; border-radius: 2px;
-        }
-        #story-img { width: 100%; height: 100%; object-fit: cover; animation: fadeIn 0.3s ease;
-        }
+        #story-progress { position: absolute; top: 10px; left: 10px; right: 10px; display: flex; gap: 4px; z-index: 10; }
+        .story-prog-bar { height: 3px; background: rgba(255,255,255,0.4); border-radius: 2px; flex: 1; overflow: hidden; }
+        .story-prog-fill { height: 100%; background: white; border-radius: 2px; }
+        #story-img { width: 100%; height: 100%; object-fit: cover; animation: fadeIn 0.3s ease; }
         #story-header-overlay { position: absolute; top: 22px; left: 10px; right: 10px; display: flex;
             align-items: center; gap: 10px; z-index: 10; pointer-events: none; }
-        .story-header-img { width: 36px;
-            height: 36px; border-radius: 50%; border: 2px solid white; object-fit: cover;
-        }
-        .story-header-name { color: white; font-weight: 600; font-size: 14px;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+        .story-header-img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid white; object-fit: cover; }
+        .story-header-name { color: white; font-weight: 600; font-size: 14px; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
         .story-header-time { color: rgba(255,255,255,0.8); font-size: 12px;
             font-weight: 500; text-shadow: 0 1px 4px rgba(0,0,0,0.5); margin-left: 4px; }
-        .story-action-btns { position: absolute;
-            top: 20px; right: 12px; display: flex; gap: 10px; z-index: 15;
-        }
+        .story-action-btns { position: absolute; top: 20px; right: 12px; display: flex; gap: 10px; z-index: 15; }
         .story-action-btn { background: rgba(0,0,0,0.4); border: none; color: white; width: 32px;
             height: 32px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s, background 0.2s;
         }
-        .story-action-btn:hover { background: rgba(0,0,0,0.7); transform: scale(1.1);
-        }
+        .story-action-btn:hover { background: rgba(0,0,0,0.7); transform: scale(1.1); }
         #story-time-left { position: absolute; bottom: calc(env(safe-area-inset-bottom, 20px) + 20px); left: 50%;
             transform: translateX(-50%); color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 600; text-shadow: 0 2px 6px rgba(0,0,0,0.8); z-index: 20; background: rgba(0,0,0,0.5); padding: 6px 14px;
             border-radius: 20px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); pointer-events: none;}
@@ -699,16 +558,13 @@
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             transform-origin: bottom center;
         }
-        .emoji-picker-popup::-webkit-scrollbar { display: none;
-        }
-        @keyframes fadeInEmoji { from { opacity: 0; transform: scale(0.85) translateY(10px);
-        } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .emoji-picker-popup::-webkit-scrollbar { display: none; }
+        @keyframes fadeInEmoji { from { opacity: 0; transform: scale(0.85) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         .emoji-btn-pick { font-size: 24px;
             cursor: pointer; padding: 6px; border-radius: 10px; border: none; background: transparent; transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.15s;
             display: flex; justify-content: center;
             align-items: center; }
-        .emoji-btn-pick:hover { transform: scale(1.3) rotate(5deg);
-            background: var(--ios-input); }
+        .emoji-btn-pick:hover { transform: scale(1.3) rotate(5deg); background: var(--ios-input); }
 
         /* ── ACTION BUTTON STYLE ── */
         .input-action-btn { background: none;
@@ -724,73 +580,53 @@
             z-index: 9999; opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; white-space: nowrap;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-        #toast.show { opacity: 1;
-            transform: translateX(-50%) translateY(0) scale(1); }
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 
-        .hidden { display: none !important;
-        }
-        .divider { height: 0.5px; background: var(--border); margin: 6px 0;
-        }
+        .hidden { display: none !important; }
+        .divider { height: 0.5px; background: var(--border); margin: 6px 0; }
 
         /* ── POLL ── */
-        .poll-container { margin-top: 10px;
-        }
+        .poll-container { margin-top: 10px; }
         .poll-option { position: relative; overflow: hidden; border-radius: 10px; margin-bottom: 8px;
             border: 1.5px solid var(--border); cursor: pointer; transition: border-color 0.3s, transform 0.2s;
         }
-        .poll-option:hover { border-color: var(--nexus); transform: translateX(4px);
-        }
-        .poll-option.voted-this { border-color: var(--nexus);
-        }
+        .poll-option:hover { border-color: var(--nexus); transform: translateX(4px); }
+        .poll-option.voted-this { border-color: var(--nexus); }
         .poll-fill { position: absolute; top: 0; left: 0; height: 100%; background: var(--nexus-soft);
             transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 0; }
-        .poll-label { position: relative;
-            z-index: 1;
+        .poll-label { position: relative; z-index: 1;
             padding: 10px 12px; font-size: 14px; font-weight: 500; display: flex; justify-content: space-between; align-items: center;
         }
-        .poll-pct { font-size: 13px; font-weight: 700; color: var(--nexus); animation: fadeIn 0.5s;
-        }
-        .poll-total { font-size: 12px; color: var(--sub); margin-top: 6px;
-        }
+        .poll-pct { font-size: 13px; font-weight: 700; color: var(--nexus); animation: fadeIn 0.5s; }
+        .poll-total { font-size: 12px; color: var(--sub); margin-top: 6px; }
 
         /* ── POLL CREATOR ── */
-        .poll-option-input { display: flex;
-            gap: 8px; margin-bottom: 8px; align-items: center; animation: postSlideIn 0.3s ease;
-        }
+        .poll-option-input { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; animation: postSlideIn 0.3s ease; }
         .poll-option-input input { flex: 1;
             padding: 10px 12px; border: 1px solid var(--border);
             border-radius: 10px; background: var(--ios-input); color: var(--text); font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.3s, box-shadow 0.3s;
         }
-        .poll-option-input input:focus { border-color: var(--nexus); box-shadow: 0 0 0 2px var(--nexus-soft);
-        }
+        .poll-option-input input:focus { border-color: var(--nexus); box-shadow: 0 0 0 2px var(--nexus-soft); }
 
         /* ── CHAR COUNTER ── */
-        .char-counter { font-size: 12px;
-            color: var(--sub); text-align: right; margin-top: 4px; transition: color 0.3s; }
-        .char-counter.warn { color: var(--warning);
-            animation: modalScale 0.3s ease; }
-        .char-counter.limit { color: var(--danger); animation: shake 0.4s ease;
-        }
-        @keyframes shake { 0%, 100% { transform: translateX(0);
-        } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px);
-        } }
+        .char-counter { font-size: 12px; color: var(--sub); text-align: right; margin-top: 4px; transition: color 0.3s; }
+        .char-counter.warn { color: var(--warning); animation: modalScale 0.3s ease; }
+        .char-counter.limit { color: var(--danger); animation: shake 0.4s ease; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
         /* ── Animated post entry ── */
         @keyframes postSlideIn {
-            from { opacity: 0;
-            transform: translateY(25px) scale(0.97); }
-            to { opacity: 1;
-            transform: translateY(0) scale(1); }
+            from { opacity: 0; transform: translateY(25px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        .post-new-anim { animation: postSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
+        .post-new-anim { animation: postSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
     </style>
 </head>
 <body class="light">
 
 <nav id="navbar" class="hidden">
     <div class="logo" id="nav-logo">
-        <div class="logo-icon"><i data-lucide="layers" style="width:18px;"></i></div>
+        <div class="logo-icon"><img src="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW" alt="logo"></div>
         cliq.
     </div>
     <div class="search-wrapper" id="search-wrapper">
@@ -807,7 +643,6 @@
             <button class="nav-btn" onclick="toggleNotifPanel()" data-label="Benachrichtigungen" id="notif-btn">
                 <i data-lucide="bell"></i>
                 <span class="notif-badge hidden" id="notif-badge">0</span>
-        
             </button>
             <button class="nav-btn" onclick="openBookmarks()" data-label="Gespeichert"><i data-lucide="bookmark"></i></button>
             <button class="nav-btn hidden" id="admin-alert-btn" onclick="openAlertModal()" data-label="Neue Meldung"><i data-lucide="plus-circle"></i></button>
@@ -815,14 +650,13 @@
             <button class="nav-btn" onclick="openSettings()" data-label="Einstellungen"><i data-lucide="settings"></i></button>
         </div>
         <button class="nav-btn" id="nav-more-btn" onclick="toggleNavDropdown()" style="display:none;"><i data-lucide="more-vertical"></i></button>
-      
         <div id="nav-dropdown" class="admin-menu hidden" style="top:42px;right:0;min-width:180px;"></div>
     </div>
 </nav>
 
 <div id="login-screen">
     <div class="login-card">
-        <div class="login-logo-container"><i data-lucide="layers" style="width:48px;height:48px;color:white;"></i></div>
+        <div class="login-logo-container"><img src="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW" alt="logo"></div>
         <div class="login-title">cliq.</div>
         <div class="login-subtitle">Verbinde dich mit der Welt.
             Teile deine Momente.</div>
@@ -841,7 +675,6 @@
         <button class="feed-tab active" id="tab-feed" onclick="switchTab('feed')" style="display:flex;align-items:center;justify-content:center;gap:6px;">
             <i data-lucide="home" style="width:16px;"></i> Feed
         </button>
-  
         <button class="feed-tab" id="tab-trending" onclick="switchTab('trending')" style="display:flex;align-items:center;justify-content:center;gap:6px;">
             <i data-lucide="flame" style="width:16px;"></i> Trending
         </button>
@@ -855,7 +688,6 @@
         <span class="notif-panel-title">Benachrichtigungen</span>
         <div style="display:flex;gap:8px;align-items:center;">
             <button onclick="markAllNotifsRead()" style="background:none;border:none;color:var(--nexus);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:transform 0.2s;">Alle gelesen</button>
-            
             <button onclick="toggleNotifPanel()" class="nav-btn"><i data-lucide="x" style="width:18px;"></i></button>
         </div>
     </div>
@@ -875,8 +707,7 @@
 </div>
 
 <div id="settings-screen" class="container hidden">
-    <div 
-        class="settings-header">
+    <div class="settings-header">
         <button class="settings-back-btn" onclick="closeSettings()"><i data-lucide="arrow-left" style="width:18px;"></i></button>
         <h2>Einstellungen</h2>
     </div>
@@ -885,14 +716,12 @@
             <label style="cursor:pointer;position:relative;display:block;">
                 <img id="settings-avatar" src="" class="profile-preview-img">
                 <div style="position:absolute;bottom:0;right:0;background:var(--nexus);color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(0,0,0,0.3);border:2px solid var(--card);transition:transform 0.2s;">
-      
                     <i data-lucide="camera" style="width:14px;"></i>
                 </div>
                 <input type="file" id="profile-img-input" accept="image/*" class="hidden" onchange="uploadProfileImage(event)">
             </label>
             <div class="profile-preview-name" id="settings-preview-name">–</div>
             <div class="profile-preview-username" id="settings-preview-user">–</div>
-       
         </div>
         <div class="divider"></div>
         <div class="settings-row" onclick="showEditProfile()">
@@ -904,7 +733,6 @@
     <div class="settings-section-title">Darstellung</div>
     <div class="settings-card">
         <div class="settings-row" style="cursor:default;">
-   
             <div class="settings-row-icon" style="background:#1c1c1e;"><i data-lucide="moon" style="width:16px;color:white;"></i></div>
             <span class="settings-row-label">Dunkler Modus</span>
             <button class="settings-toggle" id="dark-toggle" onclick="toggleDarkModeSettings()"></button>
@@ -912,20 +740,14 @@
         <div class="settings-row" style="flex-direction:column;align-items:flex-start;cursor:default;">
             <div style="display:flex;align-items:center;gap:12px;width:100%;">
                 <div class="settings-row-icon" style="background:linear-gradient(135deg,#1877f2,#8b5cf6);"><i data-lucide="palette" style="width:16px;color:white;"></i></div>
-       
                 <span class="settings-row-label">Akzentfarbe</span>
             </div>
             <div class="theme-picker">
-                <div class="theme-dot selected" style="background:#1877f2;"
-                    data-theme="default" onclick="setTheme('default',this)"></div>
-                <div class="theme-dot" style="background:#8b5cf6;"
-                    data-theme="purple" onclick="setTheme('purple',this)"></div>
-                <div class="theme-dot" style="background:#10b981;"
-                    data-theme="green" onclick="setTheme('green',this)"></div>
-                <div class="theme-dot" style="background:#f43f5e;"
-                    data-theme="rose" onclick="setTheme('rose',this)"></div>
-                <div class="theme-dot" style="background:#f97316;"
-                    data-theme="orange" onclick="setTheme('orange',this)"></div>
+                <div class="theme-dot selected" style="background:#1877f2;" data-theme="default" onclick="setTheme('default',this)"></div>
+                <div class="theme-dot" style="background:#8b5cf6;" data-theme="purple" onclick="setTheme('purple',this)"></div>
+                <div class="theme-dot" style="background:#10b981;" data-theme="green" onclick="setTheme('green',this)"></div>
+                <div class="theme-dot" style="background:#f43f5e;" data-theme="rose" onclick="setTheme('rose',this)"></div>
+                <div class="theme-dot" style="background:#f97316;" data-theme="orange" onclick="setTheme('orange',this)"></div>
             </div>
         </div>
     </div>
@@ -936,7 +758,6 @@
             <span class="settings-row-label">Likes</span>
             <button class="settings-toggle on" id="notif-likes-toggle" onclick="this.classList.toggle('on')"></button>
         </div>
-  
         <div class="settings-row" style="cursor:default;">
             <div class="settings-row-icon" style="background:#34c759;"><i data-lucide="message-circle" style="width:16px;color:white;"></i></div>
             <span class="settings-row-label">Kommentare</span>
@@ -946,8 +767,7 @@
     <div class="settings-section-title">Privatsphäre</div>
     <div class="settings-card">
         <div class="settings-row" style="cursor:default;">
-            <div class="settings-row-icon" style="background:#ff9500;"><i 
-                data-lucide="eye-off" style="width:16px;color:white;"></i></div>
+            <div class="settings-row-icon" style="background:#ff9500;"><i data-lucide="eye-off" style="width:16px;color:white;"></i></div>
             <span class="settings-row-label">Profil privat</span>
             <button class="settings-toggle" id="private-toggle" onclick="this.classList.toggle('on')"></button>
         </div>
@@ -955,13 +775,11 @@
             <div class="settings-row-icon" style="background:#5856d6;"><i data-lucide="user-check" style="width:16px;color:white;"></i></div>
             <span class="settings-row-label">Aktivitätsstatus anzeigen</span>
             <button class="settings-toggle on" onclick="this.classList.toggle('on')"></button>
-       
         </div>
     </div>
     <div class="settings-section-title">Info</div>
     <div class="settings-card">
-        <div class="settings-row" onclick="showToast('cliq. v155.0 – Danke fürs Nutzen!
-            💙')">
+        <div class="settings-row" onclick="showToast('cliq. v155.0 – Danke fürs Nutzen! 💙')">
             <div class="settings-row-icon" style="background:#1877f2;"><i data-lucide="info" style="width:16px;color:white;"></i></div>
             <span class="settings-row-label">Version</span>
             <span class="settings-row-value">v155.0</span>
@@ -969,7 +787,6 @@
         <div class="settings-row" onclick="showToast('Feedback wurde gesendet!')">
             <div class="settings-row-icon" style="background:#ff9500;"><i data-lucide="flag" style="width:16px;color:white;"></i></div>
             <span class="settings-row-label">Feedback senden</span>
-        
             <i data-lucide="chevron-right" class="settings-row-chevron" style="width:16px;"></i>
         </div>
         <div class="settings-row" onclick="logoutUser()" style="color:var(--danger);">
@@ -983,7 +800,6 @@
 <div id="profile-modal" onclick="closeProfileModal()">
     <div class="profile-modal-card" onclick="event.stopPropagation()">
         <div style="width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px;"></div>
-        
         <div class="profile-modal-header">
             <img id="pmodal-avatar" src="" class="profile-modal-avatar">
             <div style="flex:1;">
@@ -991,7 +807,6 @@
                 <div class="profile-modal-username" id="pmodal-username">–</div>
             </div>
             <button onclick="closeProfileModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;padding:4px;transition:transform 0.2s;"><i data-lucide="x"></i></button>
-       
         </div>
         <div class="profile-modal-bio" id="pmodal-bio"></div>
         <div class="profile-modal-posts">
@@ -1005,7 +820,6 @@
     <div class="modal-inner" onclick="event.stopPropagation()">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
             <h3 class="modal-title" style="margin:0;">Profil bearbeiten</h3>
-         
             <button onclick="document.getElementById('edit-profile-modal').style.display='none'" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
         </div>
         <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);display:block;margin-bottom:6px;">Anzeigename</label>
@@ -1018,8 +832,7 @@
     </div>
 </div>
 
-<div id="ai-overlay" class="lightbox" style="display:none;" 
-    onclick="toggleAiAssistant()">
+<div id="ai-overlay" class="lightbox" style="display:none;" onclick="toggleAiAssistant()">
     <div id="ai-overlay-container" onclick="event.stopPropagation()">
         <div style="padding:14px 16px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--header-bg);backdrop-filter:blur(10px);">
             <div style="display:flex;align-items:center;gap:9px;font-weight:700;font-family:'Syne',sans-serif;font-size:16px;">
@@ -1028,7 +841,6 @@
             <button onclick="toggleAiAssistant()" class="nav-btn"><i data-lucide="x"></i></button>
         </div>
         <iframe src="https://ki-assistent-alpha.vercel.app/" style="width:100%;flex-grow:1;border:none;"></iframe>
- 
     </div>
 </div>
 
@@ -1040,7 +852,6 @@
         <select id="alert-duration" class="modal-input"><option value="0">Dauerhaft anzeigen</option><option value="1">1 Stunde</option><option value="24">24 Stunden</option></select>
         <div style="display:flex;gap:10px;margin-top:4px;">
             <button id="save-alert-btn" class="btn-primary">Erstellen</button>
-           
             <button onclick="closeAlertModal()" class="btn-ghost" style="width:auto;padding:13px 18px;">Abbrechen</button>
         </div>
     </div>
@@ -1053,7 +864,6 @@
                 <i data-lucide="bar-chart-2" style="width:20px;"></i> Umfrage erstellen
             </h3>
             <button onclick="closePollModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
-    
         </div>
          <textarea id="poll-question" class="modal-input" placeholder="Frage stellen..." style="height:60px;resize:none;margin-bottom:14px;"></textarea>
         <div id="poll-options-container">
@@ -1061,7 +871,6 @@
             <div class="poll-option-input"><input type="text" class="poll-opt" placeholder="Option 2" maxlength="50"><button onclick="removePollOpt(this)" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;transition:color 0.2s;">×</button></div>
         </div>
         <button onclick="addPollOption()" style="background:none;border:1px dashed var(--border);border-radius:10px;padding:9px;width:100%;color:var(--nexus);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:14px;transition:background 0.2s;">+ Option hinzufügen</button>
-        
         <button onclick="submitPoll()" class="btn-primary">Umfrage posten</button>
     </div>
 </div>
@@ -1075,7 +884,6 @@
             <span id="story-time" class="story-header-time"></span>
         </div>
         <div class="story-action-btns">
-      
             <button id="story-del-btn" class="hidden story-action-btn" style="background:rgba(255,59,48,0.8);"><i data-lucide="trash-2" style="width:16px;"></i></button>
             <button id="story-close-btn" class="story-action-btn" onclick="closeStoryViewer()"><i data-lucide="x" style="width:16px;"></i></button>
         </div>
@@ -1083,12 +891,10 @@
              onclick="prevStory(event)"
              onmousedown="pauseStory()" onmouseup="resumeStory()" onmouseleave="resumeStory()"
              ontouchstart="pauseStory()" ontouchend="resumeStory()" ontouchcancel="resumeStory()"></div>
-        
         <div style="position:absolute;top:60px;right:0;width:65%;height:calc(100% - 60px);z-index:10;cursor:pointer;" 
              onclick="nextStory(event)"
              onmousedown="pauseStory()" onmouseup="resumeStory()" onmouseleave="resumeStory()"
              ontouchstart="pauseStory()" ontouchend="resumeStory()" ontouchcancel="resumeStory()"></div>
-             
         <img id="story-img" src="">
         <div id="story-time-left"></div>
     </div>
@@ -1096,7 +902,6 @@
 
 <div id="input-bar" class="ios-footer hidden">
     <div id="preview-container" class="hidden" style="position:absolute;bottom:78px;left:15px;background:var(--card);padding:5px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.15);animation:postSlideIn 0.3s ease;">
-  
         <img id="preview-img" src="" style="width:80px;height:80px;object-fit:cover;border-radius:8px;display:block;">
          <button onclick="clearPreview()" style="position:absolute;top:-6px;right:-6px;background:var(--danger);color:white;border:none;border-radius:50%;cursor:pointer;width:22px;height:22px;font-size:14px;display:flex;align-items:center;justify-content:center;transition:transform 0.2s;">×</button>
     </div>
@@ -1105,22 +910,20 @@
             <label style="color:var(--nexus);cursor:pointer;display:flex;align-items:center;transition:transform 0.2s;">
                 <i data-lucide="image-plus" style="width:26px;height:26px;"></i>
                 <input type="file" id="image-input" accept="image/*,video/*" class="hidden" onchange="showPreview(event)">
-        
             </label>
-             <button class="input-action-btn" onclick="openPollModal()" title="Umfrage erstellen" style="display:flex;align-items:center;justify-content:center;">
-                <i data-lucide="bar-chart-2" style="width:16px;height:16px;"></i>
+            <button onclick="openPollModal()" title="Umfrage erstellen" style="background:none;border:none;color:var(--nexus);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform 0.2s;">
+                <i data-lucide="bar-chart-2" style="width:26px;height:26px;"></i>
             </button>
         </div>
         <div id="post-input" class="ios-input-container" contenteditable="true" placeholder="Was gibt's Neues?" oninput="onPostInput()"></div>
         <button id="btn-share" class="send-btn"><i data-lucide="arrow-up" style="width:18px;stroke-width:3;"></i></button>
     </div>
-    <div class="char-counter hidden" id="char-counter">0 / 
-        500</div>
+    <div class="char-counter hidden" id="char-counter">0 / 500</div>
 </div>
 
 <div id="lightbox" class="lightbox" onclick="closeLightbox()">
     <button class="close-lightbox-btn" onclick="closeLightbox()"><i data-lucide="x" style="width:22px;"></i></button>
-     <img id="lightbox-img" src="" onclick="event.stopPropagation()">
+    <img id="lightbox-img" src="" onclick="event.stopPropagation()">
 </div>
 
 <div id="toast"></div>
@@ -1149,9 +952,7 @@
     const MAX_CHARS = 500;
     let userData = null;
     let allPosts = [];
-    // bookmarks stored locally
     let bookmarkedIds = JSON.parse(localStorage.getItem('nexus_bookmarks') || '[]');
-    // ── CHAR COUNTER ──
     window.onPostInput = () => {
         const txt = document.getElementById('post-input').innerText;
         const len = txt.length;
@@ -1160,20 +961,16 @@
         counter.textContent = `${len} / ${MAX_CHARS}`;
         counter.className = 'char-counter' + (len > MAX_CHARS ? ' limit' : len > 400 ? ' warn' : '');
     };
-    // ── TOAST ──
     window.showToast = (msg) => {
         const t = document.getElementById('toast');
         t.textContent = msg; t.classList.add('show');
         setTimeout(() => t.classList.remove('show'), 2800);
     };
-
-    // ── FEATURE 2: Rechtsklick-Menü bei Bildern global blockieren ──
     document.addEventListener('contextmenu', event => {
         if (event.target.tagName === 'IMG') {
             event.preventDefault();
         }
     });
-    // ── TIME ──
     function timeAgo(ts) {
         if (!ts) return "Gerade eben";
         const s = Math.floor((new Date() - ts.toDate()) / 1000);
@@ -1184,20 +981,16 @@
         if (s < 31536000) return Math.floor(s/2592000) + " Mon.";
         return Math.floor(s/31536000) + " J.";
     }
-
-    // ── HASHTAG / MENTION PARSER & FEATURE 1: FORMATIERUNG ──
     function parseText(text) {
         if (!text) return '';
         return text
             .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-            .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') /* Bold mit **text** */
-            .replace(/\*([^*]+)\*/g, '<strong>$1</strong>')     /* Bold mit *text* */
-            .replace(/_([^_]+)_/g, '<em>$1</em>')               /* Italic mit _text_ */
-            .replace(/#(\w+)/g, '<span class="hashtag" \n' +
-                'onclick="searchHashtag(\'#$1\')">#$1</span>')
+            .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*([^*]+)\*/g, '<strong>$1</strong>')
+            .replace(/_([^_]+)_/g, '<em>$1</em>')
+            .replace(/#(\w+)/g, '<span class="hashtag" onclick="searchHashtag(\'#$1\')">#$1</span>')
             .replace(/@(\w+)/g, '<span class="mention">@$1</span>');
     }
-
     window.searchHashtag = (tag) => {
         switchTab('feed');
         document.getElementById('search-input').value = tag;
@@ -1205,7 +998,6 @@
         expandSearch();
         showToast(`Zeige Posts mit ${tag}`);
     };
-    // ── TABS ──
     window.switchTab = (tab) => {
         document.getElementById('tab-feed').classList.toggle('active', tab === 'feed');
         document.getElementById('tab-trending').classList.toggle('active', tab === 'trending');
@@ -1213,7 +1005,6 @@
         document.getElementById('trending-section').classList.toggle('hidden', tab !== 'trending');
         if (tab === 'trending') renderTrending();
     };
-    // ── TRENDING ──
     function renderTrending() {
         const hashMap = {};
         allPosts.forEach(p => {
@@ -1232,19 +1023,15 @@
             ${sorted.map(([tag, count], i) => `
                 <div class="trending-item" onclick="searchHashtag('${tag}')">
                     <div style="font-size:13px;font-weight:700;color:var(--sub);min-width:22px;">#${i+1}</div>
-                
                     <div>
                         <div class="trending-tag">${tag}</div>
                         <div class="trending-count">${count} Post${count !== 1 ? 's' : ''}</div>
                     </div>
-                   
                     <i data-lucide="chevron-right" style="width:16px;color:var(--sub);margin-left:auto;"></i>
                 </div>`).join('')}
         </div>`;
         if(window.lucide) lucide.createIcons({root: sec});
     }
-
-    // ── SEARCH ──
     window.expandSearch = () => {
         document.getElementById('nav-logo').classList.add('hidden');
         document.getElementById('nav-actions-items').style.display = 'none';
@@ -1266,7 +1053,6 @@
         const term = e.target.value.toLowerCase();
         document.querySelectorAll('#feed .card').forEach(c => c.style.display = c.innerText.toLowerCase().includes(term) ? '' : 'none');
     };
-    // ── DARK MODE ──
     window.toggleDarkMode = () => {
         const isDark = document.body.classList.toggle('dark');
         document.body.classList.toggle('light', !isDark);
@@ -1284,15 +1070,13 @@
         el.classList.add('selected');
         localStorage.setItem('accentTheme', theme);
     };
-    // ── SETTINGS ──
     window.openSettings = () => {
         document.getElementById('main-content').classList.add('hidden');
         document.getElementById('bookmarks-screen').style.display = 'none';
         document.getElementById('input-bar').classList.add('hidden');
         document.getElementById('settings-screen').classList.remove('hidden');
         if (userData) {
-            document.getElementById('settings-avatar').src = userData.photoURL ||
-                '';
+            document.getElementById('settings-avatar').src = userData.photoURL || '';
             const verifiedHtml = userData.verified ? `<img src="${verifiedIcon}" class="verified-badge">` : '';
             document.getElementById('settings-preview-name').innerHTML = (userData.displayname || '–') + verifiedHtml;
             document.getElementById('settings-preview-user').textContent = '@' + (userData.username || '–');
@@ -1344,7 +1128,6 @@
         showToast('Profilbild aktualisiert ✓');
         e.target.value = '';
     };
-    // ── PROFILE MODAL ──
     window.openProfileModal = async (uid) => {
         const uSnap = await getDoc(doc(db, "users", uid));
         const u = uSnap.data() || {};
@@ -1352,12 +1135,8 @@
         document.getElementById('pmodal-name').innerHTML = (u.displayname || '–') + (u.verified ? `<img src="${verifiedIcon}" style="width:18px;height:18px;">` : '');
         document.getElementById('pmodal-username').textContent = '@' + (u.username || '–');
         document.getElementById('pmodal-bio').textContent = u.bio || '';
-        
-        // Load user's posts (images only for grid)
         const grid = document.getElementById('pmodal-grid');
         grid.innerHTML = '';
-        
-        // --- FIX 1: Filtere direkt aus allPosts, um Firestore-Composite-Index-Fehler zu vermeiden ---
         const userPosts = allPosts.filter(p => p.uid === uid);
         const imgPosts = userPosts.filter(p => p.imageUrl);
         if (imgPosts.length === 0) {
@@ -1367,7 +1146,6 @@
                 grid.innerHTML += `<div class="profile-grid-item" onclick="closeProfileModal();openLightbox('${p.imageUrl}')"><img src="${p.imageUrl}" loading="lazy"></div>`;
             });
         }
-        
         document.getElementById('profile-modal').style.display = 'flex';
         document.body.style.overflow = 'hidden';
     };
@@ -1375,15 +1153,11 @@
         document.getElementById('profile-modal').style.display = 'none';
         document.body.style.overflow = '';
     };
-
-    // ── BOOKMARKS ──
     window.toggleBookmark = (postId) => {
         const idx = bookmarkedIds.indexOf(postId);
         if (idx > -1) { bookmarkedIds.splice(idx, 1); showToast('Lesezeichen entfernt'); }
-        else { bookmarkedIds.push(postId);
-        showToast('Gespeichert 🔖'); }
+        else { bookmarkedIds.push(postId); showToast('Gespeichert 🔖'); }
         localStorage.setItem('nexus_bookmarks', JSON.stringify(bookmarkedIds));
-        // Update button UI
         const btn = document.querySelector(`#post-${postId} .bookmark-btn`);
         if (btn) btn.classList.toggle('bookmarked', bookmarkedIds.includes(postId));
     };
@@ -1406,22 +1180,18 @@
         empty.classList.add('hidden');
         feed.innerHTML = '';
         const bookmarkedPosts = allPosts.filter(p => bookmarkedIds.includes(p.id));
-        if (!bookmarkedPosts.length) { feed.innerHTML = ''; empty.classList.remove('hidden'); return;
-        }
+        if (!bookmarkedPosts.length) { feed.innerHTML = ''; empty.classList.remove('hidden'); return; }
         bookmarkedPosts.forEach(p => {
             getDoc(doc(db, "users", p.uid)).then(uSnap => {
                 const u = uSnap.data() || {};
                 const div = document.createElement('div');
                 div.className = 'card';
-                
                 div.innerHTML = renderPostHTML(p, u);
                 feed.appendChild(div);
                 if(window.lucide) lucide.createIcons({root: div});
             });
         });
     }
-
-    // ── NOTIFICATIONS ──
     let notifUnsubscribe = null;
     function loadNotifications() {
         const q = query(collection(db, "users", auth.currentUser.uid, "notifications"), orderBy("createdAt", "desc"));
@@ -1431,18 +1201,15 @@
             let html = '';
             snap.forEach(d => {
                 const n = d.data();
-                if 
-                (!n.read) unread++;
+                if (!n.read) unread++;
                 const icons = { like: '❤️', comment: '💬', repost: '🔁' };
                 html += `<div class="notif-item ${n.read ? '' : 'unread'}" onclick="markNotifRead('${d.id}')">
                     <div style="position:relative;">
                         <img src="${n.fromPhoto||''}" class="notif-avatar">
- 
-                       <div class="notif-icon-badge" style="background:${n.type==='like'?'#ff3b30':n.type==='comment'?'#34c759':'#1877f2'};">${icons[n.type]||'🔔'}</div>
+                        <div class="notif-icon-badge" style="background:${n.type==='like'?'#ff3b30':n.type==='comment'?'#34c759':'#1877f2'};">${icons[n.type]||'🔔'}</div>
                     </div>
                     <div style="flex:1;">
-                        <div class="notif-text"><strong>${n.fromName||'Jemand'}</strong> ${n.type==='like'?'hat deinen Post geliked':n.type==='comment'?'hat kommentiert: "'+n.preview+'"':'hat deinen Post \n' +
-                'geteilt'}</div>
+                        <div class="notif-text"><strong>${n.fromName||'Jemand'}</strong> ${n.type==='like'?'hat deinen Post geliked':n.type==='comment'?'hat kommentiert: "'+n.preview+'"':'hat deinen Post geteilt'}</div>
                         <div class="notif-time">${timeAgo(n.createdAt)}</div>
                     </div>
                 </div>`;
@@ -1450,8 +1217,7 @@
             if (!html) html = '<div class="notif-empty"><i data-lucide="bell-off" style="width:36px;height:36px;margin-bottom:10px;display:block;margin-left:auto;margin-right:auto;opacity:0.4;"></i>Noch keine Benachrichtigungen</div>';
             list.innerHTML = html;
             const badge = document.getElementById('notif-badge');
-            if (unread > 0) { badge.textContent = unread > 9 ? '9+' : unread; badge.classList.remove('hidden');
-            }
+            if (unread > 0) { badge.textContent = unread > 9 ? '9+' : unread; badge.classList.remove('hidden'); }
             else badge.classList.add('hidden');
             if(window.lucide) lucide.createIcons({root: list});
         });
@@ -1466,7 +1232,6 @@
     };
     async function sendNotification(toUid, type, postId, preview='') {
         if (toUid === auth.currentUser.uid) return;
-        // Don't notify yourself
         await addDoc(collection(db, "users", toUid, "notifications"), {
             type, postId, preview,
             fromUid: auth.currentUser.uid,
@@ -1474,14 +1239,11 @@
             fromPhoto: userData.photoURL,
             read: false,
             createdAt: serverTimestamp()
-     
         });
     }
     window.toggleNotifPanel = () => {
         document.getElementById('notif-panel').classList.toggle('open');
     };
-
-    // ── AI ──
     window.toggleAiAssistant = () => {
         const o = document.getElementById('ai-overlay');
         const vis = o.style.display !== 'none' && o.style.display !== '';
@@ -1489,10 +1251,8 @@
         document.body.style.overflow = vis ? '' : 'hidden';
         if(window.lucide) lucide.createIcons();
     };
-    // ── AUTH ──
     window.logoutUser = async () => {
-        if (confirm('Wirklich abmelden?')) { await signOut(auth);
-        location.reload(); }
+        if (confirm('Wirklich abmelden?')) { await signOut(auth); location.reload(); }
     };
     document.getElementById('btn-login').onclick = () => signInWithPopup(auth, provider);
     onAuthStateChanged(auth, async (user) => {
@@ -1503,15 +1263,12 @@
             document.getElementById('main-content').classList.remove('hidden');
             const uDoc = await getDoc(doc(db, "users", user.uid));
             if (uDoc.exists()) { userData = uDoc.data(); }
-  
             else {
                 userData = { username: "user_"+Math.floor(Math.random()*9999), displayname: user.displayName, photoURL: user.photoURL, email: user.email, verified: (user.email === adminEmail), bio: '' };
                 await setDoc(doc(db, "users", user.uid), userData);
             }
             if (user.email === adminEmail) document.getElementById('admin-alert-btn').classList.remove('hidden');
-        
-            if (localStorage.getItem('theme') === 'dark') { document.body.classList.add('dark'); document.body.classList.remove('light'); document.getElementById('theme-icon')?.setAttribute('data-lucide','sun');
-            }
+            if (localStorage.getItem('theme') === 'dark') { document.body.classList.add('dark'); document.body.classList.remove('light'); document.getElementById('theme-icon')?.setAttribute('data-lucide','sun'); }
             const accent = localStorage.getItem('accentTheme');
             if (accent && accent !== 'default') { document.body.classList.add('theme-'+accent); document.querySelector(`.theme-dot[data-theme="${accent}"]`)?.classList.add('selected'); }
             loadFeed();
@@ -1527,10 +1284,7 @@
             document.getElementById('bookmarks-screen').style.display = 'none';
         }
     });
-
-    // ── ALERTS ──
-    window.openAlertModal = () => { document.getElementById('alert-modal').style.display = 'flex';
-        if(window.lucide) lucide.createIcons(); };
+    window.openAlertModal = () => { document.getElementById('alert-modal').style.display = 'flex'; if(window.lucide) lucide.createIcons(); };
     window.closeAlertModal = () => document.getElementById('alert-modal').style.display = 'none';
     document.getElementById('save-alert-btn').onclick = async () => {
         const text = document.getElementById('alert-text').value.trim();
@@ -1538,8 +1292,7 @@
         const duration = parseInt(document.getElementById('alert-duration').value);
         if (!text) return;
         let expiresAt = null;
-        if (duration > 0) { expiresAt = new Date(); expiresAt.setHours(expiresAt.getHours() + duration);
-        }
+        if (duration > 0) { expiresAt = new Date(); expiresAt.setHours(expiresAt.getHours() + duration); }
         await addDoc(collection(db, "alerts"), { text, type, expiresAt, createdAt: serverTimestamp() });
         document.getElementById('alert-text').value = ''; closeAlertModal(); showToast('Meldung erstellt ✓');
     };
@@ -1549,7 +1302,6 @@
             const icons = { warning: 'alert-circle', info: 'info', success: 'check-circle' };
             const isAdmin = auth.currentUser?.email === adminEmail;
             snap.forEach(d => {
-       
                 const a = d.data();
                 if (a.expiresAt && a.expiresAt.toDate && a.expiresAt.toDate() < new Date()) { if(isAdmin) deleteDoc(doc(db,"alerts",d.id)); return; }
                 c.innerHTML += `<div class="alert-banner alert-${a.type}"><i data-lucide="${icons[a.type]||'info'}" style="width:18px;flex-shrink:0;"></i><div style="flex:1;font-size:14.5px;">${a.text}</div>${isAdmin?`<button onclick="deleteAlert('${d.id}')" style="background:none;border:none;color:inherit;cursor:pointer;"><i data-lucide="x" style="width:14px;"></i></button>`:''}</div>`;
@@ -1558,23 +1310,19 @@
         });
     }
     window.deleteAlert = (id) => deleteDoc(doc(db,"alerts",id));
-    // ── STORIES & FEATURE 3: PAUSIEREN BEIM HALTEN ──
     let globalStories = {};
     let currentStoryUser = null;
     let currentStoryIndex = 0;
-    
     let storyTimer = null;
     let storyStartTime = 0;
     let storyRemainingTime = 5050;
     let isStoryPaused = false;
-
     function loadStories() {
         onSnapshot(query(collection(db,"stories"), orderBy("createdAt","asc")), (snap) => {
             const bar = document.getElementById('stories-bar');
             bar.innerHTML = `<div class="story-item" onclick="addStoryPrompt()">
                 <div style="width:58px;height:58px;border-radius:50%;background:var(--ios-input);display:flex;align-items:center;justify-content:center;border:2px dashed var(--border);transition:transform 0.2s;">
                     <i data-lucide="plus" style="width:22px;color:var(--sub);"></i>
-         
                 </div>
                 <span class="story-label">Deine Story</span>
             </div>`;
@@ -1582,11 +1330,9 @@
             const now = new Date();
             const TWENTY_FOUR_HOURS = 24*60*60*1000;
             snap.forEach(d => {
-    
                 const s = d.data(); s.id = d.id;
                 const createdAt = s.createdAt ? s.createdAt.toDate() : now;
-                if (now - createdAt > TWENTY_FOUR_HOURS) { if(s.uid === auth.currentUser?.uid) deleteDoc(doc(db,"stories",d.id));
-                    return; }
+                if (now - createdAt > TWENTY_FOUR_HOURS) { if(s.uid === auth.currentUser?.uid) deleteDoc(doc(db,"stories",d.id)); return; }
                 if (!globalStories[s.uid]) globalStories[s.uid] = [];
                 globalStories[s.uid].push(s);
             });
@@ -1595,7 +1341,6 @@
                 const bU = globalStories[b].some(s => !(s.seenBy||[]).includes(auth.currentUser?.uid));
                 if (aU && !bU) return -1; if (!aU && bU) return 1;
                 const aL = globalStories[a][globalStories[a].length-1].createdAt?.toDate() || 0;
-   
                 const bL = globalStories[b][globalStories[b].length-1].createdAt?.toDate() || 0;
                 return bL - aL;
             });
@@ -1604,15 +1349,13 @@
                 const last = us[us.length-1];
                 const allSeen = us.every(s => (s.seenBy||[]).includes(auth.currentUser?.uid));
                 bar.innerHTML += `<div class="story-item" onclick="openStoryGroup('${uid}')">
-                   
-    <div class="story-ring ${allSeen?'seen':'unseen'}"><div class="story-ring-inner"><img src="${last.photoURL}" alt=""></div></div>
+                    <div class="story-ring ${allSeen?'seen':'unseen'}"><div class="story-ring-inner"><img src="${last.photoURL}" alt=""></div></div>
                     <span class="story-label">${last.displayname}</span>
                 </div>`;
             });
             if(window.lucide) lucide.createIcons();
         });
     }
-
     let storyFileInput = document.createElement('input');
     storyFileInput.type='file'; storyFileInput.accept='image/*';
     storyFileInput.onchange = async (e) => {
@@ -1625,7 +1368,6 @@
         showToast('Story gepostet! 🎉');
         e.target.value = '';
     };
-    
     window.addStoryPrompt = () => { storyFileInput.value = ''; storyFileInput.click(); };
     window.openStoryGroup = (uid) => {
         currentStoryUser = uid;
@@ -1637,22 +1379,17 @@
         document.body.style.overflow = 'hidden';
         renderCurrentStory();
     };
-
     window.renderCurrentStory = async () => {
         clearTimeout(storyTimer);
         isStoryPaused = false;
         storyRemainingTime = 5050;
-
         const us = globalStories[currentStoryUser];
-        if (!us || currentStoryIndex >= us.length) { closeStoryViewer(); return;
-        }
+        if (!us || currentStoryIndex >= us.length) { closeStoryViewer(); return; }
         const s = us[currentStoryIndex];
-        
         document.getElementById('story-img').src = s.imageUrl;
         document.getElementById('story-name').textContent = s.displayname;
         document.getElementById('story-avi').src = s.photoURL;
         document.getElementById('story-time').textContent = s.createdAt ? timeAgo(s.createdAt) : "Gerade eben";
-        
         const createdAtTime = s.createdAt ? s.createdAt.toDate() : new Date();
         const diffMs = (24*60*60*1000) - (new Date() - createdAtTime);
         const timeLeftEl = document.getElementById('story-time-left');
@@ -1660,52 +1397,33 @@
             const dh = Math.floor(diffMs/(1000*60*60));
             const dm = Math.floor((diffMs%(1000*60*60))/(1000*60));
             timeLeftEl.textContent = `Noch ${dh}h ${dm}min`;
-        } else { 
-            timeLeftEl.textContent = "Läuft ab...";
-        }
-
+        } else { timeLeftEl.textContent = "Läuft ab..."; }
         const prog = document.getElementById('story-progress');
         prog.innerHTML = '';
         for (let i = 0; i < us.length; i++) {
-            let fillWidth = (i < currentStoryIndex) ?
-                '100%' : '0%';
+            let fillWidth = (i < currentStoryIndex) ? '100%' : '0%';
             prog.innerHTML += `<div class="story-prog-bar"><div class="story-prog-fill" id="spf-${i}" style="width:${fillWidth};"></div></div>`;
         }
-
         const delBtn = document.getElementById('story-del-btn');
         if (s.uid === auth.currentUser.uid || auth.currentUser.email === adminEmail) {
             delBtn.classList.remove('hidden');
             delBtn.onclick = (e) => { e.stopPropagation(); deleteStory(s.id); };
-        } else { 
-            delBtn.classList.add('hidden');
-        }
+        } else { delBtn.classList.add('hidden'); }
         if(window.lucide) lucide.createIcons();
-        setTimeout(() => { 
-            const f = document.getElementById(`spf-${currentStoryIndex}`); 
-            if(f) {
-                f.style.transition = `width ${storyRemainingTime}ms linear`;
-                f.style.width='100%'; 
-            }
-        }, 50);
+        setTimeout(() => { const f = document.getElementById(`spf-${currentStoryIndex}`); if(f) { f.style.transition = `width ${storyRemainingTime}ms linear`; f.style.width='100%'; } }, 50);
         if (!(s.seenBy||[]).includes(auth.currentUser.uid)) {
             await updateDoc(doc(db,"stories",s.id), { seenBy: arrayUnion(auth.currentUser.uid) });
         }
-        
         storyStartTime = Date.now();
         storyTimer = setTimeout(() => nextStory(), storyRemainingTime);
     };
-
     window.pauseStory = () => {
         if (isStoryPaused) return;
         isStoryPaused = true;
         clearTimeout(storyTimer);
         storyRemainingTime -= (Date.now() - storyStartTime);
         const bar = document.getElementById(`spf-${currentStoryIndex}`);
-        if (bar) {
-            const w = window.getComputedStyle(bar).width;
-            bar.style.transition = 'none';
-            bar.style.width = w;
-        }
+        if (bar) { const w = window.getComputedStyle(bar).width; bar.style.transition = 'none'; bar.style.width = w; }
     };
     window.resumeStory = () => {
         if (!isStoryPaused) return;
@@ -1713,18 +1431,12 @@
         storyStartTime = Date.now();
         storyTimer = setTimeout(() => nextStory(), storyRemainingTime);
         const bar = document.getElementById(`spf-${currentStoryIndex}`);
-        if (bar) {
-            bar.style.transition = `width ${storyRemainingTime}ms linear`;
-            setTimeout(() => { if(!isStoryPaused) bar.style.width = '100%'; }, 50);
-        }
+        if (bar) { bar.style.transition = `width ${storyRemainingTime}ms linear`; setTimeout(() => { if(!isStoryPaused) bar.style.width = '100%'; }, 50); }
     };
     window.nextStory = (e) => { if(e) e.stopPropagation(); currentStoryIndex++; renderCurrentStory(); };
-    window.prevStory = (e) => { if(e) e.stopPropagation();
-        if(currentStoryIndex > 0) { currentStoryIndex--; renderCurrentStory(); } };
-        
+    window.prevStory = (e) => { if(e) e.stopPropagation(); if(currentStoryIndex > 0) { currentStoryIndex--; renderCurrentStory(); } };
     window.closeStoryViewer = () => { clearTimeout(storyTimer); document.getElementById('story-lightbox').style.display='none'; document.body.style.overflow=''; };
     window.deleteStory = async (id) => { if(confirm("Story löschen?")) { await deleteDoc(doc(db,"stories",id)); showToast('Story gelöscht'); nextStory(); } };
-    // ── POLL ──
     window.openPollModal = () => { document.getElementById('poll-modal').style.display='flex'; if(window.lucide) lucide.createIcons(); };
     window.closePollModal = () => document.getElementById('poll-modal').style.display='none';
     window.addPollOption = () => {
@@ -1755,15 +1467,12 @@
         const snap = await getDoc(ref);
         const poll = snap.data().poll;
         const uid = auth.currentUser.uid;
-        // Remove from all options first
         poll.options.forEach(o => { o.votes = (o.votes||[]).filter(u => u !== uid); });
-        // Toggle vote on selected
         if (!(poll.options[optionIndex].votes||[]).includes(uid)) {
             poll.options[optionIndex].votes.push(uid);
         }
         await updateDoc(ref, { poll });
     };
-    // ── REPOST ──
     window.repostPost = async (postId) => {
         const snap = await getDoc(doc(db,"posts",postId));
         const p = snap.data();
@@ -1773,13 +1482,10 @@
             timestamp: serverTimestamp(), likes: [], reactions: {}, isPinned: false,
             repostOf: { originalUid: p.uid, originalPostId: postId, originalDisplayname: '' }
         });
-        // Notify original poster
         const uSnap = await getDoc(doc(db,"users",p.uid));
-        const origUser = uSnap.data() || {};
         sendNotification(p.uid, 'repost', postId);
         showToast('Repostet! 🔁');
     };
-    // ── EDIT POST ──
     window.startEditPost = (postId, encodedText) => {
         const postCard = document.getElementById('post-'+postId);
         const textDiv = postCard.querySelector('.post-text');
@@ -1790,11 +1496,7 @@
                 <button onclick="cancelEditPost('${postId}','${encodedText}')" class="btn-ghost" style="padding:8px;font-size:13px;color:var(--sub);">Abbrechen</button>
             </div>`;
         const menu = document.getElementById('menu-'+postId);
-        if(menu) {
-            menu.classList.add('hidden');
-            const card = menu.closest('.card');
-            if(card) card.style.zIndex = '';
-        }
+        if(menu) { menu.classList.add('hidden'); const card = menu.closest('.card'); if(card) card.style.zIndex = ''; }
     };
     window.saveEditPost = async (postId) => {
         const newText = document.getElementById('edit-area-'+postId)?.value.trim();
@@ -1807,33 +1509,23 @@
         const textDiv = postCard.querySelector('.post-text');
         textDiv.innerHTML = parseText(decodeURIComponent(encodedText));
     };
-
-    // ── FEED ──
-    function encodeEmoji(e) { return e.codePointAt(0).toString(16);
-    }
-
+    function encodeEmoji(e) { return e.codePointAt(0).toString(16); }
     function renderPostHTML(p, u) {
-        const likes = Array.isArray(p.likes) ?
-            p.likes : [];
+        const likes = Array.isArray(p.likes) ? p.likes : [];
         const hasLiked = likes.includes(auth.currentUser?.uid);
         const isAdmin = auth.currentUser?.email === adminEmail;
         const isOwner = auth.currentUser?.uid === p.uid;
         const isBookmarked = bookmarkedIds.includes(p.id);
         const reactions = p.reactions || {};
         const uid = p.uid;
-
         let reactionHTML = '';
         REACTIONS.forEach(emoji => {
             const users = reactions[encodeEmoji(emoji)] || [];
             if (users.length > 0) {
                 const myReact = users.includes(auth.currentUser?.uid);
-                reactionHTML += `<span class="emoji-count" onclick="toggleReaction('${p.id}','${encodeEmoji(emoji)}')" style="${myReact?'border:1.5px solid var(--nexus);':''}">
-                    ${emoji} <span>${users.length}</span>
-  
-                </span>`;
+                reactionHTML += `<span class="emoji-count" onclick="toggleReaction('${p.id}','${encodeEmoji(emoji)}')" style="${myReact?'border:1.5px solid var(--nexus);':''}">${emoji} <span>${users.length}</span></span>`;
             }
         });
-        // Poll HTML
         let pollHTML = '';
         if (p.poll) {
             const totalVotes = p.poll.options.reduce((sum, o) => sum + (o.votes||[]).length, 0);
@@ -1842,147 +1534,101 @@
                 ${p.poll.options.map((opt, i) => {
                     const pct = totalVotes ? Math.round((opt.votes||[]).length / totalVotes * 100) : 0;
                     const isMyVote = myVoteIdx === i;
-                
                     return `<div class="poll-option ${isMyVote?'voted-this':''}" onclick="votePoll('${p.id}',${i})">
                         <div class="poll-fill" style="width:${myVoteIdx > -1 ? pct : 0}%"></div>
-                        <div class="poll-label">
-                   
-      <span>${opt.text} ${isMyVote?'✓':''}</span>
-                            ${myVoteIdx > -1 ? `<span class="poll-pct">${pct}%</span>` : ''}
-                        </div>
+                        <div class="poll-label"><span>${opt.text} ${isMyVote?'✓':''}</span>${myVoteIdx > -1 ? `<span class="poll-pct">${pct}%</span>` : ''}</div>
                     </div>`;
-             }).join('')}
- 
-                <div class="poll-total">${totalVotes} Stimme${totalVotes !== 1 ?
-                'n' : ''}</div>
+                }).join('')}
+                <div class="poll-total">${totalVotes} Stimme${totalVotes !== 1 ? 'n' : ''}</div>
             </div>`;
         }
-
         const repostLabelHTML = p.repostOf ? `<div class="repost-label"><i data-lucide="repeat-2" style="width:14px;"></i> Repost</div>` : '';
         const editedHTML = p.edited ? `<span style="font-size:11px;color:var(--sub);"> (bearbeitet)</span>` : '';
         const viewsCount = p.views || 0;
         return `
-            ${p.isPinned ?
-            `<div class="pinned-label"><i data-lucide="pin" style="width:13px;"></i> Von cliq. fixiert</div>` : ''}
+            ${p.isPinned ? `<div class="pinned-label"><i data-lucide="pin" style="width:13px;"></i> Von cliq. fixiert</div>` : ''}
             ${repostLabelHTML}
             <div class="post-header">
                 <img src="${u.photoURL||''}" class="user-img" onclick="openProfileModal('${uid}')">
                 <div style="flex-grow:1;">
                     <div class="display-name" onclick="openProfileModal('${uid}')">${u.displayname||'–'} ${u.verified?`<img src="${verifiedIcon}" class="verified-badge">`:''}${editedHTML}</div>
-      
                     <div style="font-size:12px;color:var(--sub);">@${u.username||'–'} · <span class="post-time">${timeAgo(p.timestamp)}</span></div>
                 </div>
                 <button onclick="toggleAdminMenu('${p.id}')" style="background:none;border:none;color:var(--sub);cursor:pointer;padding:4px;border-radius:50%;"><i data-lucide="more-horizontal" style="width:18px;"></i></button>
                 <div id="menu-${p.id}" class="admin-menu hidden">
                     <button onclick="sharePost('${p.id}')"><i data-lucide="share-2" style="width:15px;"></i> Teilen</button>
-   
-                 <button onclick="copyPostText('${p.id}','${encodeURIComponent(p.text||'')}')"><i data-lucide="copy" style="width:15px;"></i> Text kopieren</button>
-                    ${isOwner ?
-                    `<button onclick="startEditPost('${p.id}','${encodeURIComponent(p.text||'')}')"><i data-lucide="pen-line" style="width:15px;"></i> Bearbeiten</button>` : ''}
-                    ${isAdmin ?
-                    `
+                    <button onclick="copyPostText('${p.id}','${encodeURIComponent(p.text||'')}')"><i data-lucide="copy" style="width:15px;"></i> Text kopieren</button>
+                    ${isOwner ? `<button onclick="startEditPost('${p.id}','${encodeURIComponent(p.text||'')}')"><i data-lucide="pen-line" style="width:15px;"></i> Bearbeiten</button>` : ''}
+                    ${isAdmin ? `
                     <button onclick="togglePin('${p.id}',${p.isPinned||false})"><i data-lucide="pin" style="width:15px;"></i> ${p.isPinned?'Lösen':'Anpinnen'}</button>
                     <button onclick="toggleVerify('${uid}',${u.verified||false})"><i data-lucide="shield-check" style="width:15px;"></i> ${u.verified?'Ent-verifizieren':'Verifizieren'}</button>` : ''}
-                    ${isAdmin||isOwner ?
-                    `<button onclick="deletePost('${p.id}')" style="color:var(--danger);"><i data-lucide="trash-2" style="width:15px;"></i> Löschen</button>` : ''}
+                    ${isAdmin||isOwner ? `<button onclick="deletePost('${p.id}')" style="color:var(--danger);"><i data-lucide="trash-2" style="width:15px;"></i> Löschen</button>` : ''}
                 </div>
             </div>
-            ${!p.poll ?
-            `<div class="post-text">${parseText(p.text||'')}</div>` : ''}
+            ${!p.poll ? `<div class="post-text">${parseText(p.text||'')}</div>` : ''}
             ${pollHTML}
-            ${p.imageUrl ?
-            `<div class="post-img-wrap"><img src="${p.imageUrl}" class="post-img" onclick="openLightbox('${p.imageUrl}')"></div>` : ''}
-            ${p.videoUrl ?
-            `<div class="post-img-wrap"><video src="${p.videoUrl}" class="post-video" controls playsinline></video></div>` : ''}
-            <div class="emoji-reaction-wrapper">${reactionHTML ?
-            `<div class="emoji-reaction-bar" style="margin-top:10px;">${reactionHTML}</div>` : ''}</div>
-            ${viewsCount > 0 ?
-            `<div class="post-views"><i data-lucide="eye" style="width:13px;"></i> ${viewsCount.toLocaleString('de')} Aufrufe</div>` : ''}
+            ${p.imageUrl ? `<div class="post-img-wrap"><img src="${p.imageUrl}" class="post-img" onclick="openLightbox('${p.imageUrl}')"></div>` : ''}
+            ${p.videoUrl ? `<div class="post-img-wrap"><video src="${p.videoUrl}" class="post-video" controls playsinline></video></div>` : ''}
+            <div class="emoji-reaction-wrapper">${reactionHTML ? `<div class="emoji-reaction-bar" style="margin-top:10px;">${reactionHTML}</div>` : ''}</div>
+            ${viewsCount > 0 ? `<div class="post-views"><i data-lucide="eye" style="width:13px;"></i> ${viewsCount.toLocaleString('de')} Aufrufe</div>` : ''}
             <div class="reaction-bar">
                 <button onclick="toggleLike('${p.id}','${uid}')" class="react-btn like-btn ${hasLiked?'liked':''}">
                     <i data-lucide="heart" style="width:17px;${hasLiked?'fill:currentColor;':''}"></i> <span>${likes.length}</span>
                 </button>
-                <button onclick="showComments('${p.id}')" class="react-btn">
-   
-                 <i data-lucide="message-circle" style="width:17px;"></i>
-                </button>
-                <button onclick="repostPost('${p.id}')" class="react-btn" title="Reposten">
-                    <i data-lucide="repeat-2" style="width:17px;"></i>
-                </button>
-        
+                <button onclick="showComments('${p.id}')" class="react-btn"><i data-lucide="message-circle" style="width:17px;"></i></button>
+                <button onclick="repostPost('${p.id}')" class="react-btn" title="Reposten"><i data-lucide="repeat-2" style="width:17px;"></i></button>
                 <div style="position:relative;display:flex;align-items:center;">
-                    <button onclick="toggleEmojiPicker(event,'${p.id}')" class="react-btn">
-                        <i data-lucide="smile-plus" style="width:17px;"></i>
-                    </button>
+                    <button onclick="toggleEmojiPicker(event,'${p.id}')" class="react-btn"><i data-lucide="smile-plus" style="width:17px;"></i></button>
                 </div>
-       
-                 <button onclick="toggleBookmark('${p.id}')" class="react-btn bookmark-btn ${isBookmarked?'bookmarked':''}" style="margin-left:auto;">
+                <button onclick="toggleBookmark('${p.id}')" class="react-btn bookmark-btn ${isBookmarked?'bookmarked':''}" style="margin-left:auto;">
                     <i data-lucide="bookmark" style="width:17px;${isBookmarked?'fill:currentColor;':''}"></i>
                 </button>
-                <button onclick="sharePost('${p.id}')" class="react-btn">
-                    <i data-lucide="share-2" style="width:17px;"></i>
-        
-                </button>
+                <button onclick="sharePost('${p.id}')" class="react-btn"><i data-lucide="share-2" style="width:17px;"></i></button>
             </div>
             <div id="comments-section-${p.id}" class="hidden" style="margin-top:12px;"></div>`;
     }
-
     function loadFeed() {
         onSnapshot(query(collection(db,"posts"), orderBy("timestamp","desc")), (snap) => {
             let posts = [];
             snap.forEach(d => posts.push({ id: d.id, ...d.data() }));
             posts.sort((a,b) => (b.isPinned||0) - (a.isPinned||0));
             allPosts = posts;
-
             const feed = document.getElementById('feed');
-    
             const existingIds = new Set([...feed.children].map(c => c.id));
             const newIds = new Set(posts.map(p => 'post-'+p.id));
             existingIds.forEach(id => { if(!newIds.has(id)) document.getElementById(id)?.remove(); });
-
             posts.forEach((p, idx) => {
                 getDoc(doc(db,"users",p.uid)).then(uSnap => {
-                  
                     const u = uSnap.data() || {};
                     const pid = 'post-'+p.id;
                     const likes = Array.isArray(p.likes) ? p.likes : [];
                     const hasLiked = likes.includes(auth.currentUser?.uid);
-                    
                     const isBookmarked = bookmarkedIds.includes(p.id);
                     const reactions = p.reactions || {};
-
                     let div = document.getElementById(pid);
                     const isNew = !div;
                     if (isNew) {
                         div = document.createElement('div');
                         div.id = pid; div.className = 'card post-new-anim';
                     }
-
                     const cards = [...feed.children];
                     if (cards[idx] !== div) {
                         if (idx >= cards.length) feed.appendChild(div);
                         else feed.insertBefore(div, cards[idx]);
                     }
-
                     let reactionHTML = '';
                     REACTIONS.forEach(emoji => {
                         const users = reactions[encodeEmoji(emoji)] || [];
                         if (users.length > 0) {
                             const myReact = users.includes(auth.currentUser?.uid);
-          
-                            reactionHTML += `<span class="emoji-count" onclick="toggleReaction('${p.id}','${encodeEmoji(emoji)}')" style="${myReact?'border:1.5px solid var(--nexus);':''}">
-                                ${emoji} <span>${users.length}</span>
-                            </span>`;
-              
+                            reactionHTML += `<span class="emoji-count" onclick="toggleReaction('${p.id}','${encodeEmoji(emoji)}')" style="${myReact?'border:1.5px solid var(--nexus);':''}">${emoji} <span>${users.length}</span></span>`;
                         }
                     });
                     if (isNew) {
                         div.innerHTML = renderPostHTML(p, u);
                         if(window.lucide) lucide.createIcons({root: div});
-                        // Track view
                         trackView(p.id);
                     } else {
-                        // Selective update
                         const likeBtn = div.querySelector('.like-btn');
                         if(likeBtn) {
                             likeBtn.className = `react-btn like-btn ${hasLiked?'liked':''}`;
@@ -1999,7 +1645,6 @@
                         if(emojiWrap) emojiWrap.innerHTML = reactionHTML ? `<div class="emoji-reaction-bar" style="margin-top:10px;">${reactionHTML}</div>` : '';
                         const timeSpan = div.querySelector('.post-time');
                         if(timeSpan) timeSpan.textContent = timeAgo(p.timestamp);
-                        // Update poll
                         if (p.poll) {
                             const pollContainer = div.querySelector('.poll-container');
                             if (pollContainer) {
@@ -2008,13 +1653,10 @@
                                 pollContainer.innerHTML = p.poll.options.map((opt, i) => {
                                     const pct = totalVotes ? Math.round((opt.votes||[]).length / totalVotes * 100) : 0;
                                     const isMyVote = myVoteIdx === i;
- 
-                                   return `<div class="poll-option ${isMyVote?'voted-this':''}" onclick="votePoll('${p.id}',${i})">
+                                    return `<div class="poll-option ${isMyVote?'voted-this':''}" onclick="votePoll('${p.id}',${i})">
                                         <div class="poll-fill" style="width:${myVoteIdx > -1 ? pct : 0}%"></div>
-             
-                            <div class="poll-label"><span>${opt.text} ${isMyVote?'✓':''}</span>${myVoteIdx > -1 ? `<span class="poll-pct">${pct}%</span>` : ''}</div>
+                                        <div class="poll-label"><span>${opt.text} ${isMyVote?'✓':''}</span>${myVoteIdx > -1 ? `<span class="poll-pct">${pct}%</span>` : ''}</div>
                                     </div>`;
-                            
                                 }).join('') + `<div class="poll-total">${totalVotes} Stimme${totalVotes !== 1 ? 'n' : ''}</div>`;
                             }
                         }
@@ -2023,8 +1665,6 @@
             });
         });
     }
-
-    // ── VIEW TRACKING ──
     const viewedPosts = new Set(JSON.parse(sessionStorage.getItem('nexus_viewed') || '[]'));
     async function trackView(postId) {
         if (viewedPosts.has(postId)) return;
@@ -2032,45 +1672,34 @@
         sessionStorage.setItem('nexus_viewed', JSON.stringify([...viewedPosts]));
         try { await updateDoc(doc(db,"posts",postId), { views: increment(1) }); } catch(e) {}
     }
-
-    // ── EMOJI PICKER (BUGFIX: uses fixed positioning) ──
     window.toggleEmojiPicker = (e, id) => {
         e.stopPropagation();
-        // Remove any existing pickers
         document.querySelectorAll('.emoji-picker-popup').forEach(p => p.remove());
-        
         const btn = e.currentTarget;
         const rect = btn.getBoundingClientRect();
-        
         const picker = document.createElement('div');
         picker.className = 'emoji-picker-popup';
         picker.id = 'emoji-picker-'+id;
         picker.innerHTML = REACTIONS.map(em => `<button class="emoji-btn-pick" onclick="toggleReaction('${id}','${encodeEmoji(em)}'); this.closest('.emoji-picker-popup').remove();">${em}</button>`).join('');
-        
-        // Position it above the button, centered
         document.body.appendChild(picker);
         const pickerRect = picker.getBoundingClientRect();
         let top = rect.top - pickerRect.height - 10;
         let left = rect.left + rect.width/2 - pickerRect.width/2;
-        // Keep within viewport
         if (top < 60) top = rect.bottom + 10;
         if (left < 8) left = 8;
         if (left + 260 > window.innerWidth) left = window.innerWidth - 268;
         picker.style.top = top + 'px';
         picker.style.left = left + 'px';
-        
         if(window.lucide) lucide.createIcons({root: picker});
     };
-    // --- FIX 2 & Z-INDEX FIX: Added class support to dismiss modals appropriately ---
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.emoji-picker-popup') && !e.target.closest('[onclick*="toggleEmojiPicker"]')) {
             document.querySelectorAll('.emoji-picker-popup').forEach(p => p.remove());
         }
         if (!e.target.closest('.admin-menu') && !e.target.closest('[onclick^="toggleAdminMenu"]') && !e.target.closest('#nav-more-btn')) {
             document.querySelectorAll('.admin-menu').forEach(m => m.classList.add('hidden'));
-            document.querySelectorAll('.card').forEach(c => c.style.zIndex = ''); // Fix für den Z-Index-Stacking-Context Bug
+            document.querySelectorAll('.card').forEach(c => c.style.zIndex = '');
         }
-        // --- FIX 2 ---
         if (!e.target.closest('#notif-panel') && !e.target.closest('#notif-btn') && !e.target.closest('#notif-btn-clone')) {
             document.getElementById('notif-panel')?.classList.remove('open');
         }
@@ -2083,29 +1712,21 @@
         const uid = auth.currentUser.uid;
         const snap = await getDoc(ref);
         const reactions = snap.data().reactions || {};
-        const users = reactions[emojiCode] ||
-        [];
+        const users = reactions[emojiCode] || [];
         const newUsers = users.includes(uid) ? users.filter(u => u !== uid) : [...users, uid];
         await updateDoc(ref, { [`reactions.${emojiCode}`]: newUsers });
     };
-
-    // ── COPY / SHARE ──
     window.copyPostText = (id, encodedText) => {
         navigator.clipboard?.writeText(decodeURIComponent(encodedText));
         showToast('Text kopiert 📋');
         const menu = document.getElementById('menu-'+id);
-        if(menu) {
-            menu.classList.add('hidden');
-            const card = menu.closest('.card');
-            if(card) card.style.zIndex = '';
-        }
+        if(menu) { menu.classList.add('hidden'); const card = menu.closest('.card'); if(card) card.style.zIndex = ''; }
     };
     window.sharePost = async (id) => {
         const url = location.href.split('#')[0]+'#post-'+id;
         if (navigator.share) navigator.share({ title: 'cliq.', url });
         else { navigator.clipboard?.writeText(url); showToast('Link kopiert 🔗'); }
     };
-    // ── COMMENTS ──
     window.showComments = async (postId) => {
         const container = document.getElementById('comments-section-'+postId);
         if (!container.classList.contains('hidden')) { container.classList.add('hidden'); return; }
@@ -2118,15 +1739,12 @@
             const savedVal = inputEl?.value || '';
             container.innerHTML = `<div id="list-${postId}"></div>
                 <div class="comment-input-area">
-              
                     <img src="${userData?.photoURL}" style="width:26px;height:26px;border-radius:50%;object-fit:cover;flex-shrink:0;">
                     <input type="text" id="input-${postId}" placeholder="Kommentieren…" value="${savedVal}" style="flex:1;border:none;background:none;color:var(--text);font-size:14px;outline:none;font-family:inherit;">
                     <button onclick="addComment('${postId}')" class="send-btn" style="width:28px;height:28px;"><i data-lucide="arrow-up" style="width:14px;stroke-width:3;"></i></button>
                 </div>`;
             const list = document.getElementById('list-'+postId);
-           
-            if (snap.empty) { list.innerHTML = '<div style="font-size:12px;color:var(--sub);text-align:center;padding:10px 0;">Noch keine Kommentare.</div>';
-            }
+            if (snap.empty) { list.innerHTML = '<div style="font-size:12px;color:var(--sub);text-align:center;padding:10px 0;">Noch keine Kommentare.</div>'; }
             else {
                 list.innerHTML = '';
                 snap.forEach(dDoc => {
@@ -2134,17 +1752,14 @@
                     const isCOwner = auth.currentUser?.uid === c.uid;
                     const isAdmin = auth.currentUser?.email === adminEmail;
                     list.innerHTML += `<div class="comment-card">
-  
                         <div class="comment-header">
                             <img src="${c.photoURL||''}" class="comment-user-img">
                             <span class="comment-display-name">${c.displayname||'–'} ${c.verified?`<img src="${verifiedIcon}" style="width:13px;height:13px;">`:''}</span>
-               
-             <span class="comment-time">${timeAgo(c.timestamp)}</span>
+                            <span class="comment-time">${timeAgo(c.timestamp)}</span>
                             ${(isAdmin||isCOwner)?`<button class="comment-delete-btn" onclick="deleteComment('${postId}','${dDoc.id}')"><i data-lucide="x" style="width:13px;"></i></button>`:''}
                         </div>
                         <div class="comment-text">${parseText(c.text)}</div>
-     
-                </div>`;
+                    </div>`;
                 });
             }
             document.getElementById('input-'+postId)?.addEventListener('keydown', (e) => { if(e.key==='Enter') addComment(postId); });
@@ -2155,35 +1770,18 @@
         const input = document.getElementById('input-'+postId);
         const text = input.value.trim(); if(!text) return;
         input.value = '';
-        // Get post owner for notification
         const postSnap = await getDoc(doc(db,"posts",postId));
         const postData = postSnap.data();
         await addDoc(collection(db,"posts",postId,"comments"), { text, uid: auth.currentUser.uid, displayname: userData.displayname, photoURL: userData.photoURL, verified: userData.verified||false, timestamp: serverTimestamp() });
-        // Send notification
         sendNotification(postData.uid, 'comment', postId, text.slice(0,50));
     };
     window.deleteComment = async (postId, commentId) => { if(confirm("Kommentar löschen?")) await deleteDoc(doc(db,"posts",postId,"comments",commentId)); };
-    // ── ADMIN ──
-    window.togglePin = async (id, status) => { await updateDoc(doc(db,"posts",id), { isPinned: !status });
-        toggleAdminMenu(id); showToast(status?'Post gelöst':'Post angeheftet 📌'); };
-    window.toggleVerify = async (userId, current) => { if(confirm(current?"Verifizierung entfernen?":"Nutzer verifizieren?")) { await updateDoc(doc(db,"users",userId), { verified: !current });
-        showToast(current?'Verifizierung entfernt':'Nutzer verifiziert ✓'); } };
+    window.togglePin = async (id, status) => { await updateDoc(doc(db,"posts",id), { isPinned: !status }); toggleAdminMenu(id); showToast(status?'Post gelöst':'Post angeheftet 📌'); };
+    window.toggleVerify = async (userId, current) => { if(confirm(current?"Verifizierung entfernen?":"Nutzer verifizieren?")) { await updateDoc(doc(db,"users",userId), { verified: !current }); showToast(current?'Verifizierung entfernt':'Nutzer verifiziert ✓'); } };
     window.toggleAdminMenu = (id) => { 
-        document.querySelectorAll('.admin-menu').forEach(m => { 
-            if(m.id !== 'menu-'+id) {
-                m.classList.add('hidden');
-                const c = m.closest('.card');
-                if(c) c.style.zIndex = '';
-            }
-        }); 
+        document.querySelectorAll('.admin-menu').forEach(m => { if(m.id !== 'menu-'+id) { m.classList.add('hidden'); const c = m.closest('.card'); if(c) c.style.zIndex = ''; } }); 
         const menu = document.getElementById('menu-'+id);
-        if (menu) {
-            menu.classList.toggle('hidden');
-            const card = menu.closest('.card');
-            if (card) {
-                card.style.zIndex = menu.classList.contains('hidden') ? '' : '50';
-            }
-        }
+        if (menu) { menu.classList.toggle('hidden'); const card = menu.closest('.card'); if (card) card.style.zIndex = menu.classList.contains('hidden') ? '' : '50'; }
         if(window.lucide) lucide.createIcons(); 
     };
     window.deletePost = async (id) => { if(confirm("Post wirklich löschen?")) { await deleteDoc(doc(db,"posts",id)); showToast('Post gelöscht'); } };
@@ -2196,21 +1794,16 @@
         await updateDoc(ref, { likes: isLiking ? arrayUnion(uid) : arrayRemove(uid) });
         if (isLiking) sendNotification(ownerUid, 'like', id);
     };
-    // ── IMAGES / LIGHTBOX ──
     window.openLightbox = (url) => { document.getElementById('lightbox-img').src = url; document.getElementById('lightbox').style.display='flex'; document.body.style.overflow='hidden'; };
     window.closeLightbox = () => { document.getElementById('lightbox').style.display='none'; document.body.style.overflow=''; };
     window.showPreview = (e) => {
         const f = e.target.files[0];
         if(!f) return;
         const r = new FileReader();
-        r.onload = (rs) => {
-            document.getElementById('preview-img').src = rs.target.result;
-            document.getElementById('preview-container').classList.remove('hidden');
-        };
+        r.onload = (rs) => { document.getElementById('preview-img').src = rs.target.result; document.getElementById('preview-container').classList.remove('hidden'); };
         r.readAsDataURL(f);
     };
     window.clearPreview = () => { document.getElementById('image-input').value=''; document.getElementById('preview-container').classList.add('hidden'); };
-    // ── POST ──
     document.getElementById('btn-share').onclick = async () => {
         const txt = document.getElementById('post-input').innerText.trim();
         if (txt.length > MAX_CHARS) return showToast(`Maximale Länge: ${MAX_CHARS} Zeichen`);
@@ -2234,7 +1827,6 @@
         showToast('Post veröffentlicht 🚀');
     };
     document.getElementById('post-input').addEventListener('keydown', (e) => { if(e.key==='Enter' && !e.shiftKey && !e.ctrlKey) { e.preventDefault(); document.getElementById('btn-share').click(); } });
-    // ── RESPONSIVE HEADER ──
     window.adaptNavbar = () => {
         const nav = document.getElementById('navbar');
         if (!nav || nav.classList.contains('hidden')) return;
@@ -2247,7 +1839,6 @@
         allItems.forEach(item => { if(item.id==='admin-alert-btn' && auth?.currentUser?.email !== adminEmail) return; item.style.display='flex'; });
         moreBtn.style.display='none';
         dropdown.innerHTML=''; dropdown.classList.add('hidden');
-        
         const checkOverflow = () => {
             const logo = document.getElementById('nav-logo');
             return (logo.offsetWidth + searchWrap.offsetWidth + itemsContainer.offsetWidth + 60) > nav.clientWidth;
@@ -2261,8 +1852,6 @@
                 let iconName = btn.querySelector('i')?.getAttribute('data-lucide') || 'circle';
                 let label = btn.getAttribute('data-label') || 'Option';
                 let clone = document.createElement('button');
-                
-                // --- FIX 2: Füge die ID zum geklonten Notif-Button hinzu ---
                 if (btn.id === 'notif-btn') clone.id = 'notif-btn-clone';
                 clone.innerHTML = `<i data-lucide="${iconName}" style="width:16px;"></i> ${label}`;
                 clone.onclick = () => { dropdown.classList.add('hidden'); btn.click(); };
@@ -2275,7 +1864,6 @@
     window.toggleNavDropdown = () => document.getElementById('nav-dropdown').classList.toggle('hidden');
     let resizeTimer;
     window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(adaptNavbar, 150); });
-
 </script>
 </body>
 </html>
