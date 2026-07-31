@@ -47,7 +47,7 @@
             min-height: 100vh;
         }
 
-        /* ── FEATURE 2: BILDER-DOWNLOAD / POPUP BLOCKIEREN ── */
+        /* â”€â”€ FEATURE 2: BILDER-DOWNLOAD / POPUP BLOCKIEREN â”€â”€ */
         img {
             -webkit-touch-callout: none;
             -webkit-user-select: none;
@@ -55,7 +55,7 @@
             -webkit-user-drag: none;
         }
 
-        /* ── LOGIN ── */
+        /* â”€â”€ LOGIN â”€â”€ */
         #login-screen {
             background: linear-gradient(135deg, #1877f2, #8b5cf6);
             display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; padding: 0;
@@ -102,7 +102,7 @@
         }
         #btn-login:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
 
-        /* ── NAV ── */
+        /* â”€â”€ NAV â”€â”€ */
         nav {
             position: fixed;
             top: 0; left: 0; right: 0; height: 54px;
@@ -131,7 +131,7 @@
         .nav-btn:hover i { transform: scale(1.15); }
         .nav-btn:hover { background: var(--ios-input); }
 
-        /* ── NOTIF BADGE ── */
+        /* â”€â”€ NOTIF BADGE â”€â”€ */
         @keyframes badgePop {
             0% { transform: scale(0); }
             50% { transform: scale(1.4); }
@@ -147,7 +147,7 @@
             animation: badgePop 0.3s ease forwards;
         }
 
-        /* ── SEARCH ── */
+        /* â”€â”€ SEARCH â”€â”€ */
         .search-wrapper { display: flex; align-items: center; }
         .search-wrapper.active { flex-grow: 1; }
         .search-container { display: flex; align-items: center; background: var(--ios-input); border-radius: 10px;
@@ -158,10 +158,10 @@
             outline: none; font-family: inherit; }
         .search-wrapper.active .search-input { width: 100%; padding-left: 8px; }
 
-        /* ── CONTAINER ── */
+        /* â”€â”€ CONTAINER â”€â”€ */
         .container { max-width: 600px; margin: 0 auto; padding: 0 12px; }
 
-        /* ── TABS ── */
+        /* â”€â”€ TABS â”€â”€ */
         .feed-tabs { display: flex;
             gap: 0; background: var(--card); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; border: 0.5px solid var(--border);
         }
@@ -177,7 +177,7 @@
         .feed-tab.active { color: var(--nexus); background: var(--nexus-soft); }
         .feed-tab.active::after { width: 100%; left: 0; }
 
-        /* ── STORIES ── */
+        /* â”€â”€ STORIES â”€â”€ */
         #stories-bar { overflow-x: auto;
             display: flex; gap: 12px; padding: 14px 12px 8px; max-width: 600px; margin: 0 auto; scrollbar-width: none;
         }
@@ -199,14 +199,14 @@
             white-space: nowrap;
             overflow: hidden; text-overflow: ellipsis; }
 
-        /* ── CARDS ── */
+        /* â”€â”€ CARDS â”€â”€ */
         .card { background: var(--card);
             border-radius: var(--radius); padding: 16px; margin-bottom: 10px; border: 0.5px solid var(--border); box-shadow: var(--shadow); position: relative;
             transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
         }
         .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
 
-        /* ── ALERTS ── */
+        /* â”€â”€ ALERTS â”€â”€ */
         .alert-banner { display: flex;
             align-items: flex-start; gap: 12px; padding: 13px 14px; border-radius: 13px; margin-bottom: 10px; border: 1.5px solid;
             animation: postSlideIn 0.4s ease;
@@ -215,7 +215,7 @@
         .alert-info { border-color: #8e8e93; background: rgba(142,142,147,0.09); color: #8e8e93; }
         .alert-success { border-color: var(--green); background: rgba(52,199,89,0.09); color: var(--green); }
 
-        /* ── POST CARD ── */
+        /* â”€â”€ POST CARD â”€â”€ */
         .pinned-label { display: flex;
             align-items: center; gap: 5px; color: var(--nexus); font-size: 12px; font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;
         }
@@ -236,10 +236,10 @@
         .hashtag:hover { text-decoration: underline; color: var(--text); }
         .mention { color: var(--nexus); cursor: pointer; font-weight: 500; }
 
-        /* ── VIEWS COUNTER ── */
+        /* â”€â”€ VIEWS COUNTER â”€â”€ */
         .post-views { font-size: 12px; color: var(--sub); display: flex; align-items: center; gap: 4px; margin-top: 8px; }
 
-        /* ── POST IMAGE ── */
+        /* â”€â”€ POST IMAGE â”€â”€ */
         .post-img-wrap { width: calc(100% + 32px); position: relative;
             margin: 12px -16px -16px -16px; border-bottom-left-radius: var(--radius); border-bottom-right-radius: var(--radius); overflow: hidden; border-top: 0.5px solid var(--border);
         }
@@ -248,7 +248,7 @@
         .post-img:hover { transform: scale(1.02); }
         .post-video { width: 100%; display: block; max-height: 500px; object-fit: cover; background: #000; }
 
-        /* ── REACTION BAR ── */
+        /* â”€â”€ REACTION BAR â”€â”€ */
         .reaction-bar { display: flex;
             gap: 4px; margin-top: 14px; padding-top: 12px; border-top: 0.5px solid var(--border); align-items: center; flex-wrap: wrap;
         }
@@ -277,7 +277,7 @@
         }
         .emoji-count:hover { transform: scale(1.15) rotate(5deg); }
 
-        /* ── ADMIN MENU ── */
+        /* â”€â”€ ADMIN MENU â”€â”€ */
         .admin-menu { position: absolute;
             top: 42px; right: 0; background: var(--card); border: 0.5px solid var(--border); border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.18); z-index: 1100;
             min-width: 200px; overflow: hidden; transform-origin: top right; animation: scaleIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -295,14 +295,14 @@
         .admin-menu button:last-child { border-bottom: none; }
         .admin-menu button:hover { background: var(--ios-input); padding-left: 20px; }
 
-        /* ── EDIT POST INLINE ── */
+        /* â”€â”€ EDIT POST INLINE â”€â”€ */
         .edit-post-area { width: 100%;
             padding: 10px 12px; border: 1.5px solid var(--nexus); border-radius: var(--radius-sm); background: var(--ios-input); color: var(--text); font-size: 15px; font-family: inherit; outline: none;
             resize: none; min-height: 80px; margin: 8px 0; transition: box-shadow 0.3s;
         }
         .edit-post-area:focus { box-shadow: 0 0 0 3px var(--nexus-soft); }
 
-        /* ── COMMENTS ── */
+        /* â”€â”€ COMMENTS â”€â”€ */
         .comment-card { background: var(--ios-input);
             border-radius: 12px; padding: 10px 12px; margin-bottom: 7px; position: relative; animation: postSlideIn 0.3s ease;
         }
@@ -321,7 +321,7 @@
         }
         .comment-delete-btn:hover { color: var(--danger); transform: scale(1.2); }
 
-        /* ── INPUT BAR ── */
+        /* â”€â”€ INPUT BAR â”€â”€ */
         .ios-footer { position: fixed;
             bottom: 0; left: 0; right: 0; background: var(--tab-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-top: 0.5px solid var(--border);
             padding: 10px 15px calc(10px + env(safe-area-inset-bottom)); z-index: 1000; transition: transform 0.3s ease;
@@ -345,7 +345,7 @@
         .send-btn:active { transform: scale(0.92) translateY(-2px); }
         .media-btn-group { display: flex; align-items: center; gap: 4px; }
 
-        /* ══════════════ NEW BOTTOM NAVBAR ══════════════ */
+        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â• NEW BOTTOM NAVBAR â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
         #bottom-fade {
             position: fixed; left: 0; right: 0; bottom: 0; height: 150px;
             background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.25) 45%, rgba(0,0,0,0));
@@ -415,7 +415,7 @@
         .bn-compose.spin i { transform: rotate(135deg); }
         .bn-compose.spin::before { animation: none; box-shadow: none; }
 
-        /* ── COMPOSE MORPH ── */
+        /* â”€â”€ COMPOSE MORPH â”€â”€ */
         #bottom-nav.composing .bn-shell { border-radius: 26px; }
         .bn-compose-panel {
             display: none;
@@ -438,7 +438,7 @@
 
         .bn-tabs { display: flex; align-items: center; justify-content: space-between; width: 100%; }
 
-        /* ── STATUS FEED (TikTok style) ── */
+        /* â”€â”€ STATUS FEED (TikTok style) â”€â”€ */
         #status-feed-overlay {
             position: fixed; inset: 0; background: #000; z-index: 2500; display: none;
             flex-direction: column;
@@ -504,7 +504,7 @@
             display: flex; flex-direction: column; align-items: center; gap: 10px; height: 100dvh; justify-content: center;
         }
 
-        /* ── PROCESSING GLOW (Siri-style rotating edge light) ── */
+        /* â”€â”€ PROCESSING GLOW (Siri-style rotating edge light) â”€â”€ */
         @keyframes glowRotate { to { --glow-angle: 360deg; } }
         @property --glow-angle {
             syntax: '<angle>'; initial-value: 0deg; inherits: false;
@@ -529,7 +529,7 @@
         }
         .bn-processing-label .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--nexus); animation: badgePop 1s ease-in-out infinite; }
 
-        /* ── MUSIC FEATURE ── */
+        /* â”€â”€ MUSIC FEATURE â”€â”€ */
         .music-result-item { display: flex; align-items: center; gap: 12px; padding: 9px 8px; border-radius: 12px;
             cursor: pointer; transition: background 0.15s; }
         .music-result-item:hover { background: var(--ios-input); }
@@ -579,7 +579,7 @@
         .global-sound-toggle.on { color: white; background: var(--nexus); }
         .global-sound-toggle:active { transform: scale(0.9); }
 
-        /* ── LIGHTBOX ── */
+        /* â”€â”€ LIGHTBOX â”€â”€ */
         .lightbox { position: fixed;
             top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 2000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px); animation: fadeIn 0.3s ease; }
@@ -592,7 +592,7 @@
         }
         .close-lightbox-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.1); }
 
-        /* ── PROFILE MODAL ── */
+        /* â”€â”€ PROFILE MODAL â”€â”€ */
         #profile-modal { position: fixed;
             top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; align-items: flex-end; justify-content: center; backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px); animation: fadeIn 0.3s ease; }
@@ -617,7 +617,7 @@
         .profile-grid-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
         .profile-grid-item:hover img { transform: scale(1.1); }
 
-        /* ── NOTIFICATIONS PANEL ── */
+        /* â”€â”€ NOTIFICATIONS PANEL â”€â”€ */
         #notif-panel { position: fixed;
             top: 54px; right: 0; width: min(360px, 100vw); height: calc(100vh - 54px); background: var(--card); border-left: 0.5px solid var(--border); z-index: 1500;
             transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); overflow-y: auto; box-shadow: -8px 0 30px rgba(0,0,0,0.15);
@@ -641,12 +641,12 @@
         .notif-time { font-size: 12px; color: var(--sub); margin-top: 3px; }
         .notif-empty { padding: 40px 20px; text-align: center; color: var(--sub); font-size: 15px; }
 
-        /* ── BOOKMARKS SCREEN ── */
+        /* â”€â”€ BOOKMARKS SCREEN â”€â”€ */
         #bookmarks-screen { display: none; padding-top: 16px; animation: fadeIn 0.3s ease; }
         .bookmarks-header { display: flex; align-items: center; gap: 14px; padding: 0 0 20px; }
         .bookmarks-header h2 { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin: 0; }
 
-        /* ── TRENDING ── */
+        /* â”€â”€ TRENDING â”€â”€ */
         .trending-card { background: var(--card);
             border-radius: var(--radius); padding: 16px; margin-bottom: 10px; border: 0.5px solid var(--border); box-shadow: var(--shadow);
             animation: postSlideIn 0.4s ease;
@@ -662,7 +662,7 @@
         .trending-tag { font-weight: 700; font-size: 15px; color: var(--nexus); }
         .trending-count { font-size: 12px; color: var(--sub); margin-top: 1px; }
 
-        /* ── SETTINGS SCREEN ── */
+        /* â”€â”€ SETTINGS SCREEN â”€â”€ */
         #settings-screen { padding-top: 16px; animation: fadeIn 0.3s ease; }
         .settings-header { display: flex; align-items: center; gap: 14px; padding: 0 0 20px; }
         .settings-header h2 { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin: 0; }
@@ -709,7 +709,7 @@
             display: flex; align-items: center; justify-content: center; gap: 4px; }
         .profile-preview-username { font-size: 13px; color: var(--sub); }
 
-        /* ── MODAL ── */
+        /* â”€â”€ MODAL â”€â”€ */
         @keyframes modalScale {
             from { opacity: 0; transform: scale(0.85); }
             to { opacity: 1; transform: scale(1); }
@@ -746,7 +746,7 @@
         }
         .btn-ghost:hover { background: rgba(255,59,48,0.1); transform: translateY(-1px); }
 
-        /* ── AI OVERLAY ── */
+        /* â”€â”€ AI OVERLAY â”€â”€ */
         @keyframes overlaySlideUp {
             from { opacity: 0; transform: translateY(40px) scale(0.95); }
             to { opacity: 1; transform: translateY(0) scale(1); }
@@ -756,7 +756,7 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.3); animation: overlaySlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* ── STORY VIEWER ── */
+        /* â”€â”€ STORY VIEWER â”€â”€ */
         #story-viewer { background: #000;
             border-radius: 0; width: 100%; max-width: 400px; height: 100%; display: flex; flex-direction: column; position: relative; overflow: hidden;
             animation: modalScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -781,7 +781,7 @@
             transform: translateX(-50%); color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 600; text-shadow: 0 2px 6px rgba(0,0,0,0.8); z-index: 20; background: rgba(0,0,0,0.5); padding: 6px 14px;
             border-radius: 20px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); pointer-events: none;}
 
-        /* ── EMOJI PICKER ── */
+        /* â”€â”€ EMOJI PICKER â”€â”€ */
         .emoji-picker-popup {
             position: fixed;
             background: var(--card); border: 0.5px solid var(--border); border-radius: 16px; padding: 12px;
@@ -799,14 +799,14 @@
             align-items: center; }
         .emoji-btn-pick:hover { transform: scale(1.3) rotate(5deg); background: var(--ios-input); }
 
-        /* ── ACTION BUTTON STYLE ── */
+        /* â”€â”€ ACTION BUTTON STYLE â”€â”€ */
         .input-action-btn { background: none;
             border: 1px solid var(--border); border-radius: 8px; color: var(--sub); cursor: pointer; padding: 3px 8px; font-size: 12px; font-weight: 700; font-family: inherit;
             transition: all 0.2s; }
         .input-action-btn:hover { color: var(--nexus); border-color: var(--nexus); background: var(--nexus-soft);
             transform: translateY(-1px); }
 
-        /* ── TOAST ── */
+        /* â”€â”€ TOAST â”€â”€ */
         #toast { position: fixed;
             bottom: 100px; left: 50%; transform: translateX(-50%) translateY(30px) scale(0.9); background: var(--text); color: var(--bg); padding: 10px 20px; border-radius: 20px; font-size: 14px;
             font-weight: 500;
@@ -818,7 +818,7 @@
         .hidden { display: none !important; }
         .divider { height: 0.5px; background: var(--border); margin: 6px 0; }
 
-        /* ── POLL ── */
+        /* â”€â”€ POLL â”€â”€ */
         .poll-container { margin-top: 10px; }
         .poll-option { position: relative; overflow: hidden; border-radius: 10px; margin-bottom: 8px;
             border: 1.5px solid var(--border); cursor: pointer; transition: border-color 0.3s, transform 0.2s;
@@ -833,7 +833,7 @@
         .poll-pct { font-size: 13px; font-weight: 700; color: var(--nexus); animation: fadeIn 0.5s; }
         .poll-total { font-size: 12px; color: var(--sub); margin-top: 6px; }
 
-        /* ── POLL CREATOR ── */
+        /* â”€â”€ POLL CREATOR â”€â”€ */
         .poll-option-input { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; animation: postSlideIn 0.3s ease; }
         .poll-option-input input { flex: 1;
             padding: 10px 12px; border: 1px solid var(--border);
@@ -841,13 +841,13 @@
         }
         .poll-option-input input:focus { border-color: var(--nexus); box-shadow: 0 0 0 2px var(--nexus-soft); }
 
-        /* ── CHAR COUNTER ── */
+        /* â”€â”€ CHAR COUNTER â”€â”€ */
         .char-counter { font-size: 12px; color: var(--sub); text-align: right; margin-top: 4px; transition: color 0.3s; }
         .char-counter.warn { color: var(--warning); animation: modalScale 0.3s ease; }
         .char-counter.limit { color: var(--danger); animation: shake 0.4s ease; }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
-        /* ── Animated post entry ── */
+        /* â”€â”€ Animated post entry â”€â”€ */
         @keyframes postSlideIn {
             from { opacity: 0; transform: translateY(25px) scale(0.97); }
             to { opacity: 1; transform: translateY(0) scale(1); }
@@ -974,8 +974,8 @@
                 </div>
                 <input type="file" id="profile-img-input" accept="image/*" class="hidden" onchange="uploadProfileImage(event)">
             </label>
-            <div class="profile-preview-name" id="settings-preview-name">–</div>
-            <div class="profile-preview-username" id="settings-preview-user">–</div>
+            <div class="profile-preview-name" id="settings-preview-name">â€“</div>
+            <div class="profile-preview-username" id="settings-preview-user">â€“</div>
         </div>
         <div class="divider"></div>
         <div class="settings-row" onclick="showEditProfile()">
@@ -1018,7 +1018,7 @@
             <button class="settings-toggle on" id="notif-comments-toggle" onclick="this.classList.toggle('on')"></button>
         </div>
     </div>
-    <div class="settings-section-title">Privatsphäre</div>
+    <div class="settings-section-title">PrivatsphÃ¤re</div>
     <div class="settings-card">
         <div class="settings-row" style="cursor:default;">
             <div class="settings-row-icon" style="background:#ff9500;"><i data-lucide="eye-off" style="width:16px;color:white;"></i></div>
@@ -1027,13 +1027,13 @@
         </div>
         <div class="settings-row" style="cursor:default;">
             <div class="settings-row-icon" style="background:#5856d6;"><i data-lucide="user-check" style="width:16px;color:white;"></i></div>
-            <span class="settings-row-label">Aktivitätsstatus anzeigen</span>
+            <span class="settings-row-label">AktivitÃ¤tsstatus anzeigen</span>
             <button class="settings-toggle on" onclick="this.classList.toggle('on')"></button>
         </div>
     </div>
     <div class="settings-section-title">Info</div>
     <div class="settings-card">
-        <div class="settings-row" onclick="showToast('cliq. v155.0 – Danke fürs Nutzen! 💙')">
+        <div class="settings-row" onclick="showToast('cliq. v155.0 â€“ Danke fÃ¼rs Nutzen! ðŸ’™')">
             <div class="settings-row-icon" style="background:#1877f2;"><i data-lucide="info" style="width:16px;color:white;"></i></div>
             <span class="settings-row-label">Version</span>
             <span class="settings-row-value">v155.0</span>
@@ -1057,8 +1057,8 @@
         <div class="profile-modal-header">
             <img id="pmodal-avatar" src="" class="profile-modal-avatar">
             <div style="flex:1;">
-                <div class="profile-modal-name" id="pmodal-name">–</div>
-                <div class="profile-modal-username" id="pmodal-username">–</div>
+                <div class="profile-modal-name" id="pmodal-name">â€“</div>
+                <div class="profile-modal-username" id="pmodal-username">â€“</div>
             </div>
             <button onclick="closeProfileModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;padding:4px;transition:transform 0.2s;"><i data-lucide="x"></i></button>
         </div>
@@ -1081,7 +1081,7 @@
         <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);display:block;margin-bottom:6px;">Nutzername</label>
         <input type="text" id="edit-username" class="modal-input" placeholder="@username">
         <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);display:block;margin-bottom:6px;">Bio</label>
-        <textarea id="edit-bio" class="modal-input" placeholder="Erzähl etwas über dich..." style="height:80px;resize:none;"></textarea>
+        <textarea id="edit-bio" class="modal-input" placeholder="ErzÃ¤hl etwas Ã¼ber dich..." style="height:80px;resize:none;"></textarea>
         <button onclick="saveProfile()" class="btn-primary">Speichern</button>
     </div>
 </div>
@@ -1101,7 +1101,7 @@
 <div id="alert-modal" class="lightbox">
     <div class="modal-inner" onclick="event.stopPropagation()">
         <h3 class="modal-title">Neue Meldung</h3>
-        <select id="alert-type" class="modal-input"><option value="warning">⚠️ Warnung</option><option value="info">ℹ️ Information</option><option value="success">✅ Erfolg</option></select>
+        <select id="alert-type" class="modal-input"><option value="warning">âš ï¸ Warnung</option><option value="info">â„¹ï¸ Information</option><option value="success">âœ… Erfolg</option></select>
         <textarea id="alert-text" class="modal-input" placeholder="Nachricht eingeben..." style="height:90px;resize:none;"></textarea>
         <select id="alert-duration" class="modal-input"><option value="0">Dauerhaft anzeigen</option><option value="1">1 Stunde</option><option value="24">24 Stunden</option></select>
         <div style="display:flex;gap:10px;margin-top:4px;">
@@ -1121,10 +1121,10 @@
         </div>
          <textarea id="poll-question" class="modal-input" placeholder="Frage stellen..." style="height:60px;resize:none;margin-bottom:14px;"></textarea>
         <div id="poll-options-container">
-            <div class="poll-option-input"><input type="text" class="poll-opt" placeholder="Option 1" maxlength="50"><button onclick="removePollOpt(this)" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;transition:color 0.2s;">×</button></div>
-            <div class="poll-option-input"><input type="text" class="poll-opt" placeholder="Option 2" maxlength="50"><button onclick="removePollOpt(this)" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;transition:color 0.2s;">×</button></div>
+            <div class="poll-option-input"><input type="text" class="poll-opt" placeholder="Option 1" maxlength="50"><button onclick="removePollOpt(this)" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;transition:color 0.2s;">Ã—</button></div>
+            <div class="poll-option-input"><input type="text" class="poll-opt" placeholder="Option 2" maxlength="50"><button onclick="removePollOpt(this)" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;transition:color 0.2s;">Ã—</button></div>
         </div>
-        <button onclick="addPollOption()" style="background:none;border:1px dashed var(--border);border-radius:10px;padding:9px;width:100%;color:var(--nexus);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:14px;transition:background 0.2s;">+ Option hinzufügen</button>
+        <button onclick="addPollOption()" style="background:none;border:1px dashed var(--border);border-radius:10px;padding:9px;width:100%;color:var(--nexus);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:14px;transition:background 0.2s;">+ Option hinzufÃ¼gen</button>
         <button onclick="submitPoll()" class="btn-primary">Umfrage posten</button>
     </div>
 </div>
@@ -1133,12 +1133,12 @@
     <div class="modal-inner" onclick="event.stopPropagation()" style="max-height:80vh;display:flex;flex-direction:column;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-shrink:0;">
             <h3 class="modal-title" style="margin:0;display:flex;align-items:center;gap:8px;">
-                <i data-lucide="music-4" style="width:20px;"></i> Sound auswählen
+                <i data-lucide="music-4" style="width:20px;"></i> Sound auswÃ¤hlen
             </h3>
             <button onclick="closeMusicModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
         </div>
         <div style="position:relative;flex-shrink:0;margin-bottom:10px;">
-            <input type="text" id="music-search-input" class="modal-input" placeholder="Song oder Artist suchen…" style="margin-bottom:0;padding-left:36px;">
+            <input type="text" id="music-search-input" class="modal-input" placeholder="Song oder Artist suchenâ€¦" style="margin-bottom:0;padding-left:36px;">
             <i data-lucide="search" style="width:15px;position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--sub);"></i>
         </div>
         <div id="music-results-label" style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--sub);margin-bottom:8px;flex-shrink:0;display:flex;align-items:center;gap:6px;">
@@ -1152,10 +1152,10 @@
     <div class="modal-inner" onclick="event.stopPropagation()" style="text-align:center;">
         <button onclick="closeMusicPlayerModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;float:right;transition:transform 0.2s;"><i data-lucide="x"></i></button>
         <img id="mp-cover" src="" style="width:120px;height:120px;border-radius:16px;object-fit:cover;box-shadow:0 10px 30px rgba(0,0,0,0.25);margin:10px auto 16px;display:block;">
-        <div id="mp-title" style="font-family:'Syne',sans-serif;font-weight:800;font-size:17px;margin-bottom:2px;">–</div>
-        <div id="mp-artist" style="font-size:14px;color:var(--sub);margin-bottom:18px;">–</div>
+        <div id="mp-title" style="font-family:'Syne',sans-serif;font-weight:800;font-size:17px;margin-bottom:2px;">â€“</div>
+        <div id="mp-artist" style="font-size:14px;color:var(--sub);margin-bottom:18px;">â€“</div>
         <button id="mp-play-btn" onclick="toggleMpPreview()" class="btn-primary" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;">
-            <i data-lucide="play" style="width:16px;"></i> <span>Vorschau abspielen</span>
+            <span id="mp-play-icon-wrap" style="display:flex;align-items:center;"><i data-lucide="play" style="width:16px;"></i></span> <span id="mp-play-label">Vorschau abspielen</span>
         </button>
         <div style="display:flex;gap:8px;">
             <a id="mp-spotify-link" href="#" target="_blank" rel="noopener" style="flex:1;background:#1DB954;color:white;text-decoration:none;padding:11px;border-radius:10px;font-size:13.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;">
@@ -1180,7 +1180,7 @@
             <button onclick="openMusicModal('story')" class="btn-ghost" style="width:auto;flex:1;color:var(--nexus);background:var(--nexus-soft);display:flex;align-items:center;justify-content:center;gap:6px;">
                 <i data-lucide="music-4" style="width:15px;"></i> Musik
             </button>
-            <button onclick="publishStory()" class="btn-primary" style="flex:2;">Story veröffentlichen</button>
+            <button onclick="publishStory()" class="btn-primary" style="flex:2;">Story verÃ¶ffentlichen</button>
         </div>
     </div>
 </div>
@@ -1245,7 +1245,7 @@
                         <button onclick="openPollModal()" title="Umfrage erstellen" style="background:none;border:none;color:var(--nexus);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform 0.2s;">
                             <i data-lucide="bar-chart-2" style="width:24px;height:24px;"></i>
                         </button>
-                        <button class="music-add-btn" id="composer-music-add-btn" onclick="openMusicModal('post')" title="Musik hinzufügen">
+                        <button class="music-add-btn" id="composer-music-add-btn" onclick="openMusicModal('post')" title="Musik hinzufÃ¼gen">
                             <i data-lucide="music-4" style="width:23px;height:23px;"></i>
                         </button>
                     </div>
@@ -1257,7 +1257,7 @@
         </div>
         <div id="preview-container" class="hidden" style="position:absolute;bottom:74px;left:15px;background:var(--card);padding:5px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.15);animation:postSlideIn 0.3s ease;">
             <img id="preview-img" src="" style="width:80px;height:80px;object-fit:cover;border-radius:8px;display:block;">
-             <button onclick="clearPreview()" style="position:absolute;top:-6px;right:-6px;background:var(--danger);color:white;border:none;border-radius:50%;cursor:pointer;width:22px;height:22px;font-size:14px;display:flex;align-items:center;justify-content:center;transition:transform 0.2s;">×</button>
+             <button onclick="clearPreview()" style="position:absolute;top:-6px;right:-6px;background:var(--danger);color:white;border:none;border-radius:50%;cursor:pointer;width:22px;height:22px;font-size:14px;display:flex;align-items:center;justify-content:center;transition:transform 0.2s;">Ã—</button>
         </div>
         <div class="char-counter hidden" id="char-counter" style="position:absolute;bottom:-20px;right:10px;">0 / 500</div>
     </div>
@@ -1298,10 +1298,10 @@
     const imgbbKey = "1cb3871dd6829d7133f3285c289ffc0a";
     const adminEmail = "boxenjob5@gmail.com";
     const verifiedIcon = "https://lh3.googleusercontent.com/d/1OqVoJrTHfr_EXG520w5ES9ugrgQPzHNa";
-    const REACTIONS = ['👍','❤️','😂','😮','😢','😡','🔥','👏','🙌','🎉','💯','✨','😍','🥰','😎','🤔','🤮','💔','🤫','🙄','🤤','🥴','🥳','🤯','🤗','💩','💀','👽','👀','🧠'];
+    const REACTIONS = ['ðŸ‘','â¤ï¸','ðŸ˜‚','ðŸ˜®','ðŸ˜¢','ðŸ˜¡','ðŸ”¥','ðŸ‘','ðŸ™Œ','ðŸŽ‰','ðŸ’¯','âœ¨','ðŸ˜','ðŸ¥°','ðŸ˜Ž','ðŸ¤”','ðŸ¤®','ðŸ’”','ðŸ¤«','ðŸ™„','ðŸ¤¤','ðŸ¥´','ðŸ¥³','ðŸ¤¯','ðŸ¤—','ðŸ’©','ðŸ’€','ðŸ‘½','ðŸ‘€','ðŸ§ '];
     const MAX_CHARS = 500;
 
-    /* ── IMAGE COMPRESSION ── */
+    /* â”€â”€ IMAGE COMPRESSION â”€â”€ */
     function compressImage(file, maxDim = 1600, quality = 0.82) {
         return new Promise((resolve, reject) => {
             if (!file.type.startsWith('image/') || file.type === 'image/gif') { resolve(file); return; }
@@ -1327,7 +1327,7 @@
             img.src = url;
         });
     }
-    function setBnProcessing(active, label = 'Wird komprimiert…') {
+    function setBnProcessing(active, label = 'Wird komprimiertâ€¦') {
         const shell = document.getElementById('bn-shell');
         if (!shell) return;
         shell.classList.toggle('processing', active);
@@ -1345,12 +1345,12 @@
         }
     }
 
-    /* ══════════════ MUSIC FEATURE ══════════════ */
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â• MUSIC FEATURE â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     // Rotating pool of viral-sound seed queries (based on recurring TikTok-trend archetypes).
     // A handful are picked at random each time the picker opens, so suggestions vary.
     const VIRAL_SEED_POOL = [
         'Espresso Sabrina Carpenter', 'Die With A Smile', 'Good Luck Babe Chappell Roan',
-        'Beautiful Things Benson Boone', 'APT Rosé Bruno Mars', 'Birds of a Feather Billie Eilish',
+        'Beautiful Things Benson Boone', 'APT RosÃ© Bruno Mars', 'Birds of a Feather Billie Eilish',
         'Not Like Us Kendrick Lamar', 'Padam Padam Kylie Minogue', 'Houdini Dua Lipa',
         'Flowers Miley Cyrus', 'Paint The Town Red Doja Cat', 'Cruel Summer Taylor Swift',
         'Feather Sabrina Carpenter', 'Say My Name ODESZA', 'Levitating Dua Lipa',
@@ -1374,22 +1374,31 @@
     let selectedMusicForStory = null;
     let globalSoundEnabled = false;
 
+    function setPreviewBtnIcon(btn, iconName) {
+        if (!btn) return;
+        // Works whether the icon is still <i data-lucide> or already replaced by lucide with <svg>.
+        const existingIcon = btn.querySelector('i, svg');
+        const wrap = document.createElement('span');
+        wrap.style.cssText = 'display:flex;align-items:center;justify-content:center;';
+        wrap.innerHTML = `<i data-lucide="${iconName}" style="width:14px;"></i>`;
+        if (existingIcon) existingIcon.replaceWith(wrap.firstElementChild);
+        else btn.appendChild(wrap.firstElementChild);
+        if (window.lucide) lucide.createIcons({root: btn});
+    }
     function stopMusicPreview() {
         musicPreviewAudio.pause();
         musicPreviewAudio.currentTime = 0;
-        document.querySelectorAll('.music-preview-btn i').forEach(i => i.setAttribute('data-lucide', 'play'));
-        if(window.lucide) lucide.createIcons();
+        document.querySelectorAll('.music-preview-btn').forEach(btn => setPreviewBtnIcon(btn, 'play'));
         musicPreviewPlayingId = null;
     }
     window.toggleMusicPreview = (btn, previewUrl, id) => {
-        const icon = btn.querySelector('i');
+        if (!previewUrl) { showToast('Keine Vorschau verfÃ¼gbar'); return; }
         if (musicPreviewPlayingId === id) { stopMusicPreview(); return; }
         stopMusicPreview();
         musicPreviewAudio.src = previewUrl;
         musicPreviewAudio.play().catch(() => showToast('Vorschau konnte nicht geladen werden'));
         musicPreviewPlayingId = id;
-        icon.setAttribute('data-lucide', 'square');
-        if(window.lucide) lucide.createIcons();
+        setPreviewBtnIcon(btn, 'square');
         musicPreviewAudio.onended = () => stopMusicPreview();
     };
 
@@ -1403,7 +1412,7 @@
     }
     async function loadViralSuggestions() {
         const list = document.getElementById('music-results-list');
-        list.innerHTML = '<div class="music-loading">Lade virale Sounds…</div>';
+        list.innerHTML = '<div class="music-loading">Lade virale Soundsâ€¦</div>';
         const seeds = pickRandomViralSeeds(5);
         const batches = await Promise.all(seeds.map(s => itunesSearch(s)));
         const results = [];
@@ -1465,7 +1474,7 @@
             const term = input.value.trim();
             if (!term) { loadViralSuggestions(); return; }
             musicSearchDebounce = setTimeout(async () => {
-                document.getElementById('music-results-list').innerHTML = '<div class="music-loading">Suche…</div>';
+                document.getElementById('music-results-list').innerHTML = '<div class="music-loading">Sucheâ€¦</div>';
                 const results = await itunesSearch(term);
                 renderMusicResults(results, false);
             }, 400);
@@ -1476,8 +1485,8 @@
         try {
             data = JSON.parse(decodeURIComponent(escape(atob(encoded))));
         } catch (e) {
-            console.error('Konnte ausgewählten Song nicht lesen:', e);
-            showToast('Song konnte nicht ausgewählt werden.');
+            console.error('Konnte ausgewÃ¤hlten Song nicht lesen:', e);
+            showToast('Song konnte nicht ausgewÃ¤hlt werden.');
             return;
         }
         if (musicPickerTarget === 'post') {
@@ -1489,7 +1498,7 @@
         }
         stopMusicPreview();
         closeMusicModal();
-        showToast(`🎵 "${data.title}" ausgewählt`);
+        showToast(`ðŸŽµ "${data.title}" ausgewÃ¤hlt`);
     };
     function renderComposerMusicChip() {
         const wrap = document.getElementById('composer-music-chip-wrap');
@@ -1498,7 +1507,7 @@
         btn?.classList.add('has-music');
         wrap.innerHTML = `<div class="composer-music-chip">
             <img src="${selectedMusicForPost.artworkUrl}">
-            <span>${selectedMusicForPost.title} · ${selectedMusicForPost.artist}</span>
+            <span>${selectedMusicForPost.title} Â· ${selectedMusicForPost.artist}</span>
             <button onclick="removeComposerMusic()"><i data-lucide="x" style="width:13px;"></i></button>
         </div>`;
         if(window.lucide) lucide.createIcons({root: wrap});
@@ -1533,7 +1542,7 @@
     window.openMusicPlayerModal = (music) => {
         if (typeof music === 'string') {
             try { music = JSON.parse(music.replace(/&quot;/g, '"')); }
-            catch (e) { console.error('Musikdaten ungültig:', e); return; }
+            catch (e) { console.error('Musikdaten ungÃ¼ltig:', e); return; }
         }
         if (!music || typeof music !== 'object') return;
         document.getElementById('mp-cover').src = music.artworkUrl || '';
@@ -1543,54 +1552,65 @@
         document.getElementById('mp-apple-link').href = music.trackViewUrl || `https://music.apple.com/search?term=${encodeURIComponent((music.title||'') + ' ' + (music.artist||''))}`;
         const playBtn = document.getElementById('mp-play-btn');
         playBtn.dataset.previewUrl = music.previewUrl || '';
-        playBtn.querySelector('span').textContent = 'Vorschau abspielen';
-        playBtn.querySelector('i').setAttribute('data-lucide', 'play');
+        setMpPlayIcon('play', 'Vorschau abspielen');
         document.getElementById('music-player-modal').style.display = 'flex';
         if(window.lucide) lucide.createIcons();
     };
+    function setMpPlayIcon(iconName, labelText) {
+        const wrap = document.getElementById('mp-play-icon-wrap');
+        const label = document.getElementById('mp-play-label');
+        if (wrap) wrap.innerHTML = `<i data-lucide="${iconName}" style="width:16px;"></i>`;
+        if (label) label.textContent = labelText;
+        if (window.lucide) lucide.createIcons({root: wrap || document});
+    }
     window.closeMusicPlayerModal = () => {
         stopMusicPreview();
         document.getElementById('music-player-modal').style.display = 'none';
-        const playBtn = document.getElementById('mp-play-btn');
-        playBtn.querySelector('span').textContent = 'Vorschau abspielen';
-        playBtn.querySelector('i').setAttribute('data-lucide', 'play');
-        if(window.lucide) lucide.createIcons();
+        setMpPlayIcon('play', 'Vorschau abspielen');
     };
     window.toggleMpPreview = () => {
         const btn = document.getElementById('mp-play-btn');
         const url = btn.dataset.previewUrl;
-        const span = btn.querySelector('span');
-        const icon = btn.querySelector('i');
+        if (!url) { showToast('Keine Vorschau fÃ¼r diesen Song verfÃ¼gbar'); return; }
         if (musicPreviewPlayingId === 'mp') {
             stopMusicPreview();
-            span.textContent = 'Vorschau abspielen';
-            icon.setAttribute('data-lucide', 'play');
-            if(window.lucide) lucide.createIcons();
+            setMpPlayIcon('play', 'Vorschau abspielen');
             return;
         }
         stopMusicPreview();
         musicPreviewAudio.src = url;
         musicPreviewAudio.play().catch(() => showToast('Vorschau konnte nicht geladen werden'));
         musicPreviewPlayingId = 'mp';
-        span.textContent = 'Wird abgespielt…';
-        icon.setAttribute('data-lucide', 'square');
-        if(window.lucide) lucide.createIcons();
+        setMpPlayIcon('square', 'Wird abgespieltâ€¦');
         musicPreviewAudio.onended = () => {
             musicPreviewPlayingId = null;
-            span.textContent = 'Vorschau abspielen';
-            icon.setAttribute('data-lucide', 'play');
-            if(window.lucide) lucide.createIcons();
+            setMpPlayIcon('play', 'Vorschau abspielen');
         };
     };
+    function swapIcon(container, iconName) {
+        if (!container) return;
+        const existingIcon = container.querySelector('i, svg');
+        const span = document.createElement('span');
+        span.innerHTML = `<i data-lucide="${iconName}"></i>`;
+        const fresh = span.firstElementChild;
+        if (existingIcon) {
+            // Preserve size/style attributes if the old node had them
+            if (existingIcon.getAttribute('style')) fresh.setAttribute('style', existingIcon.getAttribute('style'));
+            existingIcon.replaceWith(fresh);
+        } else {
+            container.appendChild(fresh);
+        }
+        if (window.lucide) lucide.createIcons({root: container});
+    }
     window.toggleGlobalSound = () => {
         globalSoundEnabled = !globalSoundEnabled;
         localStorage.setItem('cliq_sound_enabled', globalSoundEnabled ? '1' : '0');
         const btn = document.getElementById('global-sound-toggle');
+        if (!btn) return;
         btn.classList.toggle('on', globalSoundEnabled);
-        btn.querySelector('i').setAttribute('data-lucide', globalSoundEnabled ? 'volume-2' : 'volume-x');
-        if(window.lucide) lucide.createIcons();
+        swapIcon(btn, globalSoundEnabled ? 'volume-2' : 'volume-x');
         if (!globalSoundEnabled) stopMusicPreview();
-        showToast(globalSoundEnabled ? 'Musik-Vorschau aktiviert 🔊' : 'Musik-Vorschau deaktiviert 🔇');
+        showToast(globalSoundEnabled ? 'Musik-Vorschau aktiviert ðŸ”Š' : 'Musik-Vorschau deaktiviert ðŸ”‡');
     };
     let userData = null;
     let allPosts = [];
@@ -1699,11 +1719,10 @@
         const isDark = document.body.classList.toggle('dark');
         document.body.classList.toggle('light', !isDark);
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        document.getElementById('theme-icon')?.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
-        document.getElementById('bn-theme-icon')?.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+        const bnThemeBtn = document.getElementById('bn-theme-btn');
+        swapIcon(bnThemeBtn, isDark ? 'sun' : 'moon');
         const dt = document.getElementById('dark-toggle');
         if (dt) dt.classList.toggle('on', isDark);
-        if(window.lucide) lucide.createIcons();
     };
     window.toggleDarkModeSettings = () => toggleDarkMode();
     window.setTheme = (theme, el) => {
@@ -1720,8 +1739,8 @@
         if (userData) {
             document.getElementById('settings-avatar').src = userData.photoURL || '';
             const verifiedHtml = userData.verified ? `<img src="${verifiedIcon}" class="verified-badge">` : '';
-            document.getElementById('settings-preview-name').innerHTML = (userData.displayname || '–') + verifiedHtml;
-            document.getElementById('settings-preview-user').textContent = '@' + (userData.username || '–');
+            document.getElementById('settings-preview-name').innerHTML = (userData.displayname || 'â€“') + verifiedHtml;
+            document.getElementById('settings-preview-user').textContent = '@' + (userData.username || 'â€“');
         }
         document.getElementById('dark-toggle').classList.toggle('on', document.body.classList.contains('dark'));
         setActiveBnTab(null);
@@ -1756,14 +1775,14 @@
         document.getElementById('settings-preview-name').innerHTML = dn + verifiedHtml;
         document.getElementById('settings-preview-user').textContent = '@' + un;
         document.getElementById('edit-profile-modal').style.display = 'none';
-        showToast('Profil gespeichert ✓');
+        showToast('Profil gespeichert âœ“');
     };
     window.uploadProfileImage = async (e) => {
         const file = e.target.files[0]; if (!file) return;
-        showToast('Profilbild wird komprimiert…');
+        showToast('Profilbild wird komprimiertâ€¦');
         try {
             const compressed = await compressImage(file, 800, 0.85);
-            showToast('Profilbild wird hochgeladen…');
+            showToast('Profilbild wird hochgeladenâ€¦');
             const fd = new FormData(); fd.append("image", compressed);
             const res = await fetch("https://api.imgbb.com/1/upload?key="+imgbbKey, { method:"POST", body:fd });
             const j = await res.json();
@@ -1772,7 +1791,7 @@
             await updateDoc(doc(db, "users", auth.currentUser.uid), { photoURL: newUrl });
             userData.photoURL = newUrl;
             document.getElementById('settings-avatar').src = newUrl;
-            showToast('Profilbild aktualisiert ✓');
+            showToast('Profilbild aktualisiert âœ“');
         } catch (err) {
             showToast('Fehler beim Hochladen des Profilbilds.');
         } finally {
@@ -1783,8 +1802,8 @@
         const uSnap = await getDoc(doc(db, "users", uid));
         const u = uSnap.data() || {};
         document.getElementById('pmodal-avatar').src = u.photoURL || '';
-        document.getElementById('pmodal-name').innerHTML = (u.displayname || '–') + (u.verified ? `<img src="${verifiedIcon}" style="width:18px;height:18px;">` : '');
-        document.getElementById('pmodal-username').textContent = '@' + (u.username || '–');
+        document.getElementById('pmodal-name').innerHTML = (u.displayname || 'â€“') + (u.verified ? `<img src="${verifiedIcon}" style="width:18px;height:18px;">` : '');
+        document.getElementById('pmodal-username').textContent = '@' + (u.username || 'â€“');
         document.getElementById('pmodal-bio').textContent = u.bio || '';
         const grid = document.getElementById('pmodal-grid');
         grid.innerHTML = '';
@@ -1807,7 +1826,7 @@
     window.toggleBookmark = (postId) => {
         const idx = bookmarkedIds.indexOf(postId);
         if (idx > -1) { bookmarkedIds.splice(idx, 1); showToast('Lesezeichen entfernt'); }
-        else { bookmarkedIds.push(postId); showToast('Gespeichert 🔖'); }
+        else { bookmarkedIds.push(postId); showToast('Gespeichert ðŸ”–'); }
         localStorage.setItem('nexus_bookmarks', JSON.stringify(bookmarkedIds));
         const btn = document.querySelector(`#post-${postId} .bookmark-btn`);
         if (btn) btn.classList.toggle('bookmarked', bookmarkedIds.includes(postId));
@@ -1851,11 +1870,11 @@
             snap.forEach(d => {
                 const n = d.data();
                 if (!n.read) unread++;
-                const icons = { like: '❤️', comment: '💬', repost: '🔁' };
+                const icons = { like: 'â¤ï¸', comment: 'ðŸ’¬', repost: 'ðŸ”' };
                 html += `<div class="notif-item ${n.read ? '' : 'unread'}" onclick="markNotifRead('${d.id}')">
                     <div style="position:relative;">
                         <img src="${n.fromPhoto||''}" class="notif-avatar">
-                        <div class="notif-icon-badge" style="background:${n.type==='like'?'#ff3b30':n.type==='comment'?'#34c759':'#1877f2'};">${icons[n.type]||'🔔'}</div>
+                        <div class="notif-icon-badge" style="background:${n.type==='like'?'#ff3b30':n.type==='comment'?'#34c759':'#1877f2'};">${icons[n.type]||'ðŸ””'}</div>
                     </div>
                     <div style="flex:1;">
                         <div class="notif-text"><strong>${n.fromName||'Jemand'}</strong> ${n.type==='like'?'hat deinen Post geliked':n.type==='comment'?'hat kommentiert: "'+n.preview+'"':'hat deinen Post geteilt'}</div>
@@ -1920,8 +1939,7 @@
             if (user.email === adminEmail) document.getElementById('admin-alert-btn').classList.remove('hidden');
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark'); document.body.classList.remove('light');
-                document.getElementById('theme-icon')?.setAttribute('data-lucide','sun');
-                document.getElementById('bn-theme-icon')?.setAttribute('data-lucide','sun');
+                swapIcon(document.getElementById('bn-theme-btn'), 'sun');
             }
             const accent = localStorage.getItem('accentTheme');
             if (accent && accent !== 'default') { document.body.classList.add('theme-'+accent); document.querySelector(`.theme-dot[data-theme="${accent}"]`)?.classList.add('selected'); }
@@ -1929,7 +1947,7 @@
             soundBtn.classList.remove('hidden');
             globalSoundEnabled = localStorage.getItem('cliq_sound_enabled') === '1';
             soundBtn.classList.toggle('on', globalSoundEnabled);
-            soundBtn.querySelector('i').setAttribute('data-lucide', globalSoundEnabled ? 'volume-2' : 'volume-x');
+            swapIcon(soundBtn, globalSoundEnabled ? 'volume-2' : 'volume-x');
             loadFeed();
             loadAlerts(); loadStories(); loadNotifications();
             if(window.lucide) lucide.createIcons();
@@ -1954,7 +1972,7 @@
         let expiresAt = null;
         if (duration > 0) { expiresAt = new Date(); expiresAt.setHours(expiresAt.getHours() + duration); }
         await addDoc(collection(db, "alerts"), { text, type, expiresAt, createdAt: serverTimestamp() });
-        document.getElementById('alert-text').value = ''; closeAlertModal(); showToast('Meldung erstellt ✓');
+        document.getElementById('alert-text').value = ''; closeAlertModal(); showToast('Meldung erstellt âœ“');
     };
     function loadAlerts() {
         onSnapshot(collection(db, "alerts"), (snap) => {
@@ -2030,7 +2048,7 @@
         renderStoryConfirmMusicChip();
         document.getElementById('story-confirm-modal').style.display = 'flex';
         if(window.lucide) lucide.createIcons();
-        setBnProcessing(true, 'Story wird komprimiert…');
+        setBnProcessing(true, 'Story wird komprimiertâ€¦');
         try {
             storyPendingCompressed = await compressImage(file, 1600, 0.85);
         } finally {
@@ -2047,7 +2065,7 @@
         if (!selectedMusicForStory) { wrap.innerHTML = ''; return; }
         wrap.innerHTML = `<div class="composer-music-chip">
             <img src="${selectedMusicForStory.artworkUrl}">
-            <span>${selectedMusicForStory.title} · ${selectedMusicForStory.artist}</span>
+            <span>${selectedMusicForStory.title} Â· ${selectedMusicForStory.artist}</span>
             <button onclick="selectedMusicForStory=null;renderStoryConfirmMusicChip()"><i data-lucide="x" style="width:13px;"></i></button>
         </div>`;
         if(window.lucide) lucide.createIcons({root: wrap});
@@ -2055,7 +2073,7 @@
     window.publishStory = async () => {
         if (!storyPendingFile) return;
         const uploadFile = storyPendingCompressed || storyPendingFile;
-        showToast('Story wird hochgeladen…');
+        showToast('Story wird hochgeladenâ€¦');
         try {
             const fd = new FormData(); fd.append("image", uploadFile);
             const res = await fetch("https://api.imgbb.com/1/upload?key="+imgbbKey, { method:"POST", body:fd });
@@ -2066,7 +2084,7 @@
                 photoURL: userData.photoURL||'', createdAt: serverTimestamp(), seenBy: [],
                 music: selectedMusicForStory || null
             });
-            showToast('Story gepostet! 🎉');
+            showToast('Story gepostet! ðŸŽ‰');
         } catch (err) {
             showToast('Fehler beim Hochladen der Story.');
         } finally {
@@ -2105,7 +2123,7 @@
             const dh = Math.floor(diffMs/(1000*60*60));
             const dm = Math.floor((diffMs%(1000*60*60))/(1000*60));
             timeLeftEl.textContent = `Noch ${dh}h ${dm}min`;
-        } else { timeLeftEl.textContent = "Läuft ab..."; }
+        } else { timeLeftEl.textContent = "LÃ¤uft ab..."; }
         const prog = document.getElementById('story-progress');
         prog.innerHTML = '';
         for (let i = 0; i < us.length; i++) {
@@ -2144,31 +2162,31 @@
     window.nextStory = (e) => { if(e) e.stopPropagation(); currentStoryIndex++; renderCurrentStory(); };
     window.prevStory = (e) => { if(e) e.stopPropagation(); if(currentStoryIndex > 0) { currentStoryIndex--; renderCurrentStory(); } };
     window.closeStoryViewer = () => { clearTimeout(storyTimer); document.getElementById('story-lightbox').style.display='none'; document.body.style.overflow=''; };
-    window.deleteStory = async (id) => { if(confirm("Story löschen?")) { await deleteDoc(doc(db,"stories",id)); showToast('Story gelöscht'); nextStory(); } };
+    window.deleteStory = async (id) => { if(confirm("Story lÃ¶schen?")) { await deleteDoc(doc(db,"stories",id)); showToast('Story gelÃ¶scht'); nextStory(); } };
     window.openPollModal = () => { document.getElementById('poll-modal').style.display='flex'; if(window.lucide) lucide.createIcons(); };
     window.closePollModal = () => document.getElementById('poll-modal').style.display='none';
     window.addPollOption = () => {
         const container = document.getElementById('poll-options-container');
         if (container.children.length >= 4) return showToast('Max. 4 Optionen');
         const div = document.createElement('div'); div.className = 'poll-option-input';
-        div.innerHTML = `<input type="text" class="poll-opt" placeholder="Option ${container.children.length+1}" maxlength="50"><button onclick="removePollOpt(this)" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;">×</button>`;
+        div.innerHTML = `<input type="text" class="poll-opt" placeholder="Option ${container.children.length+1}" maxlength="50"><button onclick="removePollOpt(this)" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;">Ã—</button>`;
         container.appendChild(div);
     };
     window.removePollOpt = (btn) => {
         const container = document.getElementById('poll-options-container');
-        if (container.children.length <= 2) return showToast('Mindestens 2 Optionen benötigt');
+        if (container.children.length <= 2) return showToast('Mindestens 2 Optionen benÃ¶tigt');
         btn.parentElement.remove();
     };
     window.submitPoll = async () => {
         const question = document.getElementById('poll-question').value.trim();
         if (!question) return showToast('Bitte eine Frage eingeben');
         const opts = [...document.querySelectorAll('.poll-opt')].map(i => i.value.trim()).filter(Boolean);
-        if (opts.length < 2) return showToast('Mindestens 2 Optionen benötigt');
+        if (opts.length < 2) return showToast('Mindestens 2 Optionen benÃ¶tigt');
         const pollData = { question, options: opts.map(o => ({ text: o, votes: [] })) };
         await addDoc(collection(db,"posts"), { text: question, poll: pollData, uid: auth.currentUser.uid, timestamp: serverTimestamp(), likes: [], reactions: {}, isPinned: false });
         closePollModal();
         document.getElementById('poll-question').value = '';
-        showToast('Umfrage gepostet ✓');
+        showToast('Umfrage gepostet âœ“');
     };
     window.votePoll = async (postId, optionIndex) => {
         const ref = doc(db,"posts",postId);
@@ -2192,7 +2210,7 @@
         });
         const uSnap = await getDoc(doc(db,"users",p.uid));
         sendNotification(p.uid, 'repost', postId);
-        showToast('Repostet! 🔁');
+        showToast('Repostet! ðŸ”');
     };
     window.startEditPost = (postId, encodedText) => {
         const postCard = document.getElementById('post-'+postId);
@@ -2210,7 +2228,7 @@
         const newText = document.getElementById('edit-area-'+postId)?.value.trim();
         if (!newText) return showToast('Text darf nicht leer sein');
         await updateDoc(doc(db,"posts",postId), { text: newText, edited: true });
-        showToast('Post bearbeitet ✓');
+        showToast('Post bearbeitet âœ“');
     };
     window.cancelEditPost = (postId, encodedText) => {
         const postCard = document.getElementById('post-'+postId);
@@ -2244,7 +2262,7 @@
                     const isMyVote = myVoteIdx === i;
                     return `<div class="poll-option ${isMyVote?'voted-this':''}" onclick="votePoll('${p.id}',${i})">
                         <div class="poll-fill" style="width:${myVoteIdx > -1 ? pct : 0}%"></div>
-                        <div class="poll-label"><span>${opt.text} ${isMyVote?'✓':''}</span>${myVoteIdx > -1 ? `<span class="poll-pct">${pct}%</span>` : ''}</div>
+                        <div class="poll-label"><span>${opt.text} ${isMyVote?'âœ“':''}</span>${myVoteIdx > -1 ? `<span class="poll-pct">${pct}%</span>` : ''}</div>
                     </div>`;
                 }).join('')}
                 <div class="poll-total">${totalVotes} Stimme${totalVotes !== 1 ? 'n' : ''}</div>
@@ -2259,8 +2277,8 @@
             <div class="post-header">
                 <img src="${u.photoURL||''}" class="user-img" onclick="openProfileModal('${uid}')">
                 <div style="flex-grow:1;">
-                    <div class="display-name" onclick="openProfileModal('${uid}')">${u.displayname||'–'} ${u.verified?`<img src="${verifiedIcon}" class="verified-badge">`:''}${editedHTML}</div>
-                    <div style="font-size:12px;color:var(--sub);">@${u.username||'–'} · <span class="post-time">${timeAgo(p.timestamp)}</span></div>
+                    <div class="display-name" onclick="openProfileModal('${uid}')">${u.displayname||'â€“'} ${u.verified?`<img src="${verifiedIcon}" class="verified-badge">`:''}${editedHTML}</div>
+                    <div style="font-size:12px;color:var(--sub);">@${u.username||'â€“'} Â· <span class="post-time">${timeAgo(p.timestamp)}</span></div>
                 </div>
                 <button onclick="toggleAdminMenu('${p.id}')" style="background:none;border:none;color:var(--sub);cursor:pointer;padding:4px;border-radius:50%;"><i data-lucide="more-horizontal" style="width:18px;"></i></button>
                 <div id="menu-${p.id}" class="admin-menu hidden">
@@ -2268,9 +2286,9 @@
                     <button onclick="copyPostText('${p.id}','${encodeURIComponent(p.text||'')}')"><i data-lucide="copy" style="width:15px;"></i> Text kopieren</button>
                     ${isOwner ? `<button onclick="startEditPost('${p.id}','${encodeURIComponent(p.text||'')}')"><i data-lucide="pen-line" style="width:15px;"></i> Bearbeiten</button>` : ''}
                     ${isAdmin ? `
-                    <button onclick="togglePin('${p.id}',${p.isPinned||false})"><i data-lucide="pin" style="width:15px;"></i> ${p.isPinned?'Lösen':'Anpinnen'}</button>
+                    <button onclick="togglePin('${p.id}',${p.isPinned||false})"><i data-lucide="pin" style="width:15px;"></i> ${p.isPinned?'LÃ¶sen':'Anpinnen'}</button>
                     <button onclick="toggleVerify('${uid}',${u.verified||false})"><i data-lucide="shield-check" style="width:15px;"></i> ${u.verified?'Ent-verifizieren':'Verifizieren'}</button>` : ''}
-                    ${isAdmin||isOwner ? `<button onclick="deletePost('${p.id}')" style="color:var(--danger);"><i data-lucide="trash-2" style="width:15px;"></i> Löschen</button>` : ''}
+                    ${isAdmin||isOwner ? `<button onclick="deletePost('${p.id}')" style="color:var(--danger);"><i data-lucide="trash-2" style="width:15px;"></i> LÃ¶schen</button>` : ''}
                 </div>
             </div>
             ${!p.poll ? `<div class="post-text">${parseText(p.text||'')}</div>` : ''}
@@ -2365,7 +2383,7 @@
                                             const isMyVote = myVoteIdx === i;
                                             return `<div class="poll-option ${isMyVote?'voted-this':''}" onclick="votePoll('${p.id}',${i})">
                                                 <div class="poll-fill" style="width:${myVoteIdx > -1 ? pct : 0}%"></div>
-                                                <div class="poll-label"><span>${opt.text} ${isMyVote?'✓':''}</span>${myVoteIdx > -1 ? `<span class="poll-pct">${pct}%</span>` : ''}</div>
+                                                <div class="poll-label"><span>${opt.text} ${isMyVote?'âœ“':''}</span>${myVoteIdx > -1 ? `<span class="poll-pct">${pct}%</span>` : ''}</div>
                                             </div>`;
                                         }).join('') + `<div class="poll-total">${totalVotes} Stimme${totalVotes !== 1 ? 'n' : ''}</div>`;
                                     }
@@ -2374,7 +2392,7 @@
                         } catch (renderErr) {
                             console.error('Fehler beim Rendern von Post', p.id, renderErr);
                         }
-                    }).catch(userErr => console.error('Fehler beim Laden des Nutzers für Post', p.id, userErr));
+                    }).catch(userErr => console.error('Fehler beim Laden des Nutzers fÃ¼r Post', p.id, userErr));
                 });
             } catch (snapErr) {
                 console.error('Fehler beim Verarbeiten des Feed-Snapshots:', snapErr);
@@ -2438,14 +2456,14 @@
     };
     window.copyPostText = (id, encodedText) => {
         navigator.clipboard?.writeText(decodeURIComponent(encodedText));
-        showToast('Text kopiert 📋');
+        showToast('Text kopiert ðŸ“‹');
         const menu = document.getElementById('menu-'+id);
         if(menu) { menu.classList.add('hidden'); const card = menu.closest('.card'); if(card) card.style.zIndex = ''; }
     };
     window.sharePost = async (id) => {
         const url = location.href.split('#')[0]+'#post-'+id;
         if (navigator.share) navigator.share({ title: 'cliq.', url });
-        else { navigator.clipboard?.writeText(url); showToast('Link kopiert 🔗'); }
+        else { navigator.clipboard?.writeText(url); showToast('Link kopiert ðŸ”—'); }
     };
     window.showComments = async (postId) => {
         const container = document.getElementById('comments-section-'+postId);
@@ -2460,7 +2478,7 @@
             container.innerHTML = `<div id="list-${postId}"></div>
                 <div class="comment-input-area">
                     <img src="${userData?.photoURL}" style="width:26px;height:26px;border-radius:50%;object-fit:cover;flex-shrink:0;">
-                    <input type="text" id="input-${postId}" placeholder="Kommentieren…" value="${savedVal}" style="flex:1;border:none;background:none;color:var(--text);font-size:14px;outline:none;font-family:inherit;">
+                    <input type="text" id="input-${postId}" placeholder="Kommentierenâ€¦" value="${savedVal}" style="flex:1;border:none;background:none;color:var(--text);font-size:14px;outline:none;font-family:inherit;">
                     <button onclick="addComment('${postId}')" class="send-btn" style="width:28px;height:28px;"><i data-lucide="arrow-up" style="width:14px;stroke-width:3;"></i></button>
                 </div>`;
             const list = document.getElementById('list-'+postId);
@@ -2474,7 +2492,7 @@
                     list.innerHTML += `<div class="comment-card">
                         <div class="comment-header">
                             <img src="${c.photoURL||''}" class="comment-user-img">
-                            <span class="comment-display-name">${c.displayname||'–'} ${c.verified?`<img src="${verifiedIcon}" style="width:13px;height:13px;">`:''}</span>
+                            <span class="comment-display-name">${c.displayname||'â€“'} ${c.verified?`<img src="${verifiedIcon}" style="width:13px;height:13px;">`:''}</span>
                             <span class="comment-time">${timeAgo(c.timestamp)}</span>
                             ${(isAdmin||isCOwner)?`<button class="comment-delete-btn" onclick="deleteComment('${postId}','${dDoc.id}')"><i data-lucide="x" style="width:13px;"></i></button>`:''}
                         </div>
@@ -2495,16 +2513,16 @@
         await addDoc(collection(db,"posts",postId,"comments"), { text, uid: auth.currentUser.uid, displayname: userData.displayname, photoURL: userData.photoURL, verified: userData.verified||false, timestamp: serverTimestamp() });
         sendNotification(postData.uid, 'comment', postId, text.slice(0,50));
     };
-    window.deleteComment = async (postId, commentId) => { if(confirm("Kommentar löschen?")) await deleteDoc(doc(db,"posts",postId,"comments",commentId)); };
-    window.togglePin = async (id, status) => { await updateDoc(doc(db,"posts",id), { isPinned: !status }); toggleAdminMenu(id); showToast(status?'Post gelöst':'Post angeheftet 📌'); };
-    window.toggleVerify = async (userId, current) => { if(confirm(current?"Verifizierung entfernen?":"Nutzer verifizieren?")) { await updateDoc(doc(db,"users",userId), { verified: !current }); showToast(current?'Verifizierung entfernt':'Nutzer verifiziert ✓'); } };
+    window.deleteComment = async (postId, commentId) => { if(confirm("Kommentar lÃ¶schen?")) await deleteDoc(doc(db,"posts",postId,"comments",commentId)); };
+    window.togglePin = async (id, status) => { await updateDoc(doc(db,"posts",id), { isPinned: !status }); toggleAdminMenu(id); showToast(status?'Post gelÃ¶st':'Post angeheftet ðŸ“Œ'); };
+    window.toggleVerify = async (userId, current) => { if(confirm(current?"Verifizierung entfernen?":"Nutzer verifizieren?")) { await updateDoc(doc(db,"users",userId), { verified: !current }); showToast(current?'Verifizierung entfernt':'Nutzer verifiziert âœ“'); } };
     window.toggleAdminMenu = (id) => { 
         document.querySelectorAll('.admin-menu').forEach(m => { if(m.id !== 'menu-'+id) { m.classList.add('hidden'); const c = m.closest('.card'); if(c) c.style.zIndex = ''; } }); 
         const menu = document.getElementById('menu-'+id);
         if (menu) { menu.classList.toggle('hidden'); const card = menu.closest('.card'); if (card) card.style.zIndex = menu.classList.contains('hidden') ? '' : '50'; }
         if(window.lucide) lucide.createIcons(); 
     };
-    window.deletePost = async (id) => { if(confirm("Post wirklich löschen?")) { await deleteDoc(doc(db,"posts",id)); showToast('Post gelöscht'); } };
+    window.deletePost = async (id) => { if(confirm("Post wirklich lÃ¶schen?")) { await deleteDoc(doc(db,"posts",id)); showToast('Post gelÃ¶scht'); } };
     window.toggleLike = async (id, ownerUid) => {
         const ref = doc(db,"posts",id);
         const uid = auth.currentUser.uid;
@@ -2525,7 +2543,7 @@
         r.onload = (rs) => { document.getElementById('preview-img').src = rs.target.result; document.getElementById('preview-container').classList.remove('hidden'); };
         r.readAsDataURL(f);
         if (f.type.startsWith('image/')) {
-            setBnProcessing(true, 'Bild wird komprimiert…');
+            setBnProcessing(true, 'Bild wird komprimiertâ€¦');
             try {
                 compressedFileCache = await compressImage(f);
             } finally {
@@ -2536,7 +2554,7 @@
     window.clearPreview = () => { document.getElementById('image-input').value=''; compressedFileCache = null; document.getElementById('preview-container').classList.add('hidden'); };
     document.getElementById('btn-share').onclick = async () => {
         const txt = document.getElementById('post-input').innerText.trim();
-        if (txt.length > MAX_CHARS) return showToast(`Maximale Länge: ${MAX_CHARS} Zeichen`);
+        if (txt.length > MAX_CHARS) return showToast(`Maximale LÃ¤nge: ${MAX_CHARS} Zeichen`);
         const fileInput = document.getElementById('image-input');
         const rawFile = fileInput.files[0];
         if (!txt && !rawFile) return;
@@ -2549,7 +2567,7 @@
             if (rawFile) {
                 const isVideo = rawFile.type.startsWith('video/');
                 const uploadFile = isVideo ? rawFile : (compressedFileCache || rawFile);
-                setBnProcessing(true, isVideo ? 'Video wird hochgeladen…' : 'Bild wird hochgeladen…');
+                setBnProcessing(true, isVideo ? 'Video wird hochgeladenâ€¦' : 'Bild wird hochgeladenâ€¦');
                 const fd = new FormData(); fd.append("image", uploadFile);
                 const res = await fetch("https://api.imgbb.com/1/upload?key="+imgbbKey, { method:"POST", body:fd });
                 const j = await res.json();
@@ -2567,7 +2585,7 @@
             selectedMusicForPost = null;
             renderComposerMusicChip();
             clearPreview();
-            showToast('Post veröffentlicht 🚀');
+            showToast('Post verÃ¶ffentlicht ðŸš€');
             closeComposeBar();
         } catch (err) {
             showToast('Fehler beim Posten. Bitte erneut versuchen.');
@@ -2616,7 +2634,7 @@
     let resizeTimer;
     window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(adaptNavbar, 150); });
 
-    /* ══════════════ NEW BOTTOM NAVBAR LOGIC ══════════════ */
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â• NEW BOTTOM NAVBAR LOGIC â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     window.setActiveBnTab = (id) => {
         document.querySelectorAll('.bn-item').forEach(b => b.classList.remove('active'));
         if (id) document.getElementById(id)?.classList.add('active');
@@ -2635,7 +2653,7 @@
         if (b && b.style.display === 'block') closeBookmarks();
     }
 
-    /* ── Compose morph ── */
+    /* â”€â”€ Compose morph â”€â”€ */
     window.openComposeBar = () => {
         const nav = document.getElementById('bottom-nav');
         const btn = document.getElementById('bn-compose-btn');
@@ -2651,7 +2669,7 @@
         document.getElementById('post-input').blur();
     };
 
-    /* ── STATUS FEED (TikTok-style vertical swipe: stories + image posts) ── */
+    /* â”€â”€ STATUS FEED (TikTok-style vertical swipe: stories + image posts) â”€â”€ */
     let statusItems = [];
     let statusScrollObserver = null;
     function buildStatusItems() {
@@ -2686,7 +2704,7 @@
                     const uSnap = await getDoc(doc(db, "users", it.uid));
                     uidCache[it.uid] = uSnap.data() || {};
                 }
-                it.displayname = uidCache[it.uid].displayname || '–';
+                it.displayname = uidCache[it.uid].displayname || 'â€“';
                 it.photoURL = uidCache[it.uid].photoURL || '';
             }
         }
@@ -2710,7 +2728,7 @@
         }
         overlay.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-        scroller.innerHTML = '<div class="music-loading" style="color:rgba(255,255,255,0.7);height:100dvh;display:flex;align-items:center;justify-content:center;">Lade…</div>';
+        scroller.innerHTML = '<div class="music-loading" style="color:rgba(255,255,255,0.7);height:100dvh;display:flex;align-items:center;justify-content:center;">Ladeâ€¦</div>';
         await hydrateStatusUsers(statusItems);
         scroller.innerHTML = statusItems.map((it, i) => renderStatusSlide(it, i)).join('');
         if(window.lucide) lucide.createIcons({root: scroller});
@@ -2769,7 +2787,7 @@
             <div class="sf-progress-row">${isStory ? `<div class="sf-progress-seg"><div class="sf-progress-seg-fill filled"></div></div>` : ''}</div>
             <div class="sf-top-bar">
                 <img class="sf-avatar" src="${it.photoURL||''}">
-                <span class="sf-top-name">${it.displayname||'–'}</span>
+                <span class="sf-top-name">${it.displayname||'â€“'}</span>
                 <span class="sf-top-time">${timeStr}</span>
                 <span class="sf-kind-badge ${isStory?'story':'post'}">${isStory?'Story':(it.isVideo?'Video':'Bild')}</span>
                 <button class="sf-close-btn" onclick="closeStatusFeed()"><i data-lucide="x" style="width:16px;"></i></button>
@@ -2797,7 +2815,7 @@
         Object.values(it.reactions).forEach(arr => total += (arr||[]).length);
         const countEl = document.getElementById(`sf-react-count-${idx}`);
         if (countEl) countEl.textContent = total > 0 ? total : '';
-        showToast('Reaktion gesendet 🎉');
+        showToast('Reaktion gesendet ðŸŽ‰');
         document.getElementById(`sf-emoji-strip-${idx}`)?.classList.remove('open');
     };
 </script>
