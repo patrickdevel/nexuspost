@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>404 - Seite nicht gefunden | cliq.</title>
+    <link rel="icon" href="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --nexus: #1877f2;
+            --nexus-soft: rgba(24,119,242,0.12);
+            --bg: #f0f2f5;
+            --card: rgba(255,255,255,0.97);
+            --text: #1c1e21;
+            --sub: #65676b;
+            --border: #dddfe2;
+            --header-bg: rgba(255,255,255,0.82);
+            --ios-input: #efeff4;
+            --danger: #ff3b30;
+            --radius: 24px;
+            --radius-sm: 12px;
+            --shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #000;
+                --card: #1c1c1e;
+                --text: #fff;
+                --sub: #8e8e93;
+                --border: #2c2c2e;
+                --header-bg: rgba(18,18,18,0.88);
+                --ios-input: #2c2c2e;
+                --shadow: 0 10px 40px rgba(0,0,0,0.4);
+            }
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ── NAV BAR ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0; height: 54px;
+            background: var(--header-bg);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 16px;
+            border-bottom: 0.5px solid var(--border);
+            z-index: 1000;
+        }
+        .logo {
+            font-family: 'Syne', sans-serif; font-size: 21px; font-weight: 800; color: var(--nexus);
+            letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; text-decoration: none;
+        }
+        .logo-icon {
+            background: var(--nexus); color: white; width: 28px; height: 28px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease;
+        }
+        .logo-icon img { width: 18px; height: 18px; }
+        .logo:hover .logo-icon { transform: rotate(-10deg) scale(1.1); }
+
+        .nav-home-btn {
+            background: var(--nexus-soft);
+            color: var(--nexus);
+            border: none;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .nav-home-btn:hover {
+            background: var(--nexus);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        /* ── 404 CARD CONTAINER ── */
+        .error-container {
+            width: 90%;
+            max-width: 440px;
+            padding: 20px;
+            margin: 70px auto 20px;
+            text-align: center;
+        }
+
+        .error-card {
+            background: var(--card);
+            border: 0.5px solid var(--border);
+            border-radius: var(--radius);
+            padding: 40px 28px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            animation: cardIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ── GLOW / BADGE ANIMATION ── */
+        .error-badge-wrap {
+            position: relative;
+            width: 96px;
+            height: 96px;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes logoPulse {
+            0% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.05) translateY(-5px); box-shadow: 0 12px 35px rgba(24,119,242,0.3); }
+            100% { transform: scale(1) translateY(0); }
+        }
+
+        .error-badge {
+            width: 100%; height: 100%;
+            border-radius: 28px;
+            background: linear-gradient(135deg, rgba(24,119,242,0.15), rgba(139,92,246,0.15));
+            border: 2px solid var(--nexus);
+            display: flex; align-items: center; justify-content: center;
+            animation: logoPulse 4s infinite ease-in-out;
+            color: var(--nexus);
+        }
+
+        .error-code {
+            font-family: 'Syne', sans-serif;
+            font-size: 54px;
+            font-weight: 800;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--nexus), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .error-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .error-desc {
+            font-size: 14.5px;
+            color: var(--sub);
+            line-height: 1.5;
+            margin-bottom: 28px;
+        }
+
+        /* ── BUTTONS ── */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--nexus);
+            color: #fff;
+            border: none;
+            padding: 13px 20px;
+            border-radius: 28px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(24,119,242,0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(24,119,242,0.35);
+        }
+
+        .btn-secondary {
+            background: var(--ios-input);
+            color: var(--text);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 28px;
+            font-size: 14.5px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+            transform: translateY(-1px);
+        }
+
+        /* ── FOOTER HINT ── */
+        .footer-tag {
+            margin-top: 24px;
+            font-size: 12px;
+            color: var(--sub);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .footer-tag i { width: 14px; height: 14px; }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <a href="https://cliq.site.je/" class="logo">
+            <div class="logo-icon"><img src="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW" alt="cliq. logo"></div>
+            cliq.
+        </a>
+        <a href="https://cliq.site.je/" class="nav-home-btn">
+            <i data-lucide="home" style="width:16px;"></i> Feed
+        </a>
+    </nav>
+
+    <!-- MAIN 404 CONTENT -->
+    <div class="error-container">
+        <div class="error-card">
+            <div class="error-badge-wrap">
+                <div class="error-badge">
+                    <i data-lucide="file-question" style="width: 44px; height: 44px;"></i>
+                </div>
+            </div>
+            
+            <div class="error-code">404</div>
+            <div class="error-title">Hoppla! Dieser Post existiert nicht.</div>
+            <div class="error-desc">
+                Die angeforderte Seite oder dieser Post existiert leider nicht mehr, wurde verschoben oder der Link ist ungültig.
+            </div>
+
+            <div class="btn-group">
+                <a href="index.html" class="btn-primary">
+                    <i data-lucide="sparkles" style="width:18px;"></i> Zurück zum Feed
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-tag">
+            <i data-lucide="shield-alert"></i> cliq. site system
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
