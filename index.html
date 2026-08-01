@@ -614,11 +614,18 @@
         .post-music-chip i { color: var(--nexus); }
         .sf-music-badge {
             position: absolute; top: calc(env(safe-area-inset-top,20px) + 56px); right: 12px; z-index: 6;
-            display: flex; align-items: center; gap: 4px; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px);
-            border-radius: 20px; padding: 4px 10px 4px 4px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+            display: flex; align-items: center; gap: 2px; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px);
+            border-radius: 20px; padding: 4px; border: 1px solid rgba(255,255,255,0.2);
         }
+        .sf-music-badge-tap { display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 0 6px 0 0; }
         .sf-music-badge img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; animation: spinCover 3.5s linear infinite; }
-        .sf-music-badge span { color: white; font-size: 11px; font-weight: 600; max-width: 110px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sf-music-badge span { color: white; font-size: 11px; font-weight: 600; max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sf-music-toggle-btn {
+            background: rgba(255,255,255,0.18); border: none; color: white; width: 24px; height: 24px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+            transition: background 0.15s, transform 0.15s;
+        }
+        .sf-music-toggle-btn:active { transform: scale(0.88); }
 
         .global-sound-toggle {
             position: fixed; z-index: 997; bottom: calc(96px + env(safe-area-inset-bottom)); right: 16px;
@@ -664,7 +671,7 @@
             -webkit-backdrop-filter: blur(18px); animation: fadeIn 0.3s ease; }
         /* Modals that can be opened ON TOP of another already-open lightbox (e.g. music picker
            opened from the story-confirm or compose flow) need a higher stacking level. */
-        #music-modal, #music-player-modal { z-index: 2100; }
+        #music-modal, #music-player-modal { z-index: 2600; }
         #lightbox-img { max-width: 95%; max-height: 88vh;
             border-radius: 12px; object-fit: contain; animation: modalScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -1523,6 +1530,13 @@
     let selectedMusicForStory = null;
     let globalSoundEnabled = false;
 
+    /* Dedicated audio channel for auto-playing the currently-viewed Status Feed slide's music,
+       kept separate from musicPreviewAudio (used by the search picker / mini-player) so opening
+       the info modal from a badge never fights with the auto-play loop for the same <audio>. */
+    let sfAudio = null;
+    let sfCurrentIdx = null;
+    let sfIsPaused = false;
+
     function setPreviewBtnIcon(btn, iconName) {
         if (!btn) return;
         // Works whether the icon is still <i data-lucide> or already replaced by lucide with <svg>.
@@ -1735,6 +1749,8 @@
             catch (e) { console.error('Musikdaten ung\u00fcltig:', e); return; }
         }
         if (!music || typeof music !== 'object') return;
+        // Avoid two audio streams playing at once if this was opened from an auto-playing status feed slide.
+        if (sfAudio && !sfIsPaused) { sfAudio.pause(); sfIsPaused = true; if (sfCurrentIdx !== null) updateSfMusicToggleIcon(sfCurrentIdx); }
         document.getElementById('mp-cover').src = music.artworkUrl || '';
         document.getElementById('mp-title').textContent = music.title || 'Unbekannter Song';
         document.getElementById('mp-artist').textContent = music.artist || '';
@@ -2704,8 +2720,8 @@
             ${!p.poll ? `<div class="post-text">${parseText(p.text||'')}</div>` : ''}
             ${pollHTML}
             ${postMusicChipHTML(p.music)}
-            ${p.imageUrl ? `<div class="post-img-wrap"><img src="${p.imageUrl}" class="post-img" onclick="openLightbox('${p.imageUrl}')">${musicBadgeHTML(p.music, 'post-music-badge')}</div>` : ''}
-            ${p.videoUrl ? `<div class="post-img-wrap"><video src="${p.videoUrl}" class="post-video" controls playsinline></video>${musicBadgeHTML(p.music, 'post-music-badge')}</div>` : ''}
+            ${p.imageUrl ? `<div class="post-img-wrap"><img src="${p.imageUrl}" class="post-img" onclick="openLightbox('${p.imageUrl}')"></div>` : ''}
+            ${p.videoUrl ? `<div class="post-img-wrap"><video src="${p.videoUrl}" class="post-video" controls playsinline></video></div>` : ''}
             <div class="emoji-reaction-wrapper">${reactionHTML ? `<div class="emoji-reaction-bar" style="margin-top:10px;">${reactionHTML}</div>` : ''}</div>
             ${viewsCount > 0 ? `<div class="post-views"><i data-lucide="eye" style="width:13px;"></i> ${viewsCount.toLocaleString('de')} Aufrufe</div>` : ''}
             <div class="reaction-bar">
@@ -3147,6 +3163,7 @@
         if(window.lucide) lucide.createIcons({root: scroller});
         scroller.scrollTop = 0;
         markStatusItemSeen(0);
+        sfPlayMusicForSlide(0);
         wireStatusScrollTracking();
     };
     function wireStatusScrollTracking() {
@@ -3157,6 +3174,7 @@
             if (idx !== lastIdx && idx >= 0 && idx < statusItems.length) {
                 lastIdx = idx;
                 markStatusItemSeen(idx);
+                sfPlayMusicForSlide(idx);
             }
         };
     }
@@ -3166,10 +3184,47 @@
         if ((it.seenBy||[]).includes(auth.currentUser?.uid)) return;
         try { await updateDoc(doc(db,"stories",it.id), { seenBy: arrayUnion(auth.currentUser.uid) }); } catch(e) {}
     }
+    function stopSfAudio() {
+        if (sfAudio) { sfAudio.pause(); sfAudio.src = ''; sfAudio = null; }
+        sfCurrentIdx = null;
+        sfIsPaused = false;
+    }
+    function updateSfMusicToggleIcon(idx) {
+        const btn = document.getElementById(`sf-music-toggle-${idx}`);
+        if (!btn) return;
+        const isPlayingHere = sfCurrentIdx === idx && sfAudio && !sfIsPaused;
+        swapIcon(btn, isPlayingHere ? 'pause' : 'play');
+    }
+    function sfPlayMusicForSlide(idx) {
+        // Moving to a new slide always stops whatever was playing and, per spec, auto-starts
+        // the new slide's own music regardless of whether the previous one was paused.
+        const prevIdx = sfCurrentIdx;
+        stopSfAudio();
+        if (prevIdx !== null) updateSfMusicToggleIcon(prevIdx);
+        const it = statusItems[idx];
+        if (!it || !it.music || !it.music.previewUrl || !globalSoundEnabled) {
+            updateSfMusicToggleIcon(idx);
+            return;
+        }
+        sfAudio = new Audio(it.music.previewUrl);
+        sfAudio.loop = true; // keep looping the 30s preview while the user stays on this slide
+        sfCurrentIdx = idx;
+        sfIsPaused = false;
+        sfAudio.play().catch(() => { sfIsPaused = true; updateSfMusicToggleIcon(idx); });
+        updateSfMusicToggleIcon(idx);
+    }
+    window.toggleSfMusicPlayback = (idx, event) => {
+        if (event) event.stopPropagation();
+        if (sfCurrentIdx !== idx || !sfAudio) return;
+        if (sfIsPaused) { sfAudio.play().catch(() => {}); sfIsPaused = false; }
+        else { sfAudio.pause(); sfIsPaused = true; }
+        updateSfMusicToggleIcon(idx);
+    };
     window.closeStatusFeed = () => {
         document.getElementById('status-feed-overlay').style.display = 'none';
         document.getElementById('status-feed-scroller').onscroll = null;
         document.body.style.overflow = '';
+        stopSfAudio();
         closeAllNestedOverlays();
         setActiveBnTab('bn-home');
     };
@@ -3189,8 +3244,11 @@
                     ${REACTIONS.slice(0,8).map(em => `<button onclick="sfReact(${idx},'${encodeEmoji(em)}')">${em}</button>`).join('')}
                 </div>`;
         }
-        const musicBadge = (it.music && it.music.artworkUrl) ? `<div class="sf-music-badge" onclick="event.stopPropagation();openMusicPlayerModalEncoded('${safeJsonAttr(it.music)}')">
-            <img src="${it.music.artworkUrl}" onerror="this.style.display='none'"><span>${(it.music.title||'Unbekannt').toString().slice(0,60)}</span>
+        const musicBadge = (it.music && it.music.artworkUrl) ? `<div class="sf-music-badge">
+            <div class="sf-music-badge-tap" onclick="event.stopPropagation();openMusicPlayerModalEncoded('${safeJsonAttr(it.music)}')">
+                <img src="${it.music.artworkUrl}" onerror="this.style.display='none'"><span>${(it.music.title||'Unbekannt').toString().slice(0,60)}</span>
+            </div>
+            ${it.music.previewUrl ? `<button id="sf-music-toggle-${idx}" class="sf-music-toggle-btn" onclick="toggleSfMusicPlayback(${idx}, event)"><i data-lucide="play" style="width:13px;"></i></button>` : ''}
         </div>` : '';
         const mediaHTML = it.isVideo
             ? `<video class="sf-media" src="${it.imageUrl}" autoplay loop muted playsinline></video>`
