@@ -1,7 +1,6 @@
 const CACHE_NAME = 'cliq-cache-v1';
 const urlsToCache = [
   '/',
-  '/index.html',
   '/manifest.json',
   // füge wichtige Ressourcen hinzu, z.B. CSS, JS, Bilder
 ];
