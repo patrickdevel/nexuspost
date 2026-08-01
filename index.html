@@ -57,18 +57,18 @@
 
         /* â”€â”€ LOGIN â”€â”€ */
         #login-screen {
-            background: linear-gradient(135deg, #1877f2, #8b5cf6);
-            display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; padding: 0;
+            position: fixed; inset: 0; display: flex; justify-content: center;
+            background: #0e0a2e; z-index: 1000; overflow: hidden;
         }
-        .login-card {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255,255,255,0.3); border-radius: 32px; padding: 40px 30px;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.2); display: flex;
-            flex-direction: column; align-items: center; width: 88%; max-width: 400px;
-            animation: modalScale 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .login-phone {
+            position: relative; width: 100%; max-width: 480px; height: 100%;
+            background-image: linear-gradient(180deg, rgba(14,10,46,0.15), rgba(14,10,46,0.75) 70%, #0e0a2e 100%),
+                url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1200&auto=format&fit=crop');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; align-items: center;
+            padding: max(6vh, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom));
+            overflow: hidden;
         }
-        
         @keyframes logoPulse {
             0% { transform: scale(1) translateY(0); }
             50% { transform: scale(1.05) translateY(-5px); box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
@@ -76,31 +76,51 @@
         }
         .login-logo-container {
             background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
-            width: 86px; height: 86px; border-radius: 24px; margin-bottom: 16px;
-            display: flex; align-items: center; justify-content: center;
+            width: clamp(74px, 20vw, 90px); height: clamp(74px, 20vw, 90px); border-radius: 24px;
+            margin-top: 10vh; display: flex; align-items: center; justify-content: center;
             border: 2px solid rgba(255,255,255,0.5);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
             animation: logoPulse 4s infinite ease-in-out;
         }
-        .login-logo-container img {
-            width: 48px;
-            height: 48px;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+        .login-logo-container img { width: 44px; height: 44px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2)); }
+        .login-phone h1 {
+            color: #fff; font-family: 'Syne', sans-serif; font-weight: 800;
+            font-size: clamp(1.9rem, 8vw, 2.5rem); text-align: center; margin-top: 20px; line-height: 1.1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
-        .login-title { color: white; font-family: 'Syne', sans-serif;
-            font-size: 32px; font-weight: 800;
-            margin-bottom: 8px; text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        .login-subtitle-new {
+            color: rgba(255,255,255,0.9); text-align: center; font-size: 1rem;
+            margin-top: 16px; font-weight: 500; max-width: 320px; line-height: 1.4;
         }
-        .login-subtitle { color: rgba(255,255,255,0.9);
-            font-size: 15px; margin-bottom: 32px; text-align: center; font-weight: 500;
-        }
+        .login-spacer { flex: 1; }
+        .login-buttons { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 14px; }
         #btn-login {
-            background: white !important;
-            color: #1c1e21 !important; border-radius: 28px; padding: 14px 28px;
-            font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s, box-shadow 0.2s;
-            border: none; cursor: pointer; font-size: 16px; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 12px;
+            width: 100%; background: white !important;
+            color: #1c1e21 !important; border-radius: 28px; padding: 16px 28px;
+            font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.15); transition: transform 0.2s, box-shadow 0.2s;
+            border: none; cursor: pointer; font-size: 1.05rem; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; justify-content: center; gap: 12px;
         }
-        #btn-login:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+        #btn-login:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+        #btn-login:active { transform: scale(0.97); }
+
+        /* Loading dots on the login button */
+        .btn-login-label { display: inline-flex; align-items: center; gap: 12px; transition: opacity 0.2s; }
+        .btn-login-dots { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 6px; opacity: 0; }
+        #btn-login.is-loading { position: relative; }
+        #btn-login.is-loading .btn-login-label { opacity: 0; }
+        #btn-login.is-loading .btn-login-dots { opacity: 1; }
+        .btn-login-dots span { width: 8px; height: 8px; background: #1c1e21; border-radius: 50%; animation: loginDotPulse 1s infinite; }
+        .btn-login-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .btn-login-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes loginDotPulse { 0%, 100% { transform: scale(0.8); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } }
+
+        .login-screen-stack { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1001; }
+        .login-slide-screen {
+            position: absolute; inset: 0; background: #17131f; display: flex; flex-direction: column;
+            padding: max(20px, env(safe-area-inset-top)) 24px; transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none;
+        }
+        .login-slide-screen.active { transform: translateX(0); pointer-events: auto; }
 
         /* â”€â”€ NAV â”€â”€ */
         nav {
@@ -392,7 +412,7 @@
         .bn-item.active i { transform: translateY(-1px) scale(1.1); }
         .bn-item.active span { transform: translateY(0.5px); }
 
-        .bn-compose-wrap { flex: 1.3; display: flex; justify-content: center; position: relative; top: -15px; }
+        .bn-compose-wrap { flex: 1.3; display: flex; justify-content: center; position: relative; top: -22px; z-index: 5; }
         @keyframes composePulseRing {
             0% { box-shadow: 0 0 0 0 rgba(24,119,242,0.45); }
             100% { box-shadow: 0 0 0 12px rgba(24,119,242,0); }
@@ -578,6 +598,35 @@
         }
         .global-sound-toggle.on { color: white; background: var(--nexus); }
         .global-sound-toggle:active { transform: scale(0.9); }
+
+        /* â”€â”€ FOLLOW SYSTEM â”€â”€ */
+        .follow-btn {
+            background: var(--nexus); color: white; border: none; font-size: 12px; font-weight: 700;
+            padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit;
+            transition: background 0.2s, color 0.2s, transform 0.15s; flex-shrink: 0; margin-left: 6px;
+        }
+        .follow-btn:active { transform: scale(0.94); }
+        .follow-btn.following { background: var(--ios-input); color: var(--sub); }
+        .follow-btn-story { background: rgba(255,255,255,0.9); color: #1c1e21; }
+        .follow-btn-story.following { background: rgba(255,255,255,0.25); color: #fff; }
+        .red-dot {
+            width: 9px; height: 9px; border-radius: 50%; background: var(--danger);
+            display: inline-block; box-shadow: 0 0 0 2px var(--card);
+        }
+        .settings-row-icon-wrap { position: relative; display: inline-flex; }
+        .settings-row-icon-wrap .red-dot { position: absolute; top: -1px; right: -1px; }
+
+        #following-screen { padding-top: 16px; animation: fadeIn 0.3s ease; }
+        .following-row {
+            display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: var(--radius);
+            background: var(--card); border: 0.5px solid var(--border); margin-bottom: 8px; cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .following-row:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+        .following-row-avatar { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+        .following-row-info { flex: 1; min-width: 0; }
+        .following-row-name { font-weight: 600; font-size: 14.5px; display: flex; align-items: center; gap: 4px; }
+        .following-row-sub { font-size: 12.5px; color: var(--sub); margin-top: 2px; }
 
         /* â”€â”€ LIGHTBOX â”€â”€ */
         .lightbox { position: fixed;
@@ -909,17 +958,23 @@
 </nav>
 
 <div id="login-screen">
-    <div class="login-card">
-        <div class="login-logo-container"><img src="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW" alt="logo"></div>
-        <div class="login-title">cliq.</div>
-        <div class="login-subtitle">Verbinde dich mit der Welt.
-            Teile deine Momente.</div>
-        <button id="btn-login">
-            <svg width="22" height="22" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="m6.306 14.691 6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 
-            16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
-            Mit Google fortfahren
-        </button>
+    <div class="login-phone">
+        <div class="login-logo-container"><img src="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW" alt="cliq. Logo"></div>
+        <h1>cliq.</h1>
+        <div class="login-subtitle-new">Verbinde dich mit der Welt. Teile deine Momente.</div>
+        <div class="login-spacer"></div>
+        <div class="login-buttons">
+            <button type="button" id="btn-login">
+                <span class="btn-login-label">
+                    <svg width="22" height="22" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="m6.306 14.691 6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 
+                    16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
+                    Mit Google anmelden
+                </span>
+                <span class="btn-login-dots"><span></span><span></span><span></span></span>
+            </button>
+        </div>
     </div>
+    <div class="login-screen-stack" id="loginScreenStack"></div>
 </div>
 
 <main id="main-content" class="container hidden">
@@ -960,6 +1015,14 @@
     </div>
 </div>
 
+<div id="following-screen" class="container hidden">
+    <div class="bookmarks-header">
+        <button class="settings-back-btn" onclick="closeFollowingList()"><i data-lucide="arrow-left" style="width:18px;"></i></button>
+        <h2>Folge ich</h2>
+    </div>
+    <div id="following-list"></div>
+</div>
+
 <div id="settings-screen" class="container hidden">
     <div class="settings-header">
         <button class="settings-back-btn" onclick="closeSettings()"><i data-lucide="arrow-left" style="width:18px;"></i></button>
@@ -974,13 +1037,21 @@
                 </div>
                 <input type="file" id="profile-img-input" accept="image/*" class="hidden" onchange="uploadProfileImage(event)">
             </label>
-            <div class="profile-preview-name" id="settings-preview-name">â€“</div>
-            <div class="profile-preview-username" id="settings-preview-user">â€“</div>
+            <div class="profile-preview-name" id="settings-preview-name">&ndash;</div>
+            <div class="profile-preview-username" id="settings-preview-user">&ndash;</div>
         </div>
         <div class="divider"></div>
         <div class="settings-row" onclick="showEditProfile()">
             <div class="settings-row-icon" style="background:var(--nexus-soft);"><i data-lucide="user-pen" style="width:16px;color:var(--nexus);"></i></div>
             <span class="settings-row-label">Profil bearbeiten</span>
+            <i data-lucide="chevron-right" class="settings-row-chevron" style="width:16px;"></i>
+        </div>
+        <div class="settings-row" onclick="openFollowingList()">
+            <div class="settings-row-icon-wrap">
+                <div class="settings-row-icon" style="background:var(--nexus-soft);"><i data-lucide="users" style="width:16px;color:var(--nexus);"></i></div>
+                <span class="red-dot hidden" id="following-red-dot"></span>
+            </div>
+            <span class="settings-row-label">Folge ich</span>
             <i data-lucide="chevron-right" class="settings-row-chevron" style="width:16px;"></i>
         </div>
     </div>
@@ -1033,7 +1104,7 @@
     </div>
     <div class="settings-section-title">Info</div>
     <div class="settings-card">
-        <div class="settings-row" onclick="showToast('cliq. v155.0 â€“ Danke fÃ¼rs Nutzen! ðŸ’™')">
+        <div class="settings-row" onclick="showToast('cliq. v155.0 &ndash; Danke fÃ¼rs Nutzen! ðŸ’™')">
             <div class="settings-row-icon" style="background:#1877f2;"><i data-lucide="info" style="width:16px;color:white;"></i></div>
             <span class="settings-row-label">Version</span>
             <span class="settings-row-value">v155.0</span>
@@ -1057,12 +1128,17 @@
         <div class="profile-modal-header">
             <img id="pmodal-avatar" src="" class="profile-modal-avatar">
             <div style="flex:1;">
-                <div class="profile-modal-name" id="pmodal-name">â€“</div>
-                <div class="profile-modal-username" id="pmodal-username">â€“</div>
+                <div class="profile-modal-name" id="pmodal-name">&ndash;</div>
+                <div class="profile-modal-username" id="pmodal-username">&ndash;</div>
             </div>
             <button onclick="closeProfileModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;padding:4px;transition:transform 0.2s;"><i data-lucide="x"></i></button>
         </div>
         <div class="profile-modal-bio" id="pmodal-bio"></div>
+        <div id="pmodal-stats-wrap" style="display:flex;gap:20px;margin-top:14px;">
+            <div><span style="font-weight:700;font-size:15px;" id="pmodal-following-count">0</span> <span style="color:var(--sub);font-size:13px;">Folge ich</span></div>
+            <div><span style="font-weight:700;font-size:15px;" id="pmodal-follower-count">0</span> <span style="color:var(--sub);font-size:13px;">Follower</span></div>
+        </div>
+        <div id="pmodal-follow-btn-wrap" style="margin-top:12px;"></div>
         <div class="profile-modal-posts">
             <div class="profile-modal-posts-title">Posts</div>
             <div class="profile-grid" id="pmodal-grid"></div>
@@ -1077,9 +1153,11 @@
             <button onclick="document.getElementById('edit-profile-modal').style.display='none'" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
         </div>
         <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);display:block;margin-bottom:6px;">Anzeigename</label>
-        <input type="text" id="edit-displayname" class="modal-input" placeholder="Dein Name">
+        <input type="text" id="edit-displayname" class="modal-input" placeholder="Dein Name" style="margin-bottom:2px;">
+        <div id="displayname-cooldown-hint" style="font-size:11.5px;color:var(--warning);margin-bottom:10px;display:none;"></div>
         <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);display:block;margin-bottom:6px;">Nutzername</label>
-        <input type="text" id="edit-username" class="modal-input" placeholder="@username">
+        <input type="text" id="edit-username" class="modal-input" placeholder="@username" style="margin-bottom:2px;">
+        <div id="username-cooldown-hint" style="font-size:11.5px;color:var(--warning);margin-bottom:10px;display:none;"></div>
         <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);display:block;margin-bottom:6px;">Bio</label>
         <textarea id="edit-bio" class="modal-input" placeholder="ErzÃ¤hl etwas Ã¼ber dich..." style="height:80px;resize:none;"></textarea>
         <button onclick="saveProfile()" class="btn-primary">Speichern</button>
@@ -1138,7 +1216,7 @@
             <button onclick="closeMusicModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
         </div>
         <div style="position:relative;flex-shrink:0;margin-bottom:10px;">
-            <input type="text" id="music-search-input" class="modal-input" placeholder="Song oder Artist suchenâ€¦" style="margin-bottom:0;padding-left:36px;">
+            <input type="text" id="music-search-input" class="modal-input" placeholder="Song oder Artist suchen&hellip;" style="margin-bottom:0;padding-left:36px;">
             <i data-lucide="search" style="width:15px;position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--sub);"></i>
         </div>
         <div id="music-results-label" style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--sub);margin-bottom:8px;flex-shrink:0;display:flex;align-items:center;gap:6px;">
@@ -1152,8 +1230,8 @@
     <div class="modal-inner" onclick="event.stopPropagation()" style="text-align:center;">
         <button onclick="closeMusicPlayerModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;float:right;transition:transform 0.2s;"><i data-lucide="x"></i></button>
         <img id="mp-cover" src="" style="width:120px;height:120px;border-radius:16px;object-fit:cover;box-shadow:0 10px 30px rgba(0,0,0,0.25);margin:10px auto 16px;display:block;">
-        <div id="mp-title" style="font-family:'Syne',sans-serif;font-weight:800;font-size:17px;margin-bottom:2px;">â€“</div>
-        <div id="mp-artist" style="font-size:14px;color:var(--sub);margin-bottom:18px;">â€“</div>
+        <div id="mp-title" style="font-family:'Syne',sans-serif;font-weight:800;font-size:17px;margin-bottom:2px;">&ndash;</div>
+        <div id="mp-artist" style="font-size:14px;color:var(--sub);margin-bottom:18px;">&ndash;</div>
         <button id="mp-play-btn" onclick="toggleMpPreview()" class="btn-primary" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;">
             <span id="mp-play-icon-wrap" style="display:flex;align-items:center;"><i data-lucide="play" style="width:16px;"></i></span> <span id="mp-play-label">Vorschau abspielen</span>
         </button>
@@ -1175,13 +1253,11 @@
             <button onclick="closeStoryConfirmModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
         </div>
         <img id="story-confirm-preview" src="" style="width:100%;max-height:320px;object-fit:contain;border-radius:14px;background:var(--ios-input);margin-bottom:14px;">
+        <button onclick="openMusicModal('story')" id="story-confirm-music-btn" class="btn-ghost" style="width:100%;color:var(--nexus);background:var(--nexus-soft);display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;font-weight:700;margin-bottom:10px;">
+            <i data-lucide="music-4" style="width:16px;"></i> <span>Musik hinzufÃ¼gen</span>
+        </button>
         <div id="story-confirm-music-chip-wrap"></div>
-        <div style="display:flex;gap:8px;margin-top:10px;">
-            <button onclick="openMusicModal('story')" class="btn-ghost" style="width:auto;flex:1;color:var(--nexus);background:var(--nexus-soft);display:flex;align-items:center;justify-content:center;gap:6px;">
-                <i data-lucide="music-4" style="width:15px;"></i> Musik
-            </button>
-            <button onclick="publishStory()" class="btn-primary" style="flex:2;">Story verÃ¶ffentlichen</button>
-        </div>
+        <button onclick="publishStory()" class="btn-primary">Story verÃ¶ffentlichen</button>
     </div>
 </div>
 
@@ -1192,6 +1268,7 @@
             <img id="story-avi" src="" class="story-header-img">
             <span id="story-name" class="story-header-name"></span>
             <span id="story-time" class="story-header-time"></span>
+            <span id="story-follow-btn-wrap" style="pointer-events:auto;"></span>
         </div>
         <div class="story-action-btns">
             <button id="story-del-btn" class="hidden story-action-btn" style="background:rgba(255,59,48,0.8);"><i data-lucide="trash-2" style="width:16px;"></i></button>
@@ -1236,7 +1313,7 @@
         <div class="bn-compose-panel" id="bn-compose-panel">
             <button class="bn-close-compose" onclick="closeComposeBar()"><i data-lucide="chevron-down" style="width:18px;"></i></button>
             <div style="flex:1;min-width:0;">
-                <div style="display:flex;align-items:flex-end;gap:10px;">
+                <div style="display:flex;align-items:center;gap:10px;">
                     <div class="media-btn-group">
                         <label style="color:var(--nexus);cursor:pointer;display:flex;align-items:center;transition:transform 0.2s;">
                             <i data-lucide="image-plus" style="width:24px;height:24px;"></i>
@@ -1327,7 +1404,17 @@
             img.src = url;
         });
     }
-    function setBnProcessing(active, label = 'Wird komprimiertâ€¦') {
+    function closeAllNestedOverlays() {
+        // Prevents secondary modals (music picker, mini-player, poll, alert) from being
+        // left invisibly open/blocking clicks after their parent screen was dismissed.
+        stopMusicPreview();
+        const ids = ['music-modal', 'music-player-modal', 'poll-modal', 'alert-modal'];
+        ids.forEach(id => {
+            const elmt = document.getElementById(id);
+            if (elmt) elmt.style.display = 'none';
+        });
+    }
+    function setBnProcessing(active, label = 'Wird komprimiert\u2026') {
         const shell = document.getElementById('bn-shell');
         if (!shell) return;
         shell.classList.toggle('processing', active);
@@ -1402,17 +1489,48 @@
         musicPreviewAudio.onended = () => stopMusicPreview();
     };
 
+    function itunesSearchJsonp(term) {
+        return new Promise((resolve) => {
+            const cbName = 'itunesCb_' + Math.random().toString(36).slice(2);
+            const script = document.createElement('script');
+            let settled = false;
+            const cleanup = () => {
+                delete window[cbName];
+                script.remove();
+                clearTimeout(timer);
+            };
+            const timer = setTimeout(() => {
+                if (!settled) { settled = true; cleanup(); resolve([]); }
+            }, 6000);
+            window[cbName] = (data) => {
+                if (settled) return;
+                settled = true;
+                cleanup();
+                resolve((data && data.results) ? data.results.filter(r => r.previewUrl) : []);
+            };
+            script.src = `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&media=music&entity=song&limit=8&callback=${cbName}`;
+            script.onerror = () => { if (!settled) { settled = true; cleanup(); resolve([]); } };
+            document.body.appendChild(script);
+        });
+    }
     async function itunesSearch(term) {
         const url = `https://itunes.apple.com/search?term=${encodeURIComponent(term)}&media=music&entity=song&limit=8`;
         try {
             const res = await fetch(url);
+            if (!res.ok) throw new Error('bad status');
             const j = await res.json();
-            return (j.results || []).filter(r => r.previewUrl);
-        } catch (e) { return []; }
+            const results = (j.results || []).filter(r => r.previewUrl);
+            if (results.length) return results;
+            // Empty result could also mean a silently-blocked/opaque response; try JSONP as a safety net.
+            return await itunesSearchJsonp(term);
+        } catch (e) {
+            // fetch failed outright (often CORS) - fall back to JSONP, which bypasses CORS entirely.
+            return await itunesSearchJsonp(term);
+        }
     }
     async function loadViralSuggestions() {
         const list = document.getElementById('music-results-list');
-        list.innerHTML = '<div class="music-loading">Lade virale Soundsâ€¦</div>';
+        list.innerHTML = '<div class="music-loading">Lade virale Sounds\u2026</div>';
         const seeds = pickRandomViralSeeds(5);
         const batches = await Promise.all(seeds.map(s => itunesSearch(s)));
         const results = [];
@@ -1474,7 +1592,7 @@
             const term = input.value.trim();
             if (!term) { loadViralSuggestions(); return; }
             musicSearchDebounce = setTimeout(async () => {
-                document.getElementById('music-results-list').innerHTML = '<div class="music-loading">Sucheâ€¦</div>';
+                document.getElementById('music-results-list').innerHTML = '<div class="music-loading">Suche\u2026</div>';
                 const results = await itunesSearch(term);
                 renderMusicResults(results, false);
             }, 400);
@@ -1507,7 +1625,7 @@
         btn?.classList.add('has-music');
         wrap.innerHTML = `<div class="composer-music-chip">
             <img src="${selectedMusicForPost.artworkUrl}">
-            <span>${selectedMusicForPost.title} Â· ${selectedMusicForPost.artist}</span>
+            <span>${selectedMusicForPost.title} \u00b7 ${selectedMusicForPost.artist}</span>
             <button onclick="removeComposerMusic()"><i data-lucide="x" style="width:13px;"></i></button>
         </div>`;
         if(window.lucide) lucide.createIcons({root: wrap});
@@ -1581,7 +1699,7 @@
         musicPreviewAudio.src = url;
         musicPreviewAudio.play().catch(() => showToast('Vorschau konnte nicht geladen werden'));
         musicPreviewPlayingId = 'mp';
-        setMpPlayIcon('square', 'Wird abgespieltâ€¦');
+        setMpPlayIcon('square', 'Wird abgespielt\u2026');
         musicPreviewAudio.onended = () => {
             musicPreviewPlayingId = null;
             setMpPlayIcon('play', 'Vorschau abspielen');
@@ -1615,6 +1733,7 @@
     let userData = null;
     let allPosts = [];
     let bookmarkedIds = JSON.parse(localStorage.getItem('nexus_bookmarks') || '[]');
+    let allUsersCache = {}; // uid -> user data, populated lazily for follow lists
     window.onPostInput = () => {
         const txt = document.getElementById('post-input').innerText;
         const len = txt.length;
@@ -1739,8 +1858,8 @@
         if (userData) {
             document.getElementById('settings-avatar').src = userData.photoURL || '';
             const verifiedHtml = userData.verified ? `<img src="${verifiedIcon}" class="verified-badge">` : '';
-            document.getElementById('settings-preview-name').innerHTML = (userData.displayname || 'â€“') + verifiedHtml;
-            document.getElementById('settings-preview-user').textContent = '@' + (userData.username || 'â€“');
+            document.getElementById('settings-preview-name').innerHTML = (userData.displayname || '\u2013') + verifiedHtml;
+            document.getElementById('settings-preview-user').textContent = '@' + (userData.username || '\u2013');
         }
         document.getElementById('dark-toggle').classList.toggle('on', document.body.classList.contains('dark'));
         setActiveBnTab(null);
@@ -1751,10 +1870,27 @@
         document.getElementById('main-content').classList.remove('hidden');
         setActiveBnTab('bn-home');
     };
+    function formatCooldownHint(changedAt, cooldownDays) {
+        if (!changedAt) return null;
+        const DAY_MS = 24 * 60 * 60 * 1000;
+        const elapsed = Date.now() - changedAt;
+        const remainingMs = cooldownDays * DAY_MS - elapsed;
+        if (remainingMs <= 0) return null;
+        const daysLeft = Math.ceil(remainingMs / DAY_MS);
+        return `Ã„nderbar in ${daysLeft} Tag${daysLeft !== 1 ? 'en' : ''}`;
+    }
     window.showEditProfile = () => {
         document.getElementById('edit-displayname').value = userData.displayname || '';
         document.getElementById('edit-username').value = userData.username || '';
         document.getElementById('edit-bio').value = userData.bio || '';
+        const dnHint = document.getElementById('displayname-cooldown-hint');
+        const unHint = document.getElementById('username-cooldown-hint');
+        const dnMsg = formatCooldownHint(userData.displaynameChangedAt, 7);
+        const unMsg = formatCooldownHint(userData.usernameChangedAt, 14);
+        dnHint.textContent = dnMsg || '';
+        dnHint.style.display = dnMsg ? 'block' : 'none';
+        unHint.textContent = unMsg || '';
+        unHint.style.display = unMsg ? 'block' : 'none';
         document.getElementById('edit-profile-modal').style.display = 'flex';
         if(window.lucide) lucide.createIcons();
     };
@@ -1764,13 +1900,40 @@
         const bio = document.getElementById('edit-bio').value.trim();
         if (!dn) return showToast('Bitte Namen eingeben');
         if (!un) return showToast('Bitte Nutzername eingeben');
-        if (un !== userData.username) {
+
+        const DAY_MS = 24 * 60 * 60 * 1000;
+        const now = Date.now();
+        const dnChanged = dn !== userData.displayname;
+        const unChanged = un !== userData.username;
+
+        if (dnChanged && userData.displaynameChangedAt) {
+            const elapsed = now - userData.displaynameChangedAt;
+            if (elapsed < 7 * DAY_MS) {
+                const daysLeft = Math.ceil((7 * DAY_MS - elapsed) / DAY_MS);
+                return showToast(`Anzeigename erst in ${daysLeft} Tag${daysLeft !== 1 ? 'en' : ''} wieder Ã¤nderbar`);
+            }
+        }
+        if (unChanged && userData.usernameChangedAt) {
+            const elapsed = now - userData.usernameChangedAt;
+            if (elapsed < 14 * DAY_MS) {
+                const daysLeft = Math.ceil((14 * DAY_MS - elapsed) / DAY_MS);
+                return showToast(`Nutzername erst in ${daysLeft} Tag${daysLeft !== 1 ? 'en' : ''} wieder Ã¤nderbar`);
+            }
+        }
+        if (unChanged) {
             const q = query(collection(db, "users"), where("username", "==", un));
             const snap = await getDocs(q);
             if (!snap.empty) return showToast('Nutzername bereits vergeben');
         }
-        await updateDoc(doc(db, "users", auth.currentUser.uid), { displayname: dn, username: un, bio });
+
+        const updates = { displayname: dn, username: un, bio };
+        if (dnChanged) updates.displaynameChangedAt = now;
+        if (unChanged) updates.usernameChangedAt = now;
+
+        await updateDoc(doc(db, "users", auth.currentUser.uid), updates);
         userData.displayname = dn; userData.username = un; userData.bio = bio;
+        if (dnChanged) userData.displaynameChangedAt = now;
+        if (unChanged) userData.usernameChangedAt = now;
         const verifiedHtml = userData.verified ? `<img src="${verifiedIcon}" class="verified-badge">` : '';
         document.getElementById('settings-preview-name').innerHTML = dn + verifiedHtml;
         document.getElementById('settings-preview-user').textContent = '@' + un;
@@ -1779,10 +1942,10 @@
     };
     window.uploadProfileImage = async (e) => {
         const file = e.target.files[0]; if (!file) return;
-        showToast('Profilbild wird komprimiertâ€¦');
+        showToast('Profilbild wird komprimiert\u2026');
         try {
             const compressed = await compressImage(file, 800, 0.85);
-            showToast('Profilbild wird hochgeladenâ€¦');
+            showToast('Profilbild wird hochgeladen\u2026');
             const fd = new FormData(); fd.append("image", compressed);
             const res = await fetch("https://api.imgbb.com/1/upload?key="+imgbbKey, { method:"POST", body:fd });
             const j = await res.json();
@@ -1801,10 +1964,27 @@
     window.openProfileModal = async (uid) => {
         const uSnap = await getDoc(doc(db, "users", uid));
         const u = uSnap.data() || {};
+        allUsersCache[uid] = u;
         document.getElementById('pmodal-avatar').src = u.photoURL || '';
-        document.getElementById('pmodal-name').innerHTML = (u.displayname || 'â€“') + (u.verified ? `<img src="${verifiedIcon}" style="width:18px;height:18px;">` : '');
-        document.getElementById('pmodal-username').textContent = '@' + (u.username || 'â€“');
+        document.getElementById('pmodal-name').innerHTML = (u.displayname || '\u2013') + (u.verified ? `<img src="${verifiedIcon}" style="width:18px;height:18px;">` : '');
+        document.getElementById('pmodal-username').textContent = '@' + (u.username || '\u2013');
         document.getElementById('pmodal-bio').textContent = u.bio || '';
+        const followingCount = Array.isArray(u.following) ? u.following.length : 0;
+        document.getElementById('pmodal-following-count').textContent = followingCount;
+        const statsWrap = document.getElementById('pmodal-stats-wrap');
+        const followBtnWrap = document.getElementById('pmodal-follow-btn-wrap');
+        if (uid === auth.currentUser?.uid) {
+            followBtnWrap.innerHTML = '';
+        } else {
+            const following = Array.isArray(userData?.following) ? userData.following : [];
+            const isFollowing = following.includes(uid);
+            followBtnWrap.innerHTML = `<button class="follow-btn ${isFollowing?'following':''}" data-uid="${uid}" onclick="toggleFollow('${uid}', event)" style="margin:0;width:100%;padding:10px;font-size:14px;">${isFollowing?'Folge ich':'Folgen'}</button>`;
+        }
+        // Follower count via query, done async so it doesn't block the rest of the modal
+        document.getElementById('pmodal-follower-count').textContent = '\u2026';
+        getDocs(query(collection(db, "users"), where("following", "array-contains", uid)))
+            .then(snap => { document.getElementById('pmodal-follower-count').textContent = snap.size; })
+            .catch(() => { document.getElementById('pmodal-follower-count').textContent = '0'; });
         const grid = document.getElementById('pmodal-grid');
         grid.innerHTML = '';
         const userPosts = allPosts.filter(p => p.uid === uid);
@@ -1867,17 +2047,25 @@
             const list = document.getElementById('notif-list');
             let unread = 0;
             let html = '';
+            const icons = { like: '\u2764\ufe0f', comment: '\ud83d\udcac', repost: '\ud83d\udd01', follow: '\ud83d\udc65', new_content: '\ud83d\udce3' };
+            const colors = { like: '#ff3b30', comment: '#34c759', repost: '#1877f2', follow: '#8b5cf6', new_content: '#f97316' };
             snap.forEach(d => {
                 const n = d.data();
                 if (!n.read) unread++;
-                const icons = { like: 'â¤ï¸', comment: 'ðŸ’¬', repost: 'ðŸ”' };
+                let text;
+                if (n.type === 'like') text = 'hat deinen Post geliked';
+                else if (n.type === 'comment') text = `hat kommentiert: \u201e${escapeHtml(n.preview || '')}\u201c`;
+                else if (n.type === 'repost') text = 'hat deinen Post geteilt';
+                else if (n.type === 'follow') text = 'folgt dir jetzt';
+                else if (n.type === 'new_content') text = n.contentKind === 'story' ? 'hat eine neue Story gepostet' : 'hat einen neuen Beitrag gepostet';
+                else text = 'hat etwas gemacht';
                 html += `<div class="notif-item ${n.read ? '' : 'unread'}" onclick="markNotifRead('${d.id}')">
                     <div style="position:relative;">
                         <img src="${n.fromPhoto||''}" class="notif-avatar">
-                        <div class="notif-icon-badge" style="background:${n.type==='like'?'#ff3b30':n.type==='comment'?'#34c759':'#1877f2'};">${icons[n.type]||'ðŸ””'}</div>
+                        <div class="notif-icon-badge" style="background:${colors[n.type]||'#8e8e93'};">${icons[n.type]||'\ud83d\udd14'}</div>
                     </div>
                     <div style="flex:1;">
-                        <div class="notif-text"><strong>${n.fromName||'Jemand'}</strong> ${n.type==='like'?'hat deinen Post geliked':n.type==='comment'?'hat kommentiert: "'+n.preview+'"':'hat deinen Post geteilt'}</div>
+                        <div class="notif-text"><strong>${escapeHtml(n.fromName||'Jemand')}</strong> ${text}</div>
                         <div class="notif-time">${timeAgo(n.createdAt)}</div>
                     </div>
                 </div>`;
@@ -1909,6 +2097,130 @@
             createdAt: serverTimestamp()
         });
     }
+
+    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOLLOW SYSTEM â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    window.toggleFollow = async (targetUid, event) => {
+        if (event) event.stopPropagation();
+        if (!auth.currentUser || targetUid === auth.currentUser.uid) return;
+        const following = Array.isArray(userData.following) ? userData.following : [];
+        const isFollowing = following.includes(targetUid);
+        const newFollowing = isFollowing ? following.filter(u => u !== targetUid) : [...following, targetUid];
+        userData.following = newFollowing;
+        try {
+            await updateDoc(doc(db, "users", auth.currentUser.uid), { following: newFollowing });
+            if (!isFollowing) {
+                await sendNotification(targetUid, 'follow', null);
+                showToast('Du folgst diesem Profil jetzt \ud83d\udc4b');
+            } else {
+                showToast('Du folgst diesem Profil nicht mehr');
+            }
+        } catch (e) {
+            // revert on failure
+            userData.following = following;
+            showToast('Aktion fehlgeschlagen, bitte erneut versuchen.');
+            return;
+        }
+        document.querySelectorAll(`.follow-btn[data-uid="${targetUid}"]`).forEach(btn => {
+            const nowFollowing = newFollowing.includes(targetUid);
+            btn.textContent = nowFollowing ? 'Folge ich' : 'Folgen';
+            btn.classList.toggle('following', nowFollowing);
+        });
+        updateFollowingBadgeVisibility();
+    };
+    function followButtonHTML(targetUid) {
+        if (!targetUid || !auth.currentUser || targetUid === auth.currentUser.uid) return '';
+        const following = Array.isArray(userData?.following) ? userData.following : [];
+        const isFollowing = following.includes(targetUid);
+        return `<button class="follow-btn ${isFollowing ? 'following' : ''}" data-uid="${targetUid}" onclick="toggleFollow('${targetUid}', event)">${isFollowing ? 'Folge ich' : 'Folgen'}</button>`;
+    }
+    async function getCachedUser(uid) {
+        if (allUsersCache[uid]) return allUsersCache[uid];
+        const uSnap = await getDoc(doc(db, "users", uid));
+        const data = uSnap.exists() ? uSnap.data() : {};
+        allUsersCache[uid] = data;
+        return data;
+    }
+    async function notifyFollowersOfNewContent(contentId, kind) {
+        // kind: 'post' | 'story'. Fires from the poster's client at creation time so every follower
+        // gets exactly one notification, regardless of who else happens to be online.
+        if (!auth.currentUser) return;
+        try {
+            const snap = await getDocs(query(collection(db, "users"), where("following", "array-contains", auth.currentUser.uid)));
+            const notifyPromises = [];
+            snap.forEach(followerDoc => {
+                const followerUid = followerDoc.id;
+                notifyPromises.push(
+                    addDoc(collection(db, "users", followerUid, "notifications"), {
+                        type: 'new_content',
+                        contentKind: kind,
+                        postId: kind === 'post' ? contentId : null,
+                        fromUid: auth.currentUser.uid,
+                        fromName: userData.displayname,
+                        fromPhoto: userData.photoURL,
+                        read: false,
+                        createdAt: serverTimestamp()
+                    }),
+                    setDoc(doc(db, "users", followerUid, "meta", "followingFeed"), {
+                        hasNew: true, lastNewAt: serverTimestamp()
+                    }, { merge: true })
+                );
+            });
+            await Promise.all(notifyPromises);
+        } catch (e) {
+            console.error('Konnte Follower nicht benachrichtigen:', e);
+        }
+    }
+    let followingHasNew = false;
+    function updateFollowingBadgeVisibility() {
+        document.getElementById('following-red-dot')?.classList.toggle('hidden', !followingHasNew);
+    }
+    function listenFollowingFeedFlag() {
+        if (!auth.currentUser) return;
+        onSnapshot(doc(db, "users", auth.currentUser.uid, "meta", "followingFeed"), (snap) => {
+            followingHasNew = !!(snap.exists() && snap.data().hasNew);
+            updateFollowingBadgeVisibility();
+        }, () => {});
+    }
+    window.openFollowingList = async () => {
+        followingHasNew = false;
+        updateFollowingBadgeVisibility();
+        if (auth.currentUser) {
+            try { await setDoc(doc(db, "users", auth.currentUser.uid, "meta", "followingFeed"), { hasNew: false }, { merge: true }); } catch(e) {}
+        }
+        document.getElementById('main-content').classList.add('hidden');
+        document.getElementById('bookmarks-screen').style.display = 'none';
+        document.getElementById('settings-screen').classList.add('hidden');
+        document.getElementById('following-screen').classList.remove('hidden');
+        const list = document.getElementById('following-list');
+        const following = Array.isArray(userData.following) ? userData.following : [];
+        if (!following.length) {
+            list.innerHTML = `<div style="text-align:center;padding:50px 20px;color:var(--sub);">
+                <i data-lucide="users" style="width:38px;height:38px;opacity:0.4;margin-bottom:10px;"></i>
+                <div>Du folgst noch niemandem.</div>
+            </div>`;
+            if(window.lucide) lucide.createIcons({root: list});
+            return;
+        }
+        list.innerHTML = '<div class="music-loading">L\u00e4dt\u2026</div>';
+        const users = await Promise.all(following.map(async uid => ({ uid, data: await getCachedUser(uid) })));
+        list.innerHTML = users.map(({uid, data}) => {
+            const lastPost = allPosts.filter(p => p.uid === uid).sort((a,b) => (b.timestamp?.toMillis?.()||0) - (a.timestamp?.toMillis?.()||0))[0];
+            return `<div class="following-row" onclick="closeFollowingList();openProfileModal('${uid}')">
+                <img src="${data.photoURL||''}" class="following-row-avatar">
+                <div class="following-row-info">
+                    <div class="following-row-name">${data.displayname||'\u2013'} ${data.verified?`<img src="${verifiedIcon}" style="width:14px;height:14px;">`:''}</div>
+                    <div class="following-row-sub">${lastPost ? 'Zuletzt gepostet ' + timeAgo(lastPost.timestamp) : 'Noch nichts gepostet'}</div>
+                </div>
+                <button class="follow-btn following" data-uid="${uid}" onclick="toggleFollow('${uid}', event)">Folge ich</button>
+            </div>`;
+        }).join('');
+        if(window.lucide) lucide.createIcons({root: list});
+    };
+    window.closeFollowingList = () => {
+        document.getElementById('following-screen').classList.add('hidden');
+        document.getElementById('main-content').classList.remove('hidden');
+    };
+
     window.toggleNotifPanel = () => {
         document.getElementById('notif-panel').classList.toggle('open');
     };
@@ -1922,7 +2234,19 @@
     window.logoutUser = async () => {
         if (confirm('Wirklich abmelden?')) { await signOut(auth); location.reload(); }
     };
-    document.getElementById('btn-login').onclick = () => signInWithPopup(auth, provider);
+    document.getElementById('btn-login').onclick = async () => {
+        const btn = document.getElementById('btn-login');
+        if (btn.classList.contains('is-loading')) return;
+        btn.classList.add('is-loading');
+        try {
+            await signInWithPopup(auth, provider);
+        } catch (e) {
+            console.error('Login-Fehler:', e);
+            showToast('Anmeldung fehlgeschlagen. Bitte erneut versuchen.');
+        } finally {
+            btn.classList.remove('is-loading');
+        }
+    };
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             document.getElementById('login-screen').classList.add('hidden');
@@ -1950,6 +2274,7 @@
             swapIcon(soundBtn, globalSoundEnabled ? 'volume-2' : 'volume-x');
             loadFeed();
             loadAlerts(); loadStories(); loadNotifications();
+            listenFollowingFeedFlag();
             if(window.lucide) lucide.createIcons();
             setTimeout(adaptNavbar, 300);
         } else {
@@ -2048,7 +2373,7 @@
         renderStoryConfirmMusicChip();
         document.getElementById('story-confirm-modal').style.display = 'flex';
         if(window.lucide) lucide.createIcons();
-        setBnProcessing(true, 'Story wird komprimiertâ€¦');
+        setBnProcessing(true, 'Story wird komprimiert\u2026');
         try {
             storyPendingCompressed = await compressImage(file, 1600, 0.85);
         } finally {
@@ -2059,31 +2384,39 @@
     window.closeStoryConfirmModal = () => {
         document.getElementById('story-confirm-modal').style.display = 'none';
         storyPendingFile = null; storyPendingCompressed = null; selectedMusicForStory = null;
+        closeAllNestedOverlays();
     };
     function renderStoryConfirmMusicChip() {
         const wrap = document.getElementById('story-confirm-music-chip-wrap');
-        if (!selectedMusicForStory) { wrap.innerHTML = ''; return; }
-        wrap.innerHTML = `<div class="composer-music-chip">
+        const btnLabel = document.querySelector('#story-confirm-music-btn span');
+        if (!selectedMusicForStory) {
+            wrap.innerHTML = '';
+            if (btnLabel) btnLabel.textContent = 'Musik hinzufÃ¼gen';
+            return;
+        }
+        if (btnLabel) btnLabel.textContent = 'Musik Ã¤ndern';
+        wrap.innerHTML = `<div class="composer-music-chip" style="max-width:none;width:100%;margin-bottom:10px;">
             <img src="${selectedMusicForStory.artworkUrl}">
-            <span>${selectedMusicForStory.title} Â· ${selectedMusicForStory.artist}</span>
-            <button onclick="selectedMusicForStory=null;renderStoryConfirmMusicChip()"><i data-lucide="x" style="width:13px;"></i></button>
+            <span style="max-width:none;flex:1;">${selectedMusicForStory.title} \u00b7 ${selectedMusicForStory.artist}</span>
+            <button onclick="event.stopPropagation();selectedMusicForStory=null;renderStoryConfirmMusicChip()"><i data-lucide="x" style="width:13px;"></i></button>
         </div>`;
         if(window.lucide) lucide.createIcons({root: wrap});
     }
     window.publishStory = async () => {
         if (!storyPendingFile) return;
         const uploadFile = storyPendingCompressed || storyPendingFile;
-        showToast('Story wird hochgeladenâ€¦');
+        showToast('Story wird hochgeladen\u2026');
         try {
             const fd = new FormData(); fd.append("image", uploadFile);
             const res = await fetch("https://api.imgbb.com/1/upload?key="+imgbbKey, { method:"POST", body:fd });
             const j = await res.json();
             if (!j?.data?.url) throw new Error('Upload fehlgeschlagen');
-            await addDoc(collection(db,"stories"), {
+            const newStoryRef = await addDoc(collection(db,"stories"), {
                 imageUrl: j.data.url, uid: auth.currentUser.uid, displayname: userData.displayname,
                 photoURL: userData.photoURL||'', createdAt: serverTimestamp(), seenBy: [],
                 music: selectedMusicForStory || null
             });
+            notifyFollowersOfNewContent(newStoryRef.id, 'story');
             showToast('Story gepostet! ðŸŽ‰');
         } catch (err) {
             showToast('Fehler beim Hochladen der Story.');
@@ -2112,6 +2445,14 @@
         document.getElementById('story-name').textContent = s.displayname;
         document.getElementById('story-avi').src = s.photoURL;
         document.getElementById('story-time').textContent = s.createdAt ? timeAgo(s.createdAt) : "Gerade eben";
+        const followWrap = document.getElementById('story-follow-btn-wrap');
+        if (s.uid === auth.currentUser.uid) {
+            followWrap.innerHTML = '';
+        } else {
+            const following = Array.isArray(userData?.following) ? userData.following : [];
+            const isFollowing = following.includes(s.uid);
+            followWrap.innerHTML = `<button class="follow-btn follow-btn-story ${isFollowing?'following':''}" data-uid="${s.uid}" onclick="toggleFollow('${s.uid}', event)">${isFollowing?'Folge ich':'Folgen'}</button>`;
+        }
         const musicWrap = document.getElementById('story-music-badge-wrap');
         musicWrap.innerHTML = (s.music && s.music.artworkUrl) ? `<div class="sf-music-badge" style="top:64px;" onclick="event.stopPropagation();openMusicPlayerModalEncoded('${safeJsonAttr(s.music)}')">
             <img src="${s.music.artworkUrl}" onerror="this.style.display='none'"><span>${(s.music.title||'Unbekannt').toString().slice(0,60)}</span>
@@ -2161,7 +2502,7 @@
     };
     window.nextStory = (e) => { if(e) e.stopPropagation(); currentStoryIndex++; renderCurrentStory(); };
     window.prevStory = (e) => { if(e) e.stopPropagation(); if(currentStoryIndex > 0) { currentStoryIndex--; renderCurrentStory(); } };
-    window.closeStoryViewer = () => { clearTimeout(storyTimer); document.getElementById('story-lightbox').style.display='none'; document.body.style.overflow=''; };
+    window.closeStoryViewer = () => { clearTimeout(storyTimer); document.getElementById('story-lightbox').style.display='none'; document.body.style.overflow=''; closeAllNestedOverlays(); };
     window.deleteStory = async (id) => { if(confirm("Story lÃ¶schen?")) { await deleteDoc(doc(db,"stories",id)); showToast('Story gelÃ¶scht'); nextStory(); } };
     window.openPollModal = () => { document.getElementById('poll-modal').style.display='flex'; if(window.lucide) lucide.createIcons(); };
     window.closePollModal = () => document.getElementById('poll-modal').style.display='none';
@@ -2277,9 +2618,10 @@
             <div class="post-header">
                 <img src="${u.photoURL||''}" class="user-img" onclick="openProfileModal('${uid}')">
                 <div style="flex-grow:1;">
-                    <div class="display-name" onclick="openProfileModal('${uid}')">${u.displayname||'â€“'} ${u.verified?`<img src="${verifiedIcon}" class="verified-badge">`:''}${editedHTML}</div>
-                    <div style="font-size:12px;color:var(--sub);">@${u.username||'â€“'} Â· <span class="post-time">${timeAgo(p.timestamp)}</span></div>
+                    <div class="display-name" onclick="openProfileModal('${uid}')">${u.displayname||'\u2013'} ${u.verified?`<img src="${verifiedIcon}" class="verified-badge">`:''}${editedHTML}</div>
+                    <div style="font-size:12px;color:var(--sub);">@${u.username||'\u2013'} \u00b7 <span class="post-time">${timeAgo(p.timestamp)}</span></div>
                 </div>
+                ${followButtonHTML(uid)}
                 <button onclick="toggleAdminMenu('${p.id}')" style="background:none;border:none;color:var(--sub);cursor:pointer;padding:4px;border-radius:50%;"><i data-lucide="more-horizontal" style="width:18px;"></i></button>
                 <div id="menu-${p.id}" class="admin-menu hidden">
                     <button onclick="sharePost('${p.id}')"><i data-lucide="share-2" style="width:15px;"></i> Teilen</button>
@@ -2478,7 +2820,7 @@
             container.innerHTML = `<div id="list-${postId}"></div>
                 <div class="comment-input-area">
                     <img src="${userData?.photoURL}" style="width:26px;height:26px;border-radius:50%;object-fit:cover;flex-shrink:0;">
-                    <input type="text" id="input-${postId}" placeholder="Kommentierenâ€¦" value="${savedVal}" style="flex:1;border:none;background:none;color:var(--text);font-size:14px;outline:none;font-family:inherit;">
+                    <input type="text" id="input-${postId}" placeholder="Kommentieren\u2026" value="${savedVal}" style="flex:1;border:none;background:none;color:var(--text);font-size:14px;outline:none;font-family:inherit;">
                     <button onclick="addComment('${postId}')" class="send-btn" style="width:28px;height:28px;"><i data-lucide="arrow-up" style="width:14px;stroke-width:3;"></i></button>
                 </div>`;
             const list = document.getElementById('list-'+postId);
@@ -2492,7 +2834,7 @@
                     list.innerHTML += `<div class="comment-card">
                         <div class="comment-header">
                             <img src="${c.photoURL||''}" class="comment-user-img">
-                            <span class="comment-display-name">${c.displayname||'â€“'} ${c.verified?`<img src="${verifiedIcon}" style="width:13px;height:13px;">`:''}</span>
+                            <span class="comment-display-name">${c.displayname||'\u2013'} ${c.verified?`<img src="${verifiedIcon}" style="width:13px;height:13px;">`:''}</span>
                             <span class="comment-time">${timeAgo(c.timestamp)}</span>
                             ${(isAdmin||isCOwner)?`<button class="comment-delete-btn" onclick="deleteComment('${postId}','${dDoc.id}')"><i data-lucide="x" style="width:13px;"></i></button>`:''}
                         </div>
@@ -2543,7 +2885,7 @@
         r.onload = (rs) => { document.getElementById('preview-img').src = rs.target.result; document.getElementById('preview-container').classList.remove('hidden'); };
         r.readAsDataURL(f);
         if (f.type.startsWith('image/')) {
-            setBnProcessing(true, 'Bild wird komprimiertâ€¦');
+            setBnProcessing(true, 'Bild wird komprimiert\u2026');
             try {
                 compressedFileCache = await compressImage(f);
             } finally {
@@ -2567,7 +2909,7 @@
             if (rawFile) {
                 const isVideo = rawFile.type.startsWith('video/');
                 const uploadFile = isVideo ? rawFile : (compressedFileCache || rawFile);
-                setBnProcessing(true, isVideo ? 'Video wird hochgeladenâ€¦' : 'Bild wird hochgeladenâ€¦');
+                setBnProcessing(true, isVideo ? 'Video wird hochgeladen\u2026' : 'Bild wird hochgeladen\u2026');
                 const fd = new FormData(); fd.append("image", uploadFile);
                 const res = await fetch("https://api.imgbb.com/1/upload?key="+imgbbKey, { method:"POST", body:fd });
                 const j = await res.json();
@@ -2575,11 +2917,12 @@
                 if (isVideo) videoUrl = j.data.url;
                 else imageUrl = j.data.url;
             }
-            await addDoc(collection(db,"posts"), {
+            const newPostRef = await addDoc(collection(db,"posts"), {
                 text: txt, imageUrl, videoUrl, uid: auth.currentUser.uid, timestamp: serverTimestamp(),
                 likes: [], reactions: {}, isPinned: false, views: 0,
                 music: selectedMusicForPost || null
             });
+            notifyFollowersOfNewContent(newPostRef.id, 'post');
             document.getElementById('post-input').innerText = '';
             document.getElementById('char-counter').classList.add('hidden');
             selectedMusicForPost = null;
@@ -2595,7 +2938,7 @@
             shareBtn.style.opacity = '1';
         }
     };
-    document.getElementById('post-input').addEventListener('keydown', (e) => { if(e.key==='Enter' && !e.shiftKey && !e.ctrlKey) { e.preventDefault(); document.getElementById('btn-share').click(); } });
+    // Enter creates a line break in the composer; sending is only via the send button.
     window.adaptNavbar = () => {
         const nav = document.getElementById('navbar');
         if (!nav || nav.classList.contains('hidden')) return;
@@ -2667,6 +3010,7 @@
         nav.classList.remove('composing');
         btn.classList.remove('spin');
         document.getElementById('post-input').blur();
+        closeAllNestedOverlays();
     };
 
     /* â”€â”€ STATUS FEED (TikTok-style vertical swipe: stories + image posts) â”€â”€ */
@@ -2704,7 +3048,7 @@
                     const uSnap = await getDoc(doc(db, "users", it.uid));
                     uidCache[it.uid] = uSnap.data() || {};
                 }
-                it.displayname = uidCache[it.uid].displayname || 'â€“';
+                it.displayname = uidCache[it.uid].displayname || '\u2013';
                 it.photoURL = uidCache[it.uid].photoURL || '';
             }
         }
@@ -2728,7 +3072,7 @@
         }
         overlay.style.display = 'flex';
         document.body.style.overflow = 'hidden';
-        scroller.innerHTML = '<div class="music-loading" style="color:rgba(255,255,255,0.7);height:100dvh;display:flex;align-items:center;justify-content:center;">Ladeâ€¦</div>';
+        scroller.innerHTML = '<div class="music-loading" style="color:rgba(255,255,255,0.7);height:100dvh;display:flex;align-items:center;justify-content:center;">Lade\u2026</div>';
         await hydrateStatusUsers(statusItems);
         scroller.innerHTML = statusItems.map((it, i) => renderStatusSlide(it, i)).join('');
         if(window.lucide) lucide.createIcons({root: scroller});
@@ -2757,7 +3101,7 @@
         document.getElementById('status-feed-overlay').style.display = 'none';
         document.getElementById('status-feed-scroller').onscroll = null;
         document.body.style.overflow = '';
-        stopMusicPreview();
+        closeAllNestedOverlays();
         setActiveBnTab('bn-home');
     };
     function renderStatusSlide(it, idx) {
@@ -2782,13 +3126,18 @@
         const mediaHTML = it.isVideo
             ? `<video class="sf-media" src="${it.imageUrl}" autoplay loop muted playsinline></video>`
             : `<img class="sf-media" src="${it.imageUrl}" loading="lazy">`;
+        const isSelf = it.uid === auth.currentUser?.uid;
+        const following = Array.isArray(userData?.following) ? userData.following : [];
+        const isFollowingUser = following.includes(it.uid);
+        const followBtnHTML = isSelf ? '' : `<button class="follow-btn follow-btn-story ${isFollowingUser?'following':''}" data-uid="${it.uid}" onclick="toggleFollow('${it.uid}', event)" style="margin-left:6px;">${isFollowingUser?'Folge ich':'Folgen'}</button>`;
         return `<div class="sf-slide" data-idx="${idx}">
             ${mediaHTML}
             <div class="sf-progress-row">${isStory ? `<div class="sf-progress-seg"><div class="sf-progress-seg-fill filled"></div></div>` : ''}</div>
             <div class="sf-top-bar">
                 <img class="sf-avatar" src="${it.photoURL||''}">
-                <span class="sf-top-name">${it.displayname||'â€“'}</span>
+                <span class="sf-top-name">${it.displayname||'\u2013'}</span>
                 <span class="sf-top-time">${timeStr}</span>
+                ${followBtnHTML}
                 <span class="sf-kind-badge ${isStory?'story':'post'}">${isStory?'Story':(it.isVideo?'Video':'Bild')}</span>
                 <button class="sf-close-btn" onclick="closeStatusFeed()"><i data-lucide="x" style="width:16px;"></i></button>
             </div>
