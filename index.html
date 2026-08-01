@@ -47,7 +47,7 @@
             min-height: 100vh;
         }
 
-        /* â”€â”€ FEATURE 2: BILDER-DOWNLOAD / POPUP BLOCKIEREN â”€â”€ */
+        /* &#9472;&#9472; FEATURE 2: BILDER-DOWNLOAD / POPUP BLOCKIEREN &#9472;&#9472; */
         img {
             -webkit-touch-callout: none;
             -webkit-user-select: none;
@@ -55,7 +55,7 @@
             -webkit-user-drag: none;
         }
 
-        /* â”€â”€ LOGIN â”€â”€ */
+        /* &#9472;&#9472; LOGIN &#9472;&#9472; */
         #login-screen {
             position: fixed; inset: 0; display: flex; justify-content: center;
             background: #0e0a2e; z-index: 1000; overflow: hidden;
@@ -122,7 +122,7 @@
         }
         .login-slide-screen.active { transform: translateX(0); pointer-events: auto; }
 
-        /* â”€â”€ NAV â”€â”€ */
+        /* &#9472;&#9472; NAV &#9472;&#9472; */
         nav {
             position: fixed;
             top: 0; left: 0; right: 0; height: 54px;
@@ -151,7 +151,7 @@
         .nav-btn:hover i { transform: scale(1.15); }
         .nav-btn:hover { background: var(--ios-input); }
 
-        /* â”€â”€ NOTIF BADGE â”€â”€ */
+        /* &#9472;&#9472; NOTIF BADGE &#9472;&#9472; */
         @keyframes badgePop {
             0% { transform: scale(0); }
             50% { transform: scale(1.4); }
@@ -167,7 +167,7 @@
             animation: badgePop 0.3s ease forwards;
         }
 
-        /* â”€â”€ SEARCH â”€â”€ */
+        /* &#9472;&#9472; SEARCH &#9472;&#9472; */
         .search-wrapper { display: flex; align-items: center; }
         .search-wrapper.active { flex-grow: 1; }
         .search-container { display: flex; align-items: center; background: var(--ios-input); border-radius: 10px;
@@ -178,10 +178,30 @@
             outline: none; font-family: inherit; }
         .search-wrapper.active .search-input { width: 100%; padding-left: 8px; }
 
-        /* â”€â”€ CONTAINER â”€â”€ */
+        /* &#9472;&#9472; CONTAINER &#9472;&#9472; */
         .container { max-width: 600px; margin: 0 auto; padding: 0 12px; }
 
-        /* â”€â”€ TABS â”€â”€ */
+        /* &#9472;&#9472; SCREEN SWIPE TRANSITIONS &#9472;&#9472; */
+        .screen-transitioning {
+            position: fixed !important; top: 54px; bottom: 0; left: 0; right: 0;
+            max-width: 600px; margin: 0 auto; background: var(--bg);
+            z-index: 500; overflow-y: auto; -webkit-overflow-scrolling: touch;
+            transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.32s ease;
+        }
+        .screen-slide-in-right { transform: translateX(100%); }
+        .screen-slide-in-left { transform: translateX(-100%); }
+        .screen-slide-settled { transform: translateX(0); }
+        .screen-slide-out-left { transform: translateX(-28%); opacity: 0.5; }
+        .screen-slide-out-right { transform: translateX(100%); }
+
+        /* Lightweight swipe for in-flow tab content (e.g. Feed <-> Trending) that must NOT be
+           taken out of normal document flow like the full screens above. */
+        @keyframes tabSlideInRight { from { transform: translateX(24px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes tabSlideInLeft { from { transform: translateX(-24px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .tab-slide-in-right { animation: tabSlideInRight 0.28s cubic-bezier(0.16, 1, 0.3, 1); }
+        .tab-slide-in-left { animation: tabSlideInLeft 0.28s cubic-bezier(0.16, 1, 0.3, 1); }
+
+        /* &#9472;&#9472; TABS &#9472;&#9472; */
         .feed-tabs { display: flex;
             gap: 0; background: var(--card); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; border: 0.5px solid var(--border);
         }
@@ -197,7 +217,7 @@
         .feed-tab.active { color: var(--nexus); background: var(--nexus-soft); }
         .feed-tab.active::after { width: 100%; left: 0; }
 
-        /* â”€â”€ STORIES â”€â”€ */
+        /* &#9472;&#9472; STORIES &#9472;&#9472; */
         #stories-bar { overflow-x: auto;
             display: flex; gap: 12px; padding: 14px 12px 8px; max-width: 600px; margin: 0 auto; scrollbar-width: none;
         }
@@ -219,14 +239,14 @@
             white-space: nowrap;
             overflow: hidden; text-overflow: ellipsis; }
 
-        /* â”€â”€ CARDS â”€â”€ */
+        /* &#9472;&#9472; CARDS &#9472;&#9472; */
         .card { background: var(--card);
             border-radius: var(--radius); padding: 16px; margin-bottom: 10px; border: 0.5px solid var(--border); box-shadow: var(--shadow); position: relative;
             transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
         }
         .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
 
-        /* â”€â”€ ALERTS â”€â”€ */
+        /* &#9472;&#9472; ALERTS &#9472;&#9472; */
         .alert-banner { display: flex;
             align-items: flex-start; gap: 12px; padding: 13px 14px; border-radius: 13px; margin-bottom: 10px; border: 1.5px solid;
             animation: postSlideIn 0.4s ease;
@@ -235,7 +255,7 @@
         .alert-info { border-color: #8e8e93; background: rgba(142,142,147,0.09); color: #8e8e93; }
         .alert-success { border-color: var(--green); background: rgba(52,199,89,0.09); color: var(--green); }
 
-        /* â”€â”€ POST CARD â”€â”€ */
+        /* &#9472;&#9472; POST CARD &#9472;&#9472; */
         .pinned-label { display: flex;
             align-items: center; gap: 5px; color: var(--nexus); font-size: 12px; font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;
         }
@@ -256,10 +276,10 @@
         .hashtag:hover { text-decoration: underline; color: var(--text); }
         .mention { color: var(--nexus); cursor: pointer; font-weight: 500; }
 
-        /* â”€â”€ VIEWS COUNTER â”€â”€ */
+        /* &#9472;&#9472; VIEWS COUNTER &#9472;&#9472; */
         .post-views { font-size: 12px; color: var(--sub); display: flex; align-items: center; gap: 4px; margin-top: 8px; }
 
-        /* â”€â”€ POST IMAGE â”€â”€ */
+        /* &#9472;&#9472; POST IMAGE &#9472;&#9472; */
         .post-img-wrap { width: calc(100% + 32px); position: relative;
             margin: 12px -16px -16px -16px; border-bottom-left-radius: var(--radius); border-bottom-right-radius: var(--radius); overflow: hidden; border-top: 0.5px solid var(--border);
         }
@@ -268,7 +288,7 @@
         .post-img:hover { transform: scale(1.02); }
         .post-video { width: 100%; display: block; max-height: 500px; object-fit: cover; background: #000; }
 
-        /* â”€â”€ REACTION BAR â”€â”€ */
+        /* &#9472;&#9472; REACTION BAR &#9472;&#9472; */
         .reaction-bar { display: flex;
             gap: 4px; margin-top: 14px; padding-top: 12px; border-top: 0.5px solid var(--border); align-items: center; flex-wrap: wrap;
         }
@@ -297,7 +317,7 @@
         }
         .emoji-count:hover { transform: scale(1.15) rotate(5deg); }
 
-        /* â”€â”€ ADMIN MENU â”€â”€ */
+        /* &#9472;&#9472; ADMIN MENU &#9472;&#9472; */
         .admin-menu { position: absolute;
             top: 42px; right: 0; background: var(--card); border: 0.5px solid var(--border); border-radius: 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.18); z-index: 1100;
             min-width: 200px; overflow: hidden; transform-origin: top right; animation: scaleIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -315,14 +335,14 @@
         .admin-menu button:last-child { border-bottom: none; }
         .admin-menu button:hover { background: var(--ios-input); padding-left: 20px; }
 
-        /* â”€â”€ EDIT POST INLINE â”€â”€ */
+        /* &#9472;&#9472; EDIT POST INLINE &#9472;&#9472; */
         .edit-post-area { width: 100%;
             padding: 10px 12px; border: 1.5px solid var(--nexus); border-radius: var(--radius-sm); background: var(--ios-input); color: var(--text); font-size: 15px; font-family: inherit; outline: none;
             resize: none; min-height: 80px; margin: 8px 0; transition: box-shadow 0.3s;
         }
         .edit-post-area:focus { box-shadow: 0 0 0 3px var(--nexus-soft); }
 
-        /* â”€â”€ COMMENTS â”€â”€ */
+        /* &#9472;&#9472; COMMENTS &#9472;&#9472; */
         .comment-card { background: var(--ios-input);
             border-radius: 12px; padding: 10px 12px; margin-bottom: 7px; position: relative; animation: postSlideIn 0.3s ease;
         }
@@ -341,7 +361,7 @@
         }
         .comment-delete-btn:hover { color: var(--danger); transform: scale(1.2); }
 
-        /* â”€â”€ INPUT BAR â”€â”€ */
+        /* &#9472;&#9472; INPUT BAR &#9472;&#9472; */
         .ios-footer { position: fixed;
             bottom: 0; left: 0; right: 0; background: var(--tab-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-top: 0.5px solid var(--border);
             padding: 10px 15px calc(10px + env(safe-area-inset-bottom)); z-index: 1000; transition: transform 0.3s ease;
@@ -365,7 +385,7 @@
         .send-btn:active { transform: scale(0.92) translateY(-2px); }
         .media-btn-group { display: flex; align-items: center; gap: 4px; }
 
-        /* â•â•â•â•â•â•â•â•â•â•â•â•â•â• NEW BOTTOM NAVBAR â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+        /* &#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552; NEW BOTTOM NAVBAR &#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552; */
         #bottom-fade {
             position: fixed; left: 0; right: 0; bottom: 0; height: 150px;
             background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.25) 45%, rgba(0,0,0,0));
@@ -435,7 +455,7 @@
         .bn-compose.spin i { transform: rotate(135deg); }
         .bn-compose.spin::before { animation: none; box-shadow: none; }
 
-        /* â”€â”€ COMPOSE MORPH â”€â”€ */
+        /* &#9472;&#9472; COMPOSE MORPH &#9472;&#9472; */
         #bottom-nav.composing .bn-shell { border-radius: 26px; }
         .bn-compose-panel {
             display: none;
@@ -458,7 +478,7 @@
 
         .bn-tabs { display: flex; align-items: center; justify-content: space-between; width: 100%; }
 
-        /* â”€â”€ STATUS FEED (TikTok style) â”€â”€ */
+        /* &#9472;&#9472; STATUS FEED (TikTok style) &#9472;&#9472; */
         #status-feed-overlay {
             position: fixed; inset: 0; background: #000; z-index: 2500; display: none;
             flex-direction: column;
@@ -524,7 +544,7 @@
             display: flex; flex-direction: column; align-items: center; gap: 10px; height: 100dvh; justify-content: center;
         }
 
-        /* â”€â”€ PROCESSING GLOW (Siri-style rotating edge light) â”€â”€ */
+        /* &#9472;&#9472; PROCESSING GLOW (Siri-style rotating edge light) &#9472;&#9472; */
         @keyframes glowRotate { to { --glow-angle: 360deg; } }
         @property --glow-angle {
             syntax: '<angle>'; initial-value: 0deg; inherits: false;
@@ -549,7 +569,7 @@
         }
         .bn-processing-label .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--nexus); animation: badgePop 1s ease-in-out infinite; }
 
-        /* â”€â”€ MUSIC FEATURE â”€â”€ */
+        /* &#9472;&#9472; MUSIC FEATURE &#9472;&#9472; */
         .music-result-item { display: flex; align-items: center; gap: 12px; padding: 9px 8px; border-radius: 12px;
             cursor: pointer; transition: background 0.15s; }
         .music-result-item:hover { background: var(--ios-input); }
@@ -582,6 +602,16 @@
         .post-music-badge img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; animation: spinCover 3.5s linear infinite; }
         .post-music-badge i { color: white; width: 12px; margin: 0 4px 0 3px; }
         @keyframes spinCover { to { transform: rotate(360deg); } }
+        .post-music-chip {
+            display: flex; align-items: center; gap: 8px; background: var(--nexus-soft);
+            border-radius: 20px; padding: 6px 12px 6px 6px; margin-top: 10px; cursor: pointer;
+            transition: transform 0.15s; max-width: fit-content;
+        }
+        .post-music-chip:hover { transform: translateX(2px); }
+        .post-music-chip img { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; animation: spinCover 3.5s linear infinite; flex-shrink: 0; }
+        .post-music-chip-fallback-icon { width: 26px; height: 26px; border-radius: 50%; background: var(--nexus); color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .post-music-chip span { font-size: 13px; font-weight: 600; color: var(--nexus); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+        .post-music-chip i { color: var(--nexus); }
         .sf-music-badge {
             position: absolute; top: calc(env(safe-area-inset-top,20px) + 56px); right: 12px; z-index: 6;
             display: flex; align-items: center; gap: 4px; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px);
@@ -599,7 +629,7 @@
         .global-sound-toggle.on { color: white; background: var(--nexus); }
         .global-sound-toggle:active { transform: scale(0.9); }
 
-        /* â”€â”€ FOLLOW SYSTEM â”€â”€ */
+        /* &#9472;&#9472; FOLLOW SYSTEM &#9472;&#9472; */
         .follow-btn {
             background: var(--nexus); color: white; border: none; font-size: 12px; font-weight: 700;
             padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit;
@@ -628,10 +658,13 @@
         .following-row-name { font-weight: 600; font-size: 14.5px; display: flex; align-items: center; gap: 4px; }
         .following-row-sub { font-size: 12.5px; color: var(--sub); margin-top: 2px; }
 
-        /* â”€â”€ LIGHTBOX â”€â”€ */
+        /* &#9472;&#9472; LIGHTBOX &#9472;&#9472; */
         .lightbox { position: fixed;
             top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 2000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px); animation: fadeIn 0.3s ease; }
+        /* Modals that can be opened ON TOP of another already-open lightbox (e.g. music picker
+           opened from the story-confirm or compose flow) need a higher stacking level. */
+        #music-modal, #music-player-modal { z-index: 2100; }
         #lightbox-img { max-width: 95%; max-height: 88vh;
             border-radius: 12px; object-fit: contain; animation: modalScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -641,7 +674,7 @@
         }
         .close-lightbox-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.1); }
 
-        /* â”€â”€ PROFILE MODAL â”€â”€ */
+        /* &#9472;&#9472; PROFILE MODAL &#9472;&#9472; */
         #profile-modal { position: fixed;
             top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: none; align-items: flex-end; justify-content: center; backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px); animation: fadeIn 0.3s ease; }
@@ -666,7 +699,7 @@
         .profile-grid-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
         .profile-grid-item:hover img { transform: scale(1.1); }
 
-        /* â”€â”€ NOTIFICATIONS PANEL â”€â”€ */
+        /* &#9472;&#9472; NOTIFICATIONS PANEL &#9472;&#9472; */
         #notif-panel { position: fixed;
             top: 54px; right: 0; width: min(360px, 100vw); height: calc(100vh - 54px); background: var(--card); border-left: 0.5px solid var(--border); z-index: 1500;
             transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); overflow-y: auto; box-shadow: -8px 0 30px rgba(0,0,0,0.15);
@@ -690,12 +723,12 @@
         .notif-time { font-size: 12px; color: var(--sub); margin-top: 3px; }
         .notif-empty { padding: 40px 20px; text-align: center; color: var(--sub); font-size: 15px; }
 
-        /* â”€â”€ BOOKMARKS SCREEN â”€â”€ */
-        #bookmarks-screen { display: none; padding-top: 16px; animation: fadeIn 0.3s ease; }
+        /* &#9472;&#9472; BOOKMARKS SCREEN &#9472;&#9472; */
+        #bookmarks-screen { padding-top: 16px; animation: fadeIn 0.3s ease; }
         .bookmarks-header { display: flex; align-items: center; gap: 14px; padding: 0 0 20px; }
         .bookmarks-header h2 { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin: 0; }
 
-        /* â”€â”€ TRENDING â”€â”€ */
+        /* &#9472;&#9472; TRENDING &#9472;&#9472; */
         .trending-card { background: var(--card);
             border-radius: var(--radius); padding: 16px; margin-bottom: 10px; border: 0.5px solid var(--border); box-shadow: var(--shadow);
             animation: postSlideIn 0.4s ease;
@@ -711,7 +744,7 @@
         .trending-tag { font-weight: 700; font-size: 15px; color: var(--nexus); }
         .trending-count { font-size: 12px; color: var(--sub); margin-top: 1px; }
 
-        /* â”€â”€ SETTINGS SCREEN â”€â”€ */
+        /* &#9472;&#9472; SETTINGS SCREEN &#9472;&#9472; */
         #settings-screen { padding-top: 16px; animation: fadeIn 0.3s ease; }
         .settings-header { display: flex; align-items: center; gap: 14px; padding: 0 0 20px; }
         .settings-header h2 { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; margin: 0; }
@@ -758,7 +791,7 @@
             display: flex; align-items: center; justify-content: center; gap: 4px; }
         .profile-preview-username { font-size: 13px; color: var(--sub); }
 
-        /* â”€â”€ MODAL â”€â”€ */
+        /* &#9472;&#9472; MODAL &#9472;&#9472; */
         @keyframes modalScale {
             from { opacity: 0; transform: scale(0.85); }
             to { opacity: 1; transform: scale(1); }
@@ -795,7 +828,7 @@
         }
         .btn-ghost:hover { background: rgba(255,59,48,0.1); transform: translateY(-1px); }
 
-        /* â”€â”€ AI OVERLAY â”€â”€ */
+        /* &#9472;&#9472; AI OVERLAY &#9472;&#9472; */
         @keyframes overlaySlideUp {
             from { opacity: 0; transform: translateY(40px) scale(0.95); }
             to { opacity: 1; transform: translateY(0) scale(1); }
@@ -805,7 +838,7 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.3); animation: overlaySlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* â”€â”€ STORY VIEWER â”€â”€ */
+        /* &#9472;&#9472; STORY VIEWER &#9472;&#9472; */
         #story-viewer { background: #000;
             border-radius: 0; width: 100%; max-width: 400px; height: 100%; display: flex; flex-direction: column; position: relative; overflow: hidden;
             animation: modalScale 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -830,7 +863,7 @@
             transform: translateX(-50%); color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 600; text-shadow: 0 2px 6px rgba(0,0,0,0.8); z-index: 20; background: rgba(0,0,0,0.5); padding: 6px 14px;
             border-radius: 20px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); pointer-events: none;}
 
-        /* â”€â”€ EMOJI PICKER â”€â”€ */
+        /* &#9472;&#9472; EMOJI PICKER &#9472;&#9472; */
         .emoji-picker-popup {
             position: fixed;
             background: var(--card); border: 0.5px solid var(--border); border-radius: 16px; padding: 12px;
@@ -848,14 +881,14 @@
             align-items: center; }
         .emoji-btn-pick:hover { transform: scale(1.3) rotate(5deg); background: var(--ios-input); }
 
-        /* â”€â”€ ACTION BUTTON STYLE â”€â”€ */
+        /* &#9472;&#9472; ACTION BUTTON STYLE &#9472;&#9472; */
         .input-action-btn { background: none;
             border: 1px solid var(--border); border-radius: 8px; color: var(--sub); cursor: pointer; padding: 3px 8px; font-size: 12px; font-weight: 700; font-family: inherit;
             transition: all 0.2s; }
         .input-action-btn:hover { color: var(--nexus); border-color: var(--nexus); background: var(--nexus-soft);
             transform: translateY(-1px); }
 
-        /* â”€â”€ TOAST â”€â”€ */
+        /* &#9472;&#9472; TOAST &#9472;&#9472; */
         #toast { position: fixed;
             bottom: 100px; left: 50%; transform: translateX(-50%) translateY(30px) scale(0.9); background: var(--text); color: var(--bg); padding: 10px 20px; border-radius: 20px; font-size: 14px;
             font-weight: 500;
@@ -867,7 +900,7 @@
         .hidden { display: none !important; }
         .divider { height: 0.5px; background: var(--border); margin: 6px 0; }
 
-        /* â”€â”€ POLL â”€â”€ */
+        /* &#9472;&#9472; POLL &#9472;&#9472; */
         .poll-container { margin-top: 10px; }
         .poll-option { position: relative; overflow: hidden; border-radius: 10px; margin-bottom: 8px;
             border: 1.5px solid var(--border); cursor: pointer; transition: border-color 0.3s, transform 0.2s;
@@ -882,7 +915,7 @@
         .poll-pct { font-size: 13px; font-weight: 700; color: var(--nexus); animation: fadeIn 0.5s; }
         .poll-total { font-size: 12px; color: var(--sub); margin-top: 6px; }
 
-        /* â”€â”€ POLL CREATOR â”€â”€ */
+        /* &#9472;&#9472; POLL CREATOR &#9472;&#9472; */
         .poll-option-input { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; animation: postSlideIn 0.3s ease; }
         .poll-option-input input { flex: 1;
             padding: 10px 12px; border: 1px solid var(--border);
@@ -890,13 +923,13 @@
         }
         .poll-option-input input:focus { border-color: var(--nexus); box-shadow: 0 0 0 2px var(--nexus-soft); }
 
-        /* â”€â”€ CHAR COUNTER â”€â”€ */
+        /* &#9472;&#9472; CHAR COUNTER &#9472;&#9472; */
         .char-counter { font-size: 12px; color: var(--sub); text-align: right; margin-top: 4px; transition: color 0.3s; }
         .char-counter.warn { color: var(--warning); animation: modalScale 0.3s ease; }
         .char-counter.limit { color: var(--danger); animation: shake 0.4s ease; }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
-        /* â”€â”€ Animated post entry â”€â”€ */
+        /* &#9472;&#9472; Animated post entry &#9472;&#9472; */
         @keyframes postSlideIn {
             from { opacity: 0; transform: translateY(25px) scale(0.97); }
             to { opacity: 1; transform: translateY(0) scale(1); }
@@ -1003,7 +1036,7 @@
     <div id="notif-list"></div>
 </div>
 
-<div id="bookmarks-screen" class="container">
+<div id="bookmarks-screen" class="container hidden">
     <div class="bookmarks-header">
         <button class="settings-back-btn" onclick="closeBookmarks()"><i data-lucide="arrow-left" style="width:18px;"></i></button>
         <h2>Gespeicherte Posts</h2>
@@ -1089,7 +1122,7 @@
             <button class="settings-toggle on" id="notif-comments-toggle" onclick="this.classList.toggle('on')"></button>
         </div>
     </div>
-    <div class="settings-section-title">PrivatsphÃ¤re</div>
+    <div class="settings-section-title">Privatsph&#228;re</div>
     <div class="settings-card">
         <div class="settings-row" style="cursor:default;">
             <div class="settings-row-icon" style="background:#ff9500;"><i data-lucide="eye-off" style="width:16px;color:white;"></i></div>
@@ -1098,13 +1131,13 @@
         </div>
         <div class="settings-row" style="cursor:default;">
             <div class="settings-row-icon" style="background:#5856d6;"><i data-lucide="user-check" style="width:16px;color:white;"></i></div>
-            <span class="settings-row-label">AktivitÃ¤tsstatus anzeigen</span>
+            <span class="settings-row-label">Aktivit&#228;tsstatus anzeigen</span>
             <button class="settings-toggle on" onclick="this.classList.toggle('on')"></button>
         </div>
     </div>
     <div class="settings-section-title">Info</div>
     <div class="settings-card">
-        <div class="settings-row" onclick="showToast('cliq. v155.0 &ndash; Danke fÃ¼rs Nutzen! ðŸ’™')">
+        <div class="settings-row" onclick="showToast('cliq. v155.0 &ndash; Danke f&#252;rs Nutzen! &#128153;')">
             <div class="settings-row-icon" style="background:#1877f2;"><i data-lucide="info" style="width:16px;color:white;"></i></div>
             <span class="settings-row-label">Version</span>
             <span class="settings-row-value">v155.0</span>
@@ -1159,7 +1192,7 @@
         <input type="text" id="edit-username" class="modal-input" placeholder="@username" style="margin-bottom:2px;">
         <div id="username-cooldown-hint" style="font-size:11.5px;color:var(--warning);margin-bottom:10px;display:none;"></div>
         <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);display:block;margin-bottom:6px;">Bio</label>
-        <textarea id="edit-bio" class="modal-input" placeholder="ErzÃ¤hl etwas Ã¼ber dich..." style="height:80px;resize:none;"></textarea>
+        <textarea id="edit-bio" class="modal-input" placeholder="Erz&#228;hl etwas &#252;ber dich..." style="height:80px;resize:none;"></textarea>
         <button onclick="saveProfile()" class="btn-primary">Speichern</button>
     </div>
 </div>
@@ -1179,7 +1212,7 @@
 <div id="alert-modal" class="lightbox">
     <div class="modal-inner" onclick="event.stopPropagation()">
         <h3 class="modal-title">Neue Meldung</h3>
-        <select id="alert-type" class="modal-input"><option value="warning">âš ï¸ Warnung</option><option value="info">â„¹ï¸ Information</option><option value="success">âœ… Erfolg</option></select>
+        <select id="alert-type" class="modal-input"><option value="warning">&#9888;&#65039; Warnung</option><option value="info">&#8505;&#65039; Information</option><option value="success">&#9989; Erfolg</option></select>
         <textarea id="alert-text" class="modal-input" placeholder="Nachricht eingeben..." style="height:90px;resize:none;"></textarea>
         <select id="alert-duration" class="modal-input"><option value="0">Dauerhaft anzeigen</option><option value="1">1 Stunde</option><option value="24">24 Stunden</option></select>
         <div style="display:flex;gap:10px;margin-top:4px;">
@@ -1199,10 +1232,10 @@
         </div>
          <textarea id="poll-question" class="modal-input" placeholder="Frage stellen..." style="height:60px;resize:none;margin-bottom:14px;"></textarea>
         <div id="poll-options-container">
-            <div class="poll-option-input"><input type="text" class="poll-opt" placeholder="Option 1" maxlength="50"><button onclick="removePollOpt(this)" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;transition:color 0.2s;">Ã—</button></div>
-            <div class="poll-option-input"><input type="text" class="poll-opt" placeholder="Option 2" maxlength="50"><button onclick="removePollOpt(this)" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;transition:color 0.2s;">Ã—</button></div>
+            <div class="poll-option-input"><input type="text" class="poll-opt" placeholder="Option 1" maxlength="50"><button onclick="removePollOpt(this)" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;transition:color 0.2s;">&#215;</button></div>
+            <div class="poll-option-input"><input type="text" class="poll-opt" placeholder="Option 2" maxlength="50"><button onclick="removePollOpt(this)" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;transition:color 0.2s;">&#215;</button></div>
         </div>
-        <button onclick="addPollOption()" style="background:none;border:1px dashed var(--border);border-radius:10px;padding:9px;width:100%;color:var(--nexus);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:14px;transition:background 0.2s;">+ Option hinzufÃ¼gen</button>
+        <button onclick="addPollOption()" style="background:none;border:1px dashed var(--border);border-radius:10px;padding:9px;width:100%;color:var(--nexus);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:14px;transition:background 0.2s;">+ Option hinzuf&#252;gen</button>
         <button onclick="submitPoll()" class="btn-primary">Umfrage posten</button>
     </div>
 </div>
@@ -1211,7 +1244,7 @@
     <div class="modal-inner" onclick="event.stopPropagation()" style="max-height:80vh;display:flex;flex-direction:column;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-shrink:0;">
             <h3 class="modal-title" style="margin:0;display:flex;align-items:center;gap:8px;">
-                <i data-lucide="music-4" style="width:20px;"></i> Sound auswÃ¤hlen
+                <i data-lucide="music-4" style="width:20px;"></i> Sound ausw&#228;hlen
             </h3>
             <button onclick="closeMusicModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
         </div>
@@ -1254,10 +1287,10 @@
         </div>
         <img id="story-confirm-preview" src="" style="width:100%;max-height:320px;object-fit:contain;border-radius:14px;background:var(--ios-input);margin-bottom:14px;">
         <button onclick="openMusicModal('story')" id="story-confirm-music-btn" class="btn-ghost" style="width:100%;color:var(--nexus);background:var(--nexus-soft);display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;font-weight:700;margin-bottom:10px;">
-            <i data-lucide="music-4" style="width:16px;"></i> <span>Musik hinzufÃ¼gen</span>
+            <i data-lucide="music-4" style="width:16px;"></i> <span>Musik hinzuf&#252;gen</span>
         </button>
         <div id="story-confirm-music-chip-wrap"></div>
-        <button onclick="publishStory()" class="btn-primary">Story verÃ¶ffentlichen</button>
+        <button onclick="publishStory()" class="btn-primary">Story ver&#246;ffentlichen</button>
     </div>
 </div>
 
@@ -1322,7 +1355,7 @@
                         <button onclick="openPollModal()" title="Umfrage erstellen" style="background:none;border:none;color:var(--nexus);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform 0.2s;">
                             <i data-lucide="bar-chart-2" style="width:24px;height:24px;"></i>
                         </button>
-                        <button class="music-add-btn" id="composer-music-add-btn" onclick="openMusicModal('post')" title="Musik hinzufÃ¼gen">
+                        <button class="music-add-btn" id="composer-music-add-btn" onclick="openMusicModal('post')" title="Musik hinzuf&#252;gen">
                             <i data-lucide="music-4" style="width:23px;height:23px;"></i>
                         </button>
                     </div>
@@ -1334,7 +1367,7 @@
         </div>
         <div id="preview-container" class="hidden" style="position:absolute;bottom:74px;left:15px;background:var(--card);padding:5px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.15);animation:postSlideIn 0.3s ease;">
             <img id="preview-img" src="" style="width:80px;height:80px;object-fit:cover;border-radius:8px;display:block;">
-             <button onclick="clearPreview()" style="position:absolute;top:-6px;right:-6px;background:var(--danger);color:white;border:none;border-radius:50%;cursor:pointer;width:22px;height:22px;font-size:14px;display:flex;align-items:center;justify-content:center;transition:transform 0.2s;">Ã—</button>
+             <button onclick="clearPreview()" style="position:absolute;top:-6px;right:-6px;background:var(--danger);color:white;border:none;border-radius:50%;cursor:pointer;width:22px;height:22px;font-size:14px;display:flex;align-items:center;justify-content:center;transition:transform 0.2s;">&#215;</button>
         </div>
         <div class="char-counter hidden" id="char-counter" style="position:absolute;bottom:-20px;right:10px;">0 / 500</div>
     </div>
@@ -1375,10 +1408,10 @@
     const imgbbKey = "1cb3871dd6829d7133f3285c289ffc0a";
     const adminEmail = "boxenjob5@gmail.com";
     const verifiedIcon = "https://lh3.googleusercontent.com/d/1OqVoJrTHfr_EXG520w5ES9ugrgQPzHNa";
-    const REACTIONS = ['ðŸ‘','â¤ï¸','ðŸ˜‚','ðŸ˜®','ðŸ˜¢','ðŸ˜¡','ðŸ”¥','ðŸ‘','ðŸ™Œ','ðŸŽ‰','ðŸ’¯','âœ¨','ðŸ˜','ðŸ¥°','ðŸ˜Ž','ðŸ¤”','ðŸ¤®','ðŸ’”','ðŸ¤«','ðŸ™„','ðŸ¤¤','ðŸ¥´','ðŸ¥³','ðŸ¤¯','ðŸ¤—','ðŸ’©','ðŸ’€','ðŸ‘½','ðŸ‘€','ðŸ§ '];
+    const REACTIONS = ['\u{1f44d}','\u2764\ufe0f','\u{1f602}','\u{1f62e}','\u{1f622}','\u{1f621}','\u{1f525}','\u{1f44f}','\u{1f64c}','\u{1f389}','\u{1f4af}','\u2728','\u{1f60d}','\u{1f970}','\u{1f60e}','\u{1f914}','\u{1f92e}','\u{1f494}','\u{1f92b}','\u{1f644}','\u{1f924}','\u{1f974}','\u{1f973}','\u{1f92f}','\u{1f917}','\u{1f4a9}','\u{1f480}','\u{1f47d}','\u{1f440}','\u{1f9e0}'];
     const MAX_CHARS = 500;
 
-    /* â”€â”€ IMAGE COMPRESSION â”€â”€ */
+    /* \u2500\u2500 IMAGE COMPRESSION \u2500\u2500 */
     function compressImage(file, maxDim = 1600, quality = 0.82) {
         return new Promise((resolve, reject) => {
             if (!file.type.startsWith('image/') || file.type === 'image/gif') { resolve(file); return; }
@@ -1414,6 +1447,35 @@
             if (elmt) elmt.style.display = 'none';
         });
     }
+
+    /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 GENERIC SWIPE SCREEN TRANSITION \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+    // direction: 'forward' (going deeper, e.g. Feed -> Settings) slides the new screen in from the
+    // right and pushes the old one slightly left. 'back' reverses it (new screen from the left,
+    // old one exits to the right) - mirrors standard iOS-style navigation.
+    function swipeToScreen(hideEl, showEl, direction = 'forward') {
+        if (!hideEl || !showEl || hideEl === showEl) {
+            if (showEl) showEl.classList.remove('hidden');
+            if (hideEl) hideEl.classList.add('hidden');
+            return;
+        }
+        showEl.classList.remove('hidden');
+        showEl.classList.add('screen-transitioning', direction === 'forward' ? 'screen-slide-in-right' : 'screen-slide-in-left');
+        hideEl.classList.add('screen-transitioning');
+        hideEl.classList.remove('screen-slide-settled');
+        // Force reflow so the initial transform is applied before we animate to the settled state.
+        void showEl.offsetWidth;
+        requestAnimationFrame(() => {
+            showEl.classList.remove('screen-slide-in-right', 'screen-slide-in-left');
+            showEl.classList.add('screen-slide-settled');
+            hideEl.classList.add(direction === 'forward' ? 'screen-slide-out-left' : 'screen-slide-out-right');
+        });
+        setTimeout(() => {
+            hideEl.classList.add('hidden');
+            hideEl.classList.remove('screen-transitioning', 'screen-slide-out-left', 'screen-slide-out-right', 'screen-slide-settled');
+            showEl.classList.remove('screen-transitioning', 'screen-slide-settled');
+        }, 340);
+    }
+
     function setBnProcessing(active, label = 'Wird komprimiert\u2026') {
         const shell = document.getElementById('bn-shell');
         if (!shell) return;
@@ -1432,12 +1494,12 @@
         }
     }
 
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â• MUSIC FEATURE â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 MUSIC FEATURE \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
     // Rotating pool of viral-sound seed queries (based on recurring TikTok-trend archetypes).
     // A handful are picked at random each time the picker opens, so suggestions vary.
     const VIRAL_SEED_POOL = [
         'Espresso Sabrina Carpenter', 'Die With A Smile', 'Good Luck Babe Chappell Roan',
-        'Beautiful Things Benson Boone', 'APT RosÃ© Bruno Mars', 'Birds of a Feather Billie Eilish',
+        'Beautiful Things Benson Boone', 'APT Ros\u00e9 Bruno Mars', 'Birds of a Feather Billie Eilish',
         'Not Like Us Kendrick Lamar', 'Padam Padam Kylie Minogue', 'Houdini Dua Lipa',
         'Flowers Miley Cyrus', 'Paint The Town Red Doja Cat', 'Cruel Summer Taylor Swift',
         'Feather Sabrina Carpenter', 'Say My Name ODESZA', 'Levitating Dua Lipa',
@@ -1479,7 +1541,7 @@
         musicPreviewPlayingId = null;
     }
     window.toggleMusicPreview = (btn, previewUrl, id) => {
-        if (!previewUrl) { showToast('Keine Vorschau verfÃ¼gbar'); return; }
+        if (!previewUrl) { showToast('Keine Vorschau verf\u00fcgbar'); return; }
         if (musicPreviewPlayingId === id) { stopMusicPreview(); return; }
         stopMusicPreview();
         musicPreviewAudio.src = previewUrl;
@@ -1603,8 +1665,8 @@
         try {
             data = JSON.parse(decodeURIComponent(escape(atob(encoded))));
         } catch (e) {
-            console.error('Konnte ausgewÃ¤hlten Song nicht lesen:', e);
-            showToast('Song konnte nicht ausgewÃ¤hlt werden.');
+            console.error('Konnte ausgew\u00e4hlten Song nicht lesen:', e);
+            showToast('Song konnte nicht ausgew\u00e4hlt werden.');
             return;
         }
         if (musicPickerTarget === 'post') {
@@ -1616,7 +1678,7 @@
         }
         stopMusicPreview();
         closeMusicModal();
-        showToast(`ðŸŽµ "${data.title}" ausgewÃ¤hlt`);
+        showToast(`\u{1f3b5} "${data.title}" ausgew\u00e4hlt`);
     };
     function renderComposerMusicChip() {
         const wrap = document.getElementById('composer-music-chip-wrap');
@@ -1648,6 +1710,16 @@
             ${sizeClass === 'post-music-badge' ? '<i data-lucide="music-4"></i>' : `<span>${safeTitle}</span>`}
         </div>`;
     }
+    function postMusicChipHTML(music) {
+        if (!music || typeof music !== 'object') return '';
+        const safeTitle = (music.title || 'Unbekannter Song').toString().slice(0, 40);
+        const safeArtist = (music.artist || '').toString().slice(0, 40);
+        return `<div class="post-music-chip" onclick="event.stopPropagation();openMusicPlayerModalEncoded('${safeJsonAttr(music)}')">
+            ${music.artworkUrl ? `<img src="${music.artworkUrl}" onerror="this.style.display='none'">` : `<div class="post-music-chip-fallback-icon"><i data-lucide="music-4" style="width:14px;"></i></div>`}
+            <span>${safeTitle}${safeArtist ? ' \u00b7 ' + safeArtist : ''}</span>
+            <i data-lucide="play" style="width:12px;flex-shrink:0;"></i>
+        </div>`;
+    }
     window.openMusicPlayerModalEncoded = (encoded) => {
         try {
             const music = JSON.parse(decodeURIComponent(escape(atob(encoded))));
@@ -1660,7 +1732,7 @@
     window.openMusicPlayerModal = (music) => {
         if (typeof music === 'string') {
             try { music = JSON.parse(music.replace(/&quot;/g, '"')); }
-            catch (e) { console.error('Musikdaten ungÃ¼ltig:', e); return; }
+            catch (e) { console.error('Musikdaten ung\u00fcltig:', e); return; }
         }
         if (!music || typeof music !== 'object') return;
         document.getElementById('mp-cover').src = music.artworkUrl || '';
@@ -1689,7 +1761,7 @@
     window.toggleMpPreview = () => {
         const btn = document.getElementById('mp-play-btn');
         const url = btn.dataset.previewUrl;
-        if (!url) { showToast('Keine Vorschau fÃ¼r diesen Song verfÃ¼gbar'); return; }
+        if (!url) { showToast('Keine Vorschau f\u00fcr diesen Song verf\u00fcgbar'); return; }
         if (musicPreviewPlayingId === 'mp') {
             stopMusicPreview();
             setMpPlayIcon('play', 'Vorschau abspielen');
@@ -1728,7 +1800,7 @@
         btn.classList.toggle('on', globalSoundEnabled);
         swapIcon(btn, globalSoundEnabled ? 'volume-2' : 'volume-x');
         if (!globalSoundEnabled) stopMusicPreview();
-        showToast(globalSoundEnabled ? 'Musik-Vorschau aktiviert ðŸ”Š' : 'Musik-Vorschau deaktiviert ðŸ”‡');
+        showToast(globalSoundEnabled ? 'Musik-Vorschau aktiviert \u{1f50a}' : 'Musik-Vorschau deaktiviert \u{1f507}');
     };
     let userData = null;
     let allPosts = [];
@@ -1780,10 +1852,16 @@
         showToast(`Zeige Posts mit ${tag}`);
     };
     window.switchTab = (tab) => {
+        const wasTrending = document.getElementById('tab-trending').classList.contains('active');
+        const goingForward = tab === 'trending' && !wasTrending;
         document.getElementById('tab-feed').classList.toggle('active', tab === 'feed');
         document.getElementById('tab-trending').classList.toggle('active', tab === 'trending');
         document.getElementById('feed').classList.toggle('hidden', tab !== 'feed');
         document.getElementById('trending-section').classList.toggle('hidden', tab !== 'trending');
+        const activeEl = document.getElementById(tab === 'feed' ? 'feed' : 'trending-section');
+        activeEl.classList.remove('tab-slide-in-right', 'tab-slide-in-left');
+        void activeEl.offsetWidth;
+        activeEl.classList.add(goingForward ? 'tab-slide-in-right' : 'tab-slide-in-left');
         if (tab === 'trending') renderTrending();
     };
     function renderTrending() {
@@ -1852,9 +1930,6 @@
         localStorage.setItem('accentTheme', theme);
     };
     window.openSettings = () => {
-        document.getElementById('main-content').classList.add('hidden');
-        document.getElementById('bookmarks-screen').style.display = 'none';
-        document.getElementById('settings-screen').classList.remove('hidden');
         if (userData) {
             document.getElementById('settings-avatar').src = userData.photoURL || '';
             const verifiedHtml = userData.verified ? `<img src="${verifiedIcon}" class="verified-badge">` : '';
@@ -1862,12 +1937,12 @@
             document.getElementById('settings-preview-user').textContent = '@' + (userData.username || '\u2013');
         }
         document.getElementById('dark-toggle').classList.toggle('on', document.body.classList.contains('dark'));
+        swipeToScreen(document.getElementById('main-content'), document.getElementById('settings-screen'), 'forward');
         setActiveBnTab(null);
         if(window.lucide) lucide.createIcons();
     };
     window.closeSettings = () => {
-        document.getElementById('settings-screen').classList.add('hidden');
-        document.getElementById('main-content').classList.remove('hidden');
+        swipeToScreen(document.getElementById('settings-screen'), document.getElementById('main-content'), 'back');
         setActiveBnTab('bn-home');
     };
     function formatCooldownHint(changedAt, cooldownDays) {
@@ -1877,7 +1952,7 @@
         const remainingMs = cooldownDays * DAY_MS - elapsed;
         if (remainingMs <= 0) return null;
         const daysLeft = Math.ceil(remainingMs / DAY_MS);
-        return `Ã„nderbar in ${daysLeft} Tag${daysLeft !== 1 ? 'en' : ''}`;
+        return `\u00c4nderbar in ${daysLeft} Tag${daysLeft !== 1 ? 'en' : ''}`;
     }
     window.showEditProfile = () => {
         document.getElementById('edit-displayname').value = userData.displayname || '';
@@ -1910,14 +1985,14 @@
             const elapsed = now - userData.displaynameChangedAt;
             if (elapsed < 7 * DAY_MS) {
                 const daysLeft = Math.ceil((7 * DAY_MS - elapsed) / DAY_MS);
-                return showToast(`Anzeigename erst in ${daysLeft} Tag${daysLeft !== 1 ? 'en' : ''} wieder Ã¤nderbar`);
+                return showToast(`Anzeigename erst in ${daysLeft} Tag${daysLeft !== 1 ? 'en' : ''} wieder \u00e4nderbar`);
             }
         }
         if (unChanged && userData.usernameChangedAt) {
             const elapsed = now - userData.usernameChangedAt;
             if (elapsed < 14 * DAY_MS) {
                 const daysLeft = Math.ceil((14 * DAY_MS - elapsed) / DAY_MS);
-                return showToast(`Nutzername erst in ${daysLeft} Tag${daysLeft !== 1 ? 'en' : ''} wieder Ã¤nderbar`);
+                return showToast(`Nutzername erst in ${daysLeft} Tag${daysLeft !== 1 ? 'en' : ''} wieder \u00e4nderbar`);
             }
         }
         if (unChanged) {
@@ -1938,7 +2013,7 @@
         document.getElementById('settings-preview-name').innerHTML = dn + verifiedHtml;
         document.getElementById('settings-preview-user').textContent = '@' + un;
         document.getElementById('edit-profile-modal').style.display = 'none';
-        showToast('Profil gespeichert âœ“');
+        showToast('Profil gespeichert \u2713');
     };
     window.uploadProfileImage = async (e) => {
         const file = e.target.files[0]; if (!file) return;
@@ -1954,7 +2029,7 @@
             await updateDoc(doc(db, "users", auth.currentUser.uid), { photoURL: newUrl });
             userData.photoURL = newUrl;
             document.getElementById('settings-avatar').src = newUrl;
-            showToast('Profilbild aktualisiert âœ“');
+            showToast('Profilbild aktualisiert \u2713');
         } catch (err) {
             showToast('Fehler beim Hochladen des Profilbilds.');
         } finally {
@@ -2006,20 +2081,18 @@
     window.toggleBookmark = (postId) => {
         const idx = bookmarkedIds.indexOf(postId);
         if (idx > -1) { bookmarkedIds.splice(idx, 1); showToast('Lesezeichen entfernt'); }
-        else { bookmarkedIds.push(postId); showToast('Gespeichert ðŸ”–'); }
+        else { bookmarkedIds.push(postId); showToast('Gespeichert \u{1f516}'); }
         localStorage.setItem('nexus_bookmarks', JSON.stringify(bookmarkedIds));
         const btn = document.querySelector(`#post-${postId} .bookmark-btn`);
         if (btn) btn.classList.toggle('bookmarked', bookmarkedIds.includes(postId));
     };
     window.openBookmarks = () => {
-        document.getElementById('main-content').classList.add('hidden');
-        document.getElementById('bookmarks-screen').style.display = 'block';
+        swipeToScreen(document.getElementById('main-content'), document.getElementById('bookmarks-screen'), 'forward');
         if(window.lucide) lucide.createIcons();
         renderBookmarks();
     };
     window.closeBookmarks = () => {
-        document.getElementById('bookmarks-screen').style.display = 'none';
-        document.getElementById('main-content').classList.remove('hidden');
+        swipeToScreen(document.getElementById('bookmarks-screen'), document.getElementById('main-content'), 'back');
     };
     function renderBookmarks() {
         const feed = document.getElementById('bookmarks-feed');
@@ -2098,7 +2171,7 @@
         });
     }
 
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â• FOLLOW SYSTEM â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 FOLLOW SYSTEM \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
     window.toggleFollow = async (targetUid, event) => {
         if (event) event.stopPropagation();
         if (!auth.currentUser || targetUid === auth.currentUser.uid) return;
@@ -2187,10 +2260,7 @@
         if (auth.currentUser) {
             try { await setDoc(doc(db, "users", auth.currentUser.uid, "meta", "followingFeed"), { hasNew: false }, { merge: true }); } catch(e) {}
         }
-        document.getElementById('main-content').classList.add('hidden');
-        document.getElementById('bookmarks-screen').style.display = 'none';
-        document.getElementById('settings-screen').classList.add('hidden');
-        document.getElementById('following-screen').classList.remove('hidden');
+        swipeToScreen(document.getElementById('settings-screen'), document.getElementById('following-screen'), 'forward');
         const list = document.getElementById('following-list');
         const following = Array.isArray(userData.following) ? userData.following : [];
         if (!following.length) {
@@ -2217,8 +2287,7 @@
         if(window.lucide) lucide.createIcons({root: list});
     };
     window.closeFollowingList = () => {
-        document.getElementById('following-screen').classList.add('hidden');
-        document.getElementById('main-content').classList.remove('hidden');
+        swipeToScreen(document.getElementById('following-screen'), document.getElementById('settings-screen'), 'back');
     };
 
     window.toggleNotifPanel = () => {
@@ -2278,13 +2347,12 @@
             if(window.lucide) lucide.createIcons();
             setTimeout(adaptNavbar, 300);
         } else {
-            ['navbar','bottom-nav','bottom-fade','main-content','settings-screen'].forEach(id => {
+            ['navbar','bottom-nav','bottom-fade','main-content','settings-screen','bookmarks-screen','following-screen'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.classList.add('hidden');
             });
             document.getElementById('global-sound-toggle')?.classList.add('hidden');
             document.getElementById('login-screen').classList.remove('hidden');
-            document.getElementById('bookmarks-screen').style.display = 'none';
         }
     });
     window.openAlertModal = () => { document.getElementById('alert-modal').style.display = 'flex'; if(window.lucide) lucide.createIcons(); };
@@ -2297,7 +2365,7 @@
         let expiresAt = null;
         if (duration > 0) { expiresAt = new Date(); expiresAt.setHours(expiresAt.getHours() + duration); }
         await addDoc(collection(db, "alerts"), { text, type, expiresAt, createdAt: serverTimestamp() });
-        document.getElementById('alert-text').value = ''; closeAlertModal(); showToast('Meldung erstellt âœ“');
+        document.getElementById('alert-text').value = ''; closeAlertModal(); showToast('Meldung erstellt \u2713');
     };
     function loadAlerts() {
         onSnapshot(collection(db, "alerts"), (snap) => {
@@ -2391,10 +2459,10 @@
         const btnLabel = document.querySelector('#story-confirm-music-btn span');
         if (!selectedMusicForStory) {
             wrap.innerHTML = '';
-            if (btnLabel) btnLabel.textContent = 'Musik hinzufÃ¼gen';
+            if (btnLabel) btnLabel.textContent = 'Musik hinzuf\u00fcgen';
             return;
         }
-        if (btnLabel) btnLabel.textContent = 'Musik Ã¤ndern';
+        if (btnLabel) btnLabel.textContent = 'Musik \u00e4ndern';
         wrap.innerHTML = `<div class="composer-music-chip" style="max-width:none;width:100%;margin-bottom:10px;">
             <img src="${selectedMusicForStory.artworkUrl}">
             <span style="max-width:none;flex:1;">${selectedMusicForStory.title} \u00b7 ${selectedMusicForStory.artist}</span>
@@ -2417,7 +2485,7 @@
                 music: selectedMusicForStory || null
             });
             notifyFollowersOfNewContent(newStoryRef.id, 'story');
-            showToast('Story gepostet! ðŸŽ‰');
+            showToast('Story gepostet! \u{1f389}');
         } catch (err) {
             showToast('Fehler beim Hochladen der Story.');
         } finally {
@@ -2464,7 +2532,7 @@
             const dh = Math.floor(diffMs/(1000*60*60));
             const dm = Math.floor((diffMs%(1000*60*60))/(1000*60));
             timeLeftEl.textContent = `Noch ${dh}h ${dm}min`;
-        } else { timeLeftEl.textContent = "LÃ¤uft ab..."; }
+        } else { timeLeftEl.textContent = "L\u00e4uft ab..."; }
         const prog = document.getElementById('story-progress');
         prog.innerHTML = '';
         for (let i = 0; i < us.length; i++) {
@@ -2503,31 +2571,31 @@
     window.nextStory = (e) => { if(e) e.stopPropagation(); currentStoryIndex++; renderCurrentStory(); };
     window.prevStory = (e) => { if(e) e.stopPropagation(); if(currentStoryIndex > 0) { currentStoryIndex--; renderCurrentStory(); } };
     window.closeStoryViewer = () => { clearTimeout(storyTimer); document.getElementById('story-lightbox').style.display='none'; document.body.style.overflow=''; closeAllNestedOverlays(); };
-    window.deleteStory = async (id) => { if(confirm("Story lÃ¶schen?")) { await deleteDoc(doc(db,"stories",id)); showToast('Story gelÃ¶scht'); nextStory(); } };
+    window.deleteStory = async (id) => { if(confirm("Story l\u00f6schen?")) { await deleteDoc(doc(db,"stories",id)); showToast('Story gel\u00f6scht'); nextStory(); } };
     window.openPollModal = () => { document.getElementById('poll-modal').style.display='flex'; if(window.lucide) lucide.createIcons(); };
     window.closePollModal = () => document.getElementById('poll-modal').style.display='none';
     window.addPollOption = () => {
         const container = document.getElementById('poll-options-container');
         if (container.children.length >= 4) return showToast('Max. 4 Optionen');
         const div = document.createElement('div'); div.className = 'poll-option-input';
-        div.innerHTML = `<input type="text" class="poll-opt" placeholder="Option ${container.children.length+1}" maxlength="50"><button onclick="removePollOpt(this)" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;">Ã—</button>`;
+        div.innerHTML = `<input type="text" class="poll-opt" placeholder="Option ${container.children.length+1}" maxlength="50"><button onclick="removePollOpt(this)" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;">\u00d7</button>`;
         container.appendChild(div);
     };
     window.removePollOpt = (btn) => {
         const container = document.getElementById('poll-options-container');
-        if (container.children.length <= 2) return showToast('Mindestens 2 Optionen benÃ¶tigt');
+        if (container.children.length <= 2) return showToast('Mindestens 2 Optionen ben\u00f6tigt');
         btn.parentElement.remove();
     };
     window.submitPoll = async () => {
         const question = document.getElementById('poll-question').value.trim();
         if (!question) return showToast('Bitte eine Frage eingeben');
         const opts = [...document.querySelectorAll('.poll-opt')].map(i => i.value.trim()).filter(Boolean);
-        if (opts.length < 2) return showToast('Mindestens 2 Optionen benÃ¶tigt');
+        if (opts.length < 2) return showToast('Mindestens 2 Optionen ben\u00f6tigt');
         const pollData = { question, options: opts.map(o => ({ text: o, votes: [] })) };
         await addDoc(collection(db,"posts"), { text: question, poll: pollData, uid: auth.currentUser.uid, timestamp: serverTimestamp(), likes: [], reactions: {}, isPinned: false });
         closePollModal();
         document.getElementById('poll-question').value = '';
-        showToast('Umfrage gepostet âœ“');
+        showToast('Umfrage gepostet \u2713');
     };
     window.votePoll = async (postId, optionIndex) => {
         const ref = doc(db,"posts",postId);
@@ -2551,7 +2619,7 @@
         });
         const uSnap = await getDoc(doc(db,"users",p.uid));
         sendNotification(p.uid, 'repost', postId);
-        showToast('Repostet! ðŸ”');
+        showToast('Repostet! \u{1f501}');
     };
     window.startEditPost = (postId, encodedText) => {
         const postCard = document.getElementById('post-'+postId);
@@ -2569,7 +2637,7 @@
         const newText = document.getElementById('edit-area-'+postId)?.value.trim();
         if (!newText) return showToast('Text darf nicht leer sein');
         await updateDoc(doc(db,"posts",postId), { text: newText, edited: true });
-        showToast('Post bearbeitet âœ“');
+        showToast('Post bearbeitet \u2713');
     };
     window.cancelEditPost = (postId, encodedText) => {
         const postCard = document.getElementById('post-'+postId);
@@ -2603,7 +2671,7 @@
                     const isMyVote = myVoteIdx === i;
                     return `<div class="poll-option ${isMyVote?'voted-this':''}" onclick="votePoll('${p.id}',${i})">
                         <div class="poll-fill" style="width:${myVoteIdx > -1 ? pct : 0}%"></div>
-                        <div class="poll-label"><span>${opt.text} ${isMyVote?'âœ“':''}</span>${myVoteIdx > -1 ? `<span class="poll-pct">${pct}%</span>` : ''}</div>
+                        <div class="poll-label"><span>${opt.text} ${isMyVote?'\u2713':''}</span>${myVoteIdx > -1 ? `<span class="poll-pct">${pct}%</span>` : ''}</div>
                     </div>`;
                 }).join('')}
                 <div class="poll-total">${totalVotes} Stimme${totalVotes !== 1 ? 'n' : ''}</div>
@@ -2628,13 +2696,14 @@
                     <button onclick="copyPostText('${p.id}','${encodeURIComponent(p.text||'')}')"><i data-lucide="copy" style="width:15px;"></i> Text kopieren</button>
                     ${isOwner ? `<button onclick="startEditPost('${p.id}','${encodeURIComponent(p.text||'')}')"><i data-lucide="pen-line" style="width:15px;"></i> Bearbeiten</button>` : ''}
                     ${isAdmin ? `
-                    <button onclick="togglePin('${p.id}',${p.isPinned||false})"><i data-lucide="pin" style="width:15px;"></i> ${p.isPinned?'LÃ¶sen':'Anpinnen'}</button>
+                    <button onclick="togglePin('${p.id}',${p.isPinned||false})"><i data-lucide="pin" style="width:15px;"></i> ${p.isPinned?'L\u00f6sen':'Anpinnen'}</button>
                     <button onclick="toggleVerify('${uid}',${u.verified||false})"><i data-lucide="shield-check" style="width:15px;"></i> ${u.verified?'Ent-verifizieren':'Verifizieren'}</button>` : ''}
-                    ${isAdmin||isOwner ? `<button onclick="deletePost('${p.id}')" style="color:var(--danger);"><i data-lucide="trash-2" style="width:15px;"></i> LÃ¶schen</button>` : ''}
+                    ${isAdmin||isOwner ? `<button onclick="deletePost('${p.id}')" style="color:var(--danger);"><i data-lucide="trash-2" style="width:15px;"></i> L\u00f6schen</button>` : ''}
                 </div>
             </div>
             ${!p.poll ? `<div class="post-text">${parseText(p.text||'')}</div>` : ''}
             ${pollHTML}
+            ${postMusicChipHTML(p.music)}
             ${p.imageUrl ? `<div class="post-img-wrap"><img src="${p.imageUrl}" class="post-img" onclick="openLightbox('${p.imageUrl}')">${musicBadgeHTML(p.music, 'post-music-badge')}</div>` : ''}
             ${p.videoUrl ? `<div class="post-img-wrap"><video src="${p.videoUrl}" class="post-video" controls playsinline></video>${musicBadgeHTML(p.music, 'post-music-badge')}</div>` : ''}
             <div class="emoji-reaction-wrapper">${reactionHTML ? `<div class="emoji-reaction-bar" style="margin-top:10px;">${reactionHTML}</div>` : ''}</div>
@@ -2725,7 +2794,7 @@
                                             const isMyVote = myVoteIdx === i;
                                             return `<div class="poll-option ${isMyVote?'voted-this':''}" onclick="votePoll('${p.id}',${i})">
                                                 <div class="poll-fill" style="width:${myVoteIdx > -1 ? pct : 0}%"></div>
-                                                <div class="poll-label"><span>${opt.text} ${isMyVote?'âœ“':''}</span>${myVoteIdx > -1 ? `<span class="poll-pct">${pct}%</span>` : ''}</div>
+                                                <div class="poll-label"><span>${opt.text} ${isMyVote?'\u2713':''}</span>${myVoteIdx > -1 ? `<span class="poll-pct">${pct}%</span>` : ''}</div>
                                             </div>`;
                                         }).join('') + `<div class="poll-total">${totalVotes} Stimme${totalVotes !== 1 ? 'n' : ''}</div>`;
                                     }
@@ -2734,7 +2803,7 @@
                         } catch (renderErr) {
                             console.error('Fehler beim Rendern von Post', p.id, renderErr);
                         }
-                    }).catch(userErr => console.error('Fehler beim Laden des Nutzers fÃ¼r Post', p.id, userErr));
+                    }).catch(userErr => console.error('Fehler beim Laden des Nutzers f\u00fcr Post', p.id, userErr));
                 });
             } catch (snapErr) {
                 console.error('Fehler beim Verarbeiten des Feed-Snapshots:', snapErr);
@@ -2798,14 +2867,14 @@
     };
     window.copyPostText = (id, encodedText) => {
         navigator.clipboard?.writeText(decodeURIComponent(encodedText));
-        showToast('Text kopiert ðŸ“‹');
+        showToast('Text kopiert \u{1f4cb}');
         const menu = document.getElementById('menu-'+id);
         if(menu) { menu.classList.add('hidden'); const card = menu.closest('.card'); if(card) card.style.zIndex = ''; }
     };
     window.sharePost = async (id) => {
         const url = location.href.split('#')[0]+'#post-'+id;
         if (navigator.share) navigator.share({ title: 'cliq.', url });
-        else { navigator.clipboard?.writeText(url); showToast('Link kopiert ðŸ”—'); }
+        else { navigator.clipboard?.writeText(url); showToast('Link kopiert \u{1f517}'); }
     };
     window.showComments = async (postId) => {
         const container = document.getElementById('comments-section-'+postId);
@@ -2855,16 +2924,16 @@
         await addDoc(collection(db,"posts",postId,"comments"), { text, uid: auth.currentUser.uid, displayname: userData.displayname, photoURL: userData.photoURL, verified: userData.verified||false, timestamp: serverTimestamp() });
         sendNotification(postData.uid, 'comment', postId, text.slice(0,50));
     };
-    window.deleteComment = async (postId, commentId) => { if(confirm("Kommentar lÃ¶schen?")) await deleteDoc(doc(db,"posts",postId,"comments",commentId)); };
-    window.togglePin = async (id, status) => { await updateDoc(doc(db,"posts",id), { isPinned: !status }); toggleAdminMenu(id); showToast(status?'Post gelÃ¶st':'Post angeheftet ðŸ“Œ'); };
-    window.toggleVerify = async (userId, current) => { if(confirm(current?"Verifizierung entfernen?":"Nutzer verifizieren?")) { await updateDoc(doc(db,"users",userId), { verified: !current }); showToast(current?'Verifizierung entfernt':'Nutzer verifiziert âœ“'); } };
+    window.deleteComment = async (postId, commentId) => { if(confirm("Kommentar l\u00f6schen?")) await deleteDoc(doc(db,"posts",postId,"comments",commentId)); };
+    window.togglePin = async (id, status) => { await updateDoc(doc(db,"posts",id), { isPinned: !status }); toggleAdminMenu(id); showToast(status?'Post gel\u00f6st':'Post angeheftet \u{1f4cc}'); };
+    window.toggleVerify = async (userId, current) => { if(confirm(current?"Verifizierung entfernen?":"Nutzer verifizieren?")) { await updateDoc(doc(db,"users",userId), { verified: !current }); showToast(current?'Verifizierung entfernt':'Nutzer verifiziert \u2713'); } };
     window.toggleAdminMenu = (id) => { 
         document.querySelectorAll('.admin-menu').forEach(m => { if(m.id !== 'menu-'+id) { m.classList.add('hidden'); const c = m.closest('.card'); if(c) c.style.zIndex = ''; } }); 
         const menu = document.getElementById('menu-'+id);
         if (menu) { menu.classList.toggle('hidden'); const card = menu.closest('.card'); if (card) card.style.zIndex = menu.classList.contains('hidden') ? '' : '50'; }
         if(window.lucide) lucide.createIcons(); 
     };
-    window.deletePost = async (id) => { if(confirm("Post wirklich lÃ¶schen?")) { await deleteDoc(doc(db,"posts",id)); showToast('Post gelÃ¶scht'); } };
+    window.deletePost = async (id) => { if(confirm("Post wirklich l\u00f6schen?")) { await deleteDoc(doc(db,"posts",id)); showToast('Post gel\u00f6scht'); } };
     window.toggleLike = async (id, ownerUid) => {
         const ref = doc(db,"posts",id);
         const uid = auth.currentUser.uid;
@@ -2896,7 +2965,7 @@
     window.clearPreview = () => { document.getElementById('image-input').value=''; compressedFileCache = null; document.getElementById('preview-container').classList.add('hidden'); };
     document.getElementById('btn-share').onclick = async () => {
         const txt = document.getElementById('post-input').innerText.trim();
-        if (txt.length > MAX_CHARS) return showToast(`Maximale LÃ¤nge: ${MAX_CHARS} Zeichen`);
+        if (txt.length > MAX_CHARS) return showToast(`Maximale L\u00e4nge: ${MAX_CHARS} Zeichen`);
         const fileInput = document.getElementById('image-input');
         const rawFile = fileInput.files[0];
         if (!txt && !rawFile) return;
@@ -2928,7 +2997,7 @@
             selectedMusicForPost = null;
             renderComposerMusicChip();
             clearPreview();
-            showToast('Post verÃ¶ffentlicht ðŸš€');
+            showToast('Post ver\u00f6ffentlicht \u{1f680}');
             closeComposeBar();
         } catch (err) {
             showToast('Fehler beim Posten. Bitte erneut versuchen.');
@@ -2977,7 +3046,7 @@
     let resizeTimer;
     window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(adaptNavbar, 150); });
 
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â• NEW BOTTOM NAVBAR LOGIC â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 NEW BOTTOM NAVBAR LOGIC \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
     window.setActiveBnTab = (id) => {
         document.querySelectorAll('.bn-item').forEach(b => b.classList.remove('active'));
         if (id) document.getElementById(id)?.classList.add('active');
@@ -2996,7 +3065,7 @@
         if (b && b.style.display === 'block') closeBookmarks();
     }
 
-    /* â”€â”€ Compose morph â”€â”€ */
+    /* \u2500\u2500 Compose morph \u2500\u2500 */
     window.openComposeBar = () => {
         const nav = document.getElementById('bottom-nav');
         const btn = document.getElementById('bn-compose-btn');
@@ -3013,7 +3082,7 @@
         closeAllNestedOverlays();
     };
 
-    /* â”€â”€ STATUS FEED (TikTok-style vertical swipe: stories + image posts) â”€â”€ */
+    /* \u2500\u2500 STATUS FEED (TikTok-style vertical swipe: stories + image posts) \u2500\u2500 */
     let statusItems = [];
     let statusScrollObserver = null;
     function buildStatusItems() {
@@ -3164,7 +3233,7 @@
         Object.values(it.reactions).forEach(arr => total += (arr||[]).length);
         const countEl = document.getElementById(`sf-react-count-${idx}`);
         if (countEl) countEl.textContent = total > 0 ? total : '';
-        showToast('Reaktion gesendet ðŸŽ‰');
+        showToast('Reaktion gesendet \u{1f389}');
         document.getElementById(`sf-emoji-strip-${idx}`)?.classList.remove('open');
     };
 </script>
