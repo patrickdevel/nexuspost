@@ -222,7 +222,7 @@
         }
 
         /* ── FEATURES SECTION ── */
-        .features { padding: 100px 24px; max-width: 1200px; margin: 0 auto; }
+        .features { padding: 80px 24px; max-width: 1200px; margin: 0 auto; }
         
         .section-header { text-align: center; margin-bottom: 60px; }
         .section-header h2 {
@@ -271,6 +271,32 @@
         .theme-dot-lg:hover { transform: scale(1.15); }
         .theme-dot-lg.active { border-color: var(--text); transform: scale(1.1); }
 
+        /* ── FAQ SECTION ── */
+        .faq-section {
+            padding: 80px 24px; max-width: 900px; margin: 0 auto;
+        }
+        .faq-item {
+            background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm);
+            margin-bottom: 12px; backdrop-filter: blur(16px); overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        .faq-item:hover { border-color: var(--nexus); }
+        .faq-question {
+            padding: 20px 24px; display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; font-weight: 600; font-size: 17px; font-family: 'DM Sans', sans-serif;
+        }
+        .faq-question i { transition: transform 0.3s; color: var(--nexus); }
+        .faq-answer {
+            max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease;
+            color: var(--sub); font-size: 15px; padding: 0 24px; line-height: 1.6;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 200px; padding: 0 24px 20px 24px;
+        }
+        .faq-item.open .faq-question i {
+            transform: rotate(180deg);
+        }
+
         /* ── FOOTER ── */
         footer {
             border-top: 1px solid var(--border); padding: 40px 24px;
@@ -302,8 +328,9 @@
         </div>
         <ul class="nav-links">
             <li><a href="#features">Features</a></li>
+            <li><a href="#more-features">Details</a></li>
             <li><a href="#themes">Design</a></li>
-            <li><a href="#ai">KI-Assistent</a></li>
+            <li><a href="#faq">FAQ</a></li>
         </ul>
         <div class="nav-actions">
             <button class="btn btn-secondary" id="theme-toggle" onclick="toggleDarkModeLanding()" title="Modus wechseln">
@@ -319,7 +346,7 @@
     <section class="hero">
         <div class="hero-text">
             <h1>Verbinde dich mit deiner Welt.</h1>
-            <p>cliq. kombiniert moderne Social-Media-Features, nahtlose Musikintegration und intelligente KI-Assistenten in einem flüssigen Aero-Glaß-Erlebnis.</p>
+            <p>cliq. kombiniert moderne Social-Media-Features, nahtlose Musikintegration und intelligente KI-Assistenten in einem flüssigen Aero-Glas-Erlebnis.</p>
             <div class="hero-buttons">
                 <a href="app.html" class="btn" style="padding: 14px 28px; font-size: 16px;">
                     <i data-lucide="sparkles"></i> Loslegen
@@ -412,6 +439,52 @@
         </div>
     </section>
 
+    <!-- MEHR FEATURES (Aus cliq-6.html abgeleitet) -->
+    <section class="features" id="more-features" style="padding-top: 0;">
+        <div class="section-header">
+            <h2>Noch mehr Power unter der Haube</h2>
+            <p>Entdecke die exklusiven Funktionen unserer Web-App.</p>
+        </div>
+
+        <div class="grid-features">
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="circle-dot"></i></div>
+                <h3>24h Story-System</h3>
+                <p>Teile flüchtige Momente in Story-Ringen mit dynamic conic-gradients, automatischem Fortschrittsbalken und interaktiver Ansicht.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="bell"></i></div>
+                <h3>Echtzeit-Notifikationen</h3>
+                <p>Bleibe auf dem Laufenden mit dem ausklappbaren Benachrichtigungspanel inklusive Badges, Unread-Markierungen und Interaktions-Historie.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="bookmark"></i></div>
+                <h3>Smart Bookmarks</h3>
+                <p>Speichere deine Lieblings-Beiträge mit einem Klick in deinen privaten Bookmarks ab und greife jederzeit blitzschnell darauf zu.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="smile"></i></div>
+                <h3>Emoji-Reaktionen</h3>
+                <p>Drücke deine Emotionen präzise aus: Mit dem integrierten Emoji-Picker-Popup und animierten Counter-Reaktionen für jeden Post.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="repeat"></i></div>
+                <h3>Reposts & Pinned Posts</h3>
+                <p>Hebe wichtige Ankündigungen ganz oben in deinem Profil hervor oder teile inspirierende Inhalte anderer User direkt über die Repost-Funktion.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon"><i data-lucide="user-check"></i></div>
+                <h3>Profile & Follow-System</h3>
+                <p>Erstelle individuelle Profile mit Verified-Badges, verfolge deine Lieblings-Creator und verwalte deine Follower-Liste in Echtzeit.</p>
+            </div>
+        </div>
+    </section>
+
     <!-- THEMES INTERACTIVE PREVIEW -->
     <section class="features" id="themes">
         <div class="theme-section">
@@ -424,6 +497,64 @@
                 <div class="theme-dot-lg" style="background:#10b981;" onclick="setLandingTheme('green', this)"></div>
                 <div class="theme-dot-lg" style="background:#f43f5e;" onclick="setLandingTheme('rose', this)"></div>
                 <div class="theme-dot-lg" style="background:#f97316;" onclick="setLandingTheme('orange', this)"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section" id="faq">
+        <div class="section-header">
+            <h2>Häufig gestellte Fragen (FAQ)</h2>
+            <p>Du hast Fragen? Wir haben die Antworten.</p>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Was macht cliq. anders als andere Social Media Apps?</span>
+                <i data-lucide="chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                cliq. vereint Microblogging, Vertikal-Video-Feeds (TikTok-Style), eine tiefe Musik-Integration und einen integrierten KI-Assistenten in einer einzigen, performanten Web-Oberfläche im iOS Aero-Glass Design.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Ist cliq. kostenfrei nutzbar?</span>
+                <i data-lucide="chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                Ja! cliq. ist vollumfänglich kostenlos nutzbar. Alle Features inklusive KI-Assistent, Stories, Umfragen und Music-Previews stehen dir direkt zur Verfügung.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Muss ich eine App aus dem App Store installieren?</span>
+                <i data-lucide="chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                Nein, cliq. ist eine Progressive Web Application (PWA). Du kannst sie direkt über jeden Browser nutzen oder sie auf deinem Smartphone zum Home-Bildschirm hinzufügen.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Wie funktioniert die Musik-Integration?</span>
+                <i data-lucide="chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                Du kannst beim Erstellen eines Posts oder einer Story aus einer Vielzahl von viralen Sounds wählen. Dein Beitrag wird dann mit einem rotierenden Vinyl-Badge versehen, das bei Klick die Musik direkt abspielt.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Kann ich mein Design anpassen?</span>
+                <i data-lucide="chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                Absolut! Du kannst jederzeit zwischen Dark- und Light-Mode wechseln sowie aus 5 verschiedenen Akzentfarben (Blau, Violett, Grün, Rose, Orange) wählen.
             </div>
         </div>
     </section>
@@ -454,6 +585,11 @@
             }
             document.querySelectorAll('.theme-dot-lg').forEach(dot => dot.classList.remove('active'));
             el.classList.add('active');
+        }
+
+        function toggleFaq(element) {
+            const item = element.parentElement;
+            item.classList.toggle('open');
         }
     </script>
 </body>
