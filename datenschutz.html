@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <title>Datenschutzerklärung | cliq.</title>
+    <meta name="robots" content="noindex, follow">
+
+    <link rel="icon" href="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --nexus: #1877f2;
+            --nexus-soft: rgba(24,119,242,0.12);
+            --bg: #000000; 
+            --card: rgba(28, 28, 30, 0.65); 
+            --text: #ffffff; 
+            --sub: #8e8e93; 
+            --border: rgba(255, 255, 255, 0.12);
+            --header-bg: rgba(18, 18, 18, 0.75);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        body.light {
+            --bg: #f0f2f5;
+            --card: rgba(255, 255, 255, 0.75);
+            --text: #1c1e21;
+            --sub: #65676b;
+            --border: rgba(0, 0, 0, 0.08);
+            --header-bg: rgba(255, 255, 255, 0.82);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+        }
+
+        body.theme-purple { --nexus: #8b5cf6; --nexus-soft: rgba(139,92,246,0.15); }
+        body.theme-green  { --nexus: #10b981; --nexus-soft: rgba(16,185,129,0.15); }
+        body.theme-rose   { --nexus: #f43f5e; --nexus-soft: rgba(244,63,94,0.15); }
+        body.theme-orange { --nexus: #f97316; --nexus-soft: rgba(249,115,22,0.15); }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            transition: background 0.4s, color 0.4s;
+            line-height: 1.6;
+        }
+
+        /* Ambient Glow Animations */
+        .ambient-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--nexus) 0%, rgba(139,92,246,0.3) 50%, rgba(0,0,0,0) 70%);
+            filter: blur(80px);
+            opacity: 0.25;
+            z-index: -1;
+            pointer-events: none;
+            animation: floatGlow 12s infinite alternate ease-in-out;
+        }
+        .glow-1 { top: -100px; left: -100px; }
+        .glow-2 { bottom: -150px; right: -100px; animation-delay: -6s; }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, 80px) scale(1.1); }
+            100% { transform: translate(-30px, 40px) scale(0.95); }
+        }
+
+        /* Nav Header */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0; height: 64px;
+            background: var(--header-bg);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 24px; border-bottom: 0.5px solid var(--border);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--nexus);
+            display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none;
+        }
+        .logo-icon {
+            background: var(--nexus); color: white; width: 32px; height: 32px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px var(--nexus-soft);
+        }
+        .logo-icon img { width: 20px; height: 20px; }
+
+        .btn {
+            background: var(--nexus); color: white; border: none;
+            padding: 10px 20px; border-radius: 24px; font-weight: 600; font-size: 14px;
+            cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: inherit; text-decoration: none;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--nexus-soft); }
+        .btn-secondary {
+            background: var(--card); color: var(--text); border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Content Area */
+        .container {
+            max-width: 900px;
+            margin: 110px auto 60px;
+            padding: 0 24px;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff 30%, var(--nexus));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        body.light .page-header h1 {
+            background: linear-gradient(135deg, #1c1e21 30%, var(--nexus));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-header p {
+            color: var(--sub);
+            font-size: 15px;
+        }
+
+        .legal-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 36px;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .legal-card h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            margin-top: 28px;
+            margin-bottom: 12px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .legal-card h2:first-of-type { margin-top: 0; }
+
+        .legal-card h2 i {
+            color: var(--nexus);
+            width: 22px;
+            height: 22px;
+        }
+
+        .legal-card p, .legal-card ul {
+            color: var(--sub);
+            font-size: 15px;
+            margin-bottom: 16px;
+        }
+
+        .legal-card ul {
+            padding-left: 20px;
+        }
+
+        .legal-card li {
+            margin-bottom: 8px;
+        }
+
+        .legal-card strong {
+            color: var(--text);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border); padding: 40px 24px;
+            text-align: center; color: var(--sub); font-size: 14px;
+            background: var(--header-bg); backdrop-filter: blur(20px);
+        }
+
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 30px; }
+            .legal-card { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <!-- NAVBAR -->
+    <nav>
+        <a href="index.html" class="logo">
+            <div class="logo-icon"><img src="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW" alt="cliq logo"></div>
+            cliq.
+        </a>
+        <div style="display:flex; gap:12px; align-items:center;">
+            <button class="btn btn-secondary" id="theme-toggle" onclick="toggleDarkMode()" title="Modus wechseln">
+                <i data-lucide="moon" style="width:18px;"></i>
+            </button>
+            <a href="index.html" class="btn btn-secondary">
+                <i data-lucide="arrow-left" style="width:16px;"></i> Zurück
+            </a>
+        </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="container">
+        <div class="page-header">
+            <h1>Datenschutzerklärung</h1>
+            <p>Stand: August 2026 – Transparent & DSGVO-konform</p>
+        </div>
+
+        <div class="legal-card">
+            <h2><i data-lucide="shield-check"></i> 1. Datenschutz auf einen Blick</h2>
+            <p><strong>Allgemeine Hinweise:</strong> Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Webseite und Web-App <strong>cliq.</strong> besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.</p>
+
+            <h2><i data-lucide="user"></i> 2. Verantwortliche Stelle</h2>
+            <p>Verantwortlich für die Datenverarbeitung auf dieser Website im Sinne der Datenschutz-Grundverordnung (DSGVO) ist:</p>
+            <p>
+                <strong>Nexus Software / cliq.</strong><br>
+                E-Mail: <a href="mailto:support@cliqposts.app" style="color:var(--nexus);">support@cliqposts.app</a><br>
+                Website: <a href="https://cliqposts.vercel.app/" style="color:var(--nexus);">https://cliqposts.vercel.app/</a>
+            </p>
+
+            <h2><i data-lucide="server"></i> 3. Hosting & Infrastruktur (Vercel)</h2>
+            <p>Wir hosten die Inhalte unserer Website bei folgendem Anbieter:</p>
+            <p><strong>Vercel Inc.</strong><br>340 S Lemon Ave #4133, Walnut, CA 91789, USA.</p>
+            <p>Wenn Sie unsere Website besuchen, erfasst Vercel verschiedene Logfiles inklusive Ihrer IP-Adresse, dem verwendeten Browser, Uhrzeit und Datum des Zugriffs. Vercel ist ein Tool zur Bereitstellung und Auslieferung von Webseiten. Die Verwendung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer sicheren und schnellen Bereitstellung unseres Dienstes).</p>
+
+            <h2><i data-lucide="database"></i> 4. Datenerfassung in der Web-App</h2>
+            <p>Unsere Anwendung speichert nutzerbezogene Daten (z. B. erstelle Beiträge, gesetzte Reaktionen, ausgewählte Themes oder Login-Status) direkt in den lokalen Speichertechnologien Ihres Browsers (<strong>Local Storage / Session Storage</strong>) sowie ggf. über verschlüsselte Datenbank-Schnittstellen (Firebase/Firestore).</p>
+            <ul>
+                <li><strong>Lokale Speicherung:</strong> Ihre Design-Einstellungen (Dark/Light Mode, Akzentfarben) verbleiben lokal auf Ihrem Endgerät und werden nicht an Dritte weitergegeben.</li>
+                <li><strong>Beiträge & Stories:</strong> Wenn Sie Texte, Bilder oder Umfragen innerhalb der App veröffentlichen, werden diese gespeichert, um allen Nutzern der Plattform angezeigt werden zu können.</li>
+            </ul>
+
+            <h2><i data-lucide="bot"></i> 5. KI-Funktionen (KI-Assistent)</h2>
+            <p>In cliq. ist ein KI-Assistent integriert. Wenn Sie Fragen oder Eingaben an den KI-Assistenten senden, werden diese Eingaben an die jeweiligen API-Schnittstellen der KI-Anbieter übermittelt, um Antworten zu generieren. Geben Sie in den KI-Chat keine vertraulichen oder sensiblen personenbezogenen Daten ein.</p>
+
+            <h2><i data-lucide="lock"></i> 6. Ihre Rechte nach der DSGVO</h2>
+            <p>Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit folgende Rechte bezüglich Ihrer personenbezogenen Daten:</p>
+            <ul>
+                <li><strong>Auskunftsrecht</strong> (Art. 15 DSGVO) über Ihre bei uns gespeicherten Daten.</li>
+                <li><strong>Recht auf Berichtigung</strong> (Art. 16 DSGVO) unrichtiger Daten.</li>
+                <li><strong>Recht auf Löschung</strong> (Art. 17 DSGVO) Ihrer Daten („Recht auf Vergessenwerden“).</li>
+                <li><strong>Recht auf Einschränkung der Verarbeitung</strong> (Art. 18 DSGVO).</li>
+                <li><strong>Recht auf Datenübertragbarkeit</strong> (Art. 20 DSGVO).</li>
+                <li><strong>Widerspruchsrecht</strong> (Art. 21 DSGVO) gegen die Verarbeitung.</li>
+            </ul>
+            <p>Wenn Sie von Ihren Rechten Gebrauch machen möchten, wenden Sie sich einfach per E-Mail an uns.</p>
+
+            <h2><i data-lucide="file-text"></i> 7. Beschwerderecht bei der Aufsichtsbehörde</h2>
+            <p>Im Falle von Verstößen gegen die DSGVO steht den Betroffenen ein Beschwerderecht bei einer Aufsichtsbehörde, insbesondere in dem Mitgliedstaat ihres gewöhnlichen Aufenthaltsorts, ihres Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes zu.</p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>cliq. – Privacy First 💙 | <a href="index.html" style="color:var(--nexus); text-decoration:none;">Zur Hauptseite</a></p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('light');
+            const icon = document.querySelector('#theme-toggle i');
+            if (document.body.classList.contains('light')) {
+                icon.setAttribute('data-lucide', 'sun');
+            } else {
+                icon.setAttribute('data-lucide', 'moon');
+            }
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
