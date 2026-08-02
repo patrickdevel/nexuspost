@@ -49,6 +49,7 @@
             overflow-x: hidden;
             transition: background 0.4s, color 0.4s;
             line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* Ambient Glow Animations */
@@ -101,6 +102,7 @@
             cursor: pointer; display: flex; align-items: center; gap: 8px;
             transition: transform 0.2s, box-shadow 0.2s;
             font-family: inherit; text-decoration: none;
+            white-space: nowrap;
         }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--nexus-soft); }
         .btn-secondary {
@@ -127,6 +129,7 @@
             background: linear-gradient(135deg, #ffffff 30%, var(--nexus));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            word-break: break-word;
         }
         body.light .page-header h1 {
             background: linear-gradient(135deg, #1c1e21 30%, var(--nexus));
@@ -147,6 +150,8 @@
             backdrop-filter: blur(20px);
             box-shadow: var(--shadow);
             margin-bottom: 24px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .legal-card h2 {
@@ -165,6 +170,7 @@
             color: var(--nexus);
             width: 22px;
             height: 22px;
+            flex-shrink: 0;
         }
 
         .legal-card p, .legal-card ul {
@@ -192,9 +198,46 @@
             background: var(--header-bg); backdrop-filter: blur(20px);
         }
 
-        @media (max-width: 600px) {
-            .page-header h1 { font-size: 30px; }
-            .legal-card { padding: 24px; }
+        /* ── RESPONSIVE MOBILE OPTIMIZATIONS ── */
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 16px;
+            }
+            .logo {
+                font-size: 20px;
+            }
+            .logo-icon {
+                width: 28px;
+                height: 28px;
+            }
+            .container {
+                margin: 90px auto 40px;
+                padding: 0 16px;
+            }
+            .page-header h1 {
+                font-size: 28px;
+            }
+            .legal-card {
+                padding: 20px;
+                border-radius: var(--radius-sm);
+            }
+            .legal-card h2 {
+                font-size: 18px;
+                margin-top: 22px;
+            }
+            .btn-secondary span {
+                display: none; /* Blendet Text auf sehr kleinen Handys aus, Icon bleibt */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ambient-glow {
+                width: 300px;
+                height: 300px;
+            }
+            .legal-card p, .legal-card ul {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -209,12 +252,12 @@
             <div class="logo-icon"><img src="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW" alt="cliq logo"></div>
             cliq.
         </a>
-        <div style="display:flex; gap:12px; align-items:center;">
+        <div style="display:flex; gap:8px; align-items:center;">
             <button class="btn btn-secondary" id="theme-toggle" onclick="toggleDarkMode()" title="Modus wechseln">
                 <i data-lucide="moon" style="width:18px;"></i>
             </button>
             <a href="index.html" class="btn btn-secondary">
-                <i data-lucide="arrow-left" style="width:16px;"></i> Zurück
+                <i data-lucide="arrow-left" style="width:16px;"></i> <span>Zurück</span>
             </a>
         </div>
     </nav>
