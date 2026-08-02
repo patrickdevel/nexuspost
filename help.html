@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <title>Datenschutzerklärung | cliq.</title>
+    <meta name="robots" content="noindex, follow">
+
+    <link rel="icon" href="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --nexus: #1877f2;
+            --nexus-soft: rgba(24,119,242,0.12);
+            --bg: #000000; 
+            --card: rgba(28, 28, 30, 0.65); 
+            --text: #ffffff; 
+            --sub: #8e8e93; 
+            --border: rgba(255, 255, 255, 0.12);
+            --header-bg: rgba(18, 18, 18, 0.75);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        body.light {
+            --bg: #f0f2f5;
+            --card: rgba(255, 255, 255, 0.75);
+            --text: #1c1e21;
+            --sub: #65676b;
+            --border: rgba(0, 0, 0, 0.08);
+            --header-bg: rgba(255, 255, 255, 0.82);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+        }
+
+        body.theme-purple { --nexus: #8b5cf6; --nexus-soft: rgba(139,92,246,0.15); }
+        body.theme-green  { --nexus: #10b981; --nexus-soft: rgba(16,185,129,0.15); }
+        body.theme-rose   { --nexus: #f43f5e; --nexus-soft: rgba(244,63,94,0.15); }
+        body.theme-orange { --nexus: #f97316; --nexus-soft: rgba(249,115,22,0.15); }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            transition: background 0.4s, color 0.4s;
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Ambient Glow Animations */
+        .ambient-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--nexus) 0%, rgba(139,92,246,0.3) 50%, rgba(0,0,0,0) 70%);
+            filter: blur(80px);
+            opacity: 0.25;
+            z-index: -1;
+            pointer-events: none;
+            animation: floatGlow 12s infinite alternate ease-in-out;
+        }
+        .glow-1 { top: -100px; left: -100px; }
+        .glow-2 { bottom: -150px; right: -100px; animation-delay: -6s; }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, 80px) scale(1.1); }
+            100% { transform: translate(-30px, 40px) scale(0.95); }
+        }
+
+        /* Nav Header */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0; height: 64px;
+            background: var(--header-bg);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 24px; border-bottom: 0.5px solid var(--border);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--nexus);
+            display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none;
+        }
+        .logo-icon {
+            background: var(--nexus); color: white; width: 32px; height: 32px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px var(--nexus-soft);
+        }
+        .logo-icon img { width: 20px; height: 20px; }
+
+        .btn {
+            background: var(--nexus); color: white; border: none;
+            padding: 10px 20px; border-radius: 24px; font-weight: 600; font-size: 14px;
+            cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: inherit; text-decoration: none;
+            white-space: nowrap;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--nexus-soft); }
+        .btn-secondary {
+            background: var(--card); color: var(--text); border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Content Area */
+        .container {
+            max-width: 900px;
+            margin: 110px auto 60px;
+            padding: 0 24px;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff 30%, var(--nexus));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            word-break: break-word;
+        }
+        body.light .page-header h1 {
+            background: linear-gradient(135deg, #1c1e21 30%, var(--nexus));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-header p {
+            color: var(--sub);
+            font-size: 15px;
+        }
+
+        .legal-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 36px;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .legal-card h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            margin-top: 28px;
+            margin-bottom: 12px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .legal-card h2:first-of-type { margin-top: 0; }
+
+        .legal-card h2 i {
+            color: var(--nexus);
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+
+        .legal-card p, .legal-card ul {
+            color: var(--sub);
+            font-size: 15px;
+            margin-bottom: 16px;
+        }
+
+        .legal-card ul {
+            padding-left: 20px;
+        }
+
+        .legal-card li {
+            margin-bottom: 8px;
+        }
+
+        .legal-card strong {
+            color: var(--text);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border); padding: 40px 24px;
+            text-align: center; color: var(--sub); font-size: 14px;
+            background: var(--header-bg); backdrop-filter: blur(20px);
+        }
+
+        /* ── RESPONSIVE MOBILE OPTIMIZATIONS ── */
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 16px;
+            }
+            .logo {
+                font-size: 20px;
+            }
+            .logo-icon {
+                width: 28px;
+                height: 28px;
+            }
+            .container {
+                margin: 90px auto 40px;
+                padding: 0 16px;
+            }
+            .page-header h1 {
+                font-size: 28px;
+            }
+            .legal-card {
+                padding: 20px;
+                border-radius: var(--radius-sm);
+            }
+            .legal-card h2 {
+                font-size: 18px;
+                margin-top: 22px;
+            }
+            .btn-secondary span {
+                display: none; /* Blendet Text auf sehr kleinen Handys aus, Icon bleibt */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ambient-glow {
+                width: 300px;
+                height: 300px;
+            }
+            .legal-card p, .legal-card ul {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <!-- NAVBAR -->
+    <nav>
+        <a href="index.html" class="logo">
+            <div class="logo-icon"><img src="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW" alt="cliq logo"></div>
+            cliq.
+        </a>
+        <div style="display:flex; gap:8px; align-items:center;">
+            <button class="btn btn-secondary" id="theme-toggle" onclick="toggleDarkMode()" title="Modus wechseln">
+                <i data-lucide="moon" style="width:18px;"></i>
+            </button>
+            <a href="index.html" class="btn btn-secondary">
+                <i data-lucide="arrow-left" style="width:16px;"></i> <span>Zurück</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="container">
+        <div class="page-header">
+            <h1>Häifig gestellte Fragen</h1>
+            
+        </div>
+
+        <div class="legal-card">
+            <h2>Warum kann ich nur maximal 5 Bilder am Tag hochladen?</h2>
+            <p>Dies liegt daran, dass wir momentan auf einen kostenlosen Anbieter zum Bilder hochladen angewiesen sind. Würden wir das Limit erweitern, würden schneller ak die grenzen des <strong>Free-Tier</strong> gelangen und das würde die gesamte Plattform irgendwann kostenpflichtig machen.</p>
+
+            <h2>Warum werden nur 30 Sek. Tracks abgespielt?</h2>
+            <p>Dies liegt wieder daran, dass wir die Plattform kostenlos halten möchten. Wir möchten keine teueren Lizenzen mit Musikfirmen abschließen, nur um ganze Songs abpielen zu können. Statdessen sind wir angewiesen auf die iTunes-API, um Songs abspielen zu können.</p>
+
+     <!-- FOOTER -->
+    <footer>
+        <p>cliq.</p>
+        <p style="margin-top: 8px;">
+            <a href="datenschutz.html" style="color: var(--sub); text-decoration: underline; transition: color 0.2s;" onmouseover="this.style.color='var(--nexus)'" onmouseout="this.style.color='var(--sub)'">Datenschutzerklärung</a>
+        </p>
+    </footer>
+
+
+    <script>
+        lucide.createIcons();
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('light');
+            const icon = document.querySelector('#theme-toggle i');
+            if (document.body.classList.contains('light')) {
+                icon.setAttribute('data-lucide', 'sun');
+            } else {
+                icon.setAttribute('data-lucide', 'moon');
+            }
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
