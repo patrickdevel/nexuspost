@@ -1046,9 +1046,12 @@
     document.getElementById('btn-login').onclick = async () => {
         const btn = document.getElementById('btn-login');
         if (btn.classList.contains('is-loading')) return;
+        console.log('[cliq] Login-Button geklickt, starte Google-Anmeldung...');
+        showToast('Google-Anmeldung wird gestartet...');
         btn.classList.add('is-loading');
         try {
-            await signInWithPopup(auth, provider);
+            const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject({ code: 'cliq/timeout', message: 'Zeit\u00fcberschreitung - keine Antwort von Google nach 20 Sekunden. M\u00f6glicherweise wurde das Popup blockiert.' }), 20000));
+            await Promise.race([signInWithPopup(auth, provider), timeoutPromise]);
         } catch (e) {
             console.error('Login-Fehler:', e);
             if (e && (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request')) {
@@ -1672,11 +1675,4 @@
                             <img src="${c.photoURL||''}" class="comment-user-img">
                             <span class="comment-display-name">${c.displayname||'\u2013'} ${c.verified?`<img src="${verifiedIcon}" style="width:13px;height:13px;">`:''}</span>
                             <span class="comment-time">${timeAgo(c.timestamp)}</span>
-                            ${(isAdmin||isCOwner)?`<button class="comment-delete-btn" onclick="deleteComment('${postId}','${dDoc.id}')"><i data-lucide="x" style="width:13px;"></i></button>`:''}
-                        </div>
-                        <div class="comment-text">${parseText(c.text)}</div>
-                    </div>`;
-                });
-            }
-            document.getElementById('input-'+postId)?.addEventListener('keydown', (e) => { if(e.key==='Enter') addComment(postId); });
-            if(window.lucide) lucide.createIcons({root: container});
+                            ${(isAdmin||isCOwner)?`<button class="comment-delete-btn" onclick="deleteComment('${postId}','${dDoc.id}')"><i data-luci
