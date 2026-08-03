@@ -12,17 +12,31 @@
     window.__cliqErrors = [];
     function __cliqShowError(msg) {
         window.__cliqErrors.push(msg);
-        let box = document.getElementById('cliq-error-box');
-        if (!box) {
-            box = document.createElement('div');
-            box.id = 'cliq-error-box';
-            box.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#7f1d1d;color:#fff;font:12px/1.5 monospace;padding:10px 12px;max-height:45vh;overflow:auto;white-space:pre-wrap;box-shadow:0 4px 20px rgba(0,0,0,0.4);';
-            document.body ? document.body.prepend(box) : document.addEventListener('DOMContentLoaded', () => document.body.prepend(box));
+        let stack = document.getElementById('cliq-error-stack');
+        if (!stack) {
+            stack = document.createElement('div');
+            stack.id = 'cliq-error-stack';
+            stack.style.cssText = 'position:fixed;top:max(10px,env(safe-area-inset-top));left:10px;right:10px;z-index:99999;display:flex;flex-direction:column;gap:8px;pointer-events:none;align-items:center;';
+            const attach = () => document.body.prepend(stack);
+            document.body ? attach() : document.addEventListener('DOMContentLoaded', attach);
         }
-        const line = document.createElement('div');
-        line.style.cssText = 'border-top:1px solid rgba(255,255,255,0.25);padding-top:6px;margin-top:6px;';
-        line.textContent = msg;
-        box.appendChild(line);
+        const card = document.createElement('div');
+        card.style.cssText = 'pointer-events:auto;width:100%;max-width:480px;background:linear-gradient(135deg,#7f1d1d,#5c1414);color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 8px 28px rgba(0,0,0,0.45);display:flex;gap:10px;align-items:flex-start;font-family:-apple-system,BlinkMacSystemFont,sans-serif;border:1px solid rgba(255,255,255,0.12);opacity:0;transform:translateY(-12px);transition:opacity 0.25s ease,transform 0.25s ease;';
+        card.innerHTML =
+            '<div style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:1px;">!</div>' +
+            '<div style="flex:1;min-width:0;font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;word-break:break-word;"></div>' +
+            '<button style="flex-shrink:0;background:rgba(255,255,255,0.12);border:none;color:#fff;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;">\u00d7</button>';
+        card.querySelector('div:nth-child(2)').textContent = msg;
+        const dismiss = () => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(-12px)';
+            setTimeout(() => card.remove(), 250);
+        };
+        card.querySelector('button').onclick = dismiss;
+        const autoTimer = setTimeout(dismiss, 9000);
+        card.querySelector('button').addEventListener('mouseenter', () => clearTimeout(autoTimer));
+        stack.appendChild(card);
+        requestAnimationFrame(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; });
     }
     window.addEventListener('error', (e) => {
         __cliqShowError('Fehler: ' + (e.message || e.error) + (e.filename ? ('\n  bei ' + e.filename + ':' + e.lineno + ':' + e.colno) : ''));
