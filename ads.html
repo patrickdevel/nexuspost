@@ -184,73 +184,191 @@ header{
     z-index:500;
 }
 
+/* Standard Popup */
 .popup{
     position:absolute;
-    width:260px;              /* vorher 170px */
-    min-height:150px;
-    border-radius:24px;
+    width:240px;
+    min-height:130px;
+    border-radius:20px;
     background:rgba(255,255,255,.18);
     border:1px solid rgba(255,255,255,.15);
     backdrop-filter:blur(24px);
     color:white;
-    padding:18px;
+    padding:14px;
     box-shadow:0 20px 50px rgba(0,0,0,.5);
     animation:pop .28s ease;
 }
-
-.popup h5{
-    font-size:1.05rem;
-    margin-bottom:10px;
-}
-
-.popup p{
-    font-size:.9rem;
-    line-height:1.4;
-    color:#ebedf5;
-}
-
-.popup button{
-    margin-top:16px;
-    width:100%;
-    border:none;
-    border-radius:14px;
-    padding:12px;
-    font-size:1rem;
-    font-weight:700;
-    background:linear-gradient(135deg,#58b5ff,#7d63ff);
-    color:white;
-}
-
-.popup h5{
-    font-size:.82rem;
-    margin-bottom:6px;
-}
-
-.popup p{
-    font-size:.72rem;
-    color:#ebedf5;
-}
-
+.popup h5{ font-size:.85rem; margin-bottom:6px; }
+.popup p{ font-size:.72rem; color:#ebedf5; line-height:1.35; }
 .popup button{
     margin-top:10px;
     width:100%;
     border:none;
     border-radius:10px;
-    padding:7px;
+    padding:8px;
     background:linear-gradient(135deg,#58b5ff,#7d63ff);
     color:white;
     font-weight:bold;
+    font-size:.8rem;
+}
+
+/* Ad Banner */
+.ad-banner{
+    position:absolute;
+    width:280px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#ff4d6d,#ff8c42);
+    color:white;
+    padding:12px 14px;
+    box-shadow:0 12px 30px rgba(0,0,0,.45);
+    animation:pop .25s ease;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+.ad-banner .ad-label{
+    font-size:.6rem;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    opacity:.8;
+}
+.ad-banner h5{ font-size:.9rem; margin:0; }
+.ad-banner p{ font-size:.7rem; margin:0; opacity:.9; }
+.ad-banner button{
+    margin-top:6px;
+    border:none;
+    border-radius:8px;
+    padding:7px 12px;
+    background:rgba(255,255,255,.25);
+    color:white;
+    font-weight:700;
+    font-size:.75rem;
+    align-self:flex-start;
+}
+
+/* Cookie / Consent Bar */
+.cookie-bar{
+    position:absolute;
+    width:300px;
+    border-radius:14px;
+    background:rgba(20,24,36,.92);
+    border:1px solid rgba(255,255,255,.12);
+    color:white;
+    padding:14px;
+    box-shadow:0 15px 40px rgba(0,0,0,.5);
+    animation:slideUp .3s ease;
+}
+.cookie-bar h5{ font-size:.8rem; margin-bottom:6px; }
+.cookie-bar p{ font-size:.68rem; color:#c8cdd8; margin-bottom:10px; line-height:1.35; }
+.cookie-bar .btn-row{ display:flex; gap:8px; }
+.cookie-bar button{
+    flex:1;
+    border:none;
+    border-radius:8px;
+    padding:8px;
+    font-size:.72rem;
+    font-weight:700;
+}
+.cookie-bar .accept{ background:linear-gradient(135deg,#58b5ff,#7d63ff); color:white; }
+.cookie-bar .reject{ background:rgba(255,255,255,.1); color:#ccc; }
+
+/* Toast Notification */
+.toast{
+    position:absolute;
+    width:260px;
+    border-radius:12px;
+    background:rgba(30,34,50,.95);
+    border-left:4px solid #58b5ff;
+    color:white;
+    padding:12px 14px;
+    box-shadow:0 10px 25px rgba(0,0,0,.4);
+    animation:slideIn .3s ease;
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+}
+.toast .icon{ font-size:1.3rem; line-height:1; }
+.toast h5{ font-size:.78rem; margin:0 0 3px; }
+.toast p{ font-size:.68rem; color:#b9bfd1; margin:0; }
+
+/* Floating App Promo */
+.float-ad{
+    position:absolute;
+    width:200px;
+    border-radius:18px;
+    background:linear-gradient(160deg,#1a1f35,#2a1f4e);
+    border:1px solid rgba(255,255,255,.1);
+    color:white;
+    padding:14px;
+    box-shadow:0 15px 35px rgba(0,0,0,.5);
+    animation:pop .28s ease;
+    text-align:center;
+}
+.float-ad .badge-new{
+    display:inline-block;
+    background:#ff3366;
+    font-size:.55rem;
+    padding:2px 7px;
+    border-radius:999px;
+    margin-bottom:8px;
+    font-weight:700;
+}
+.float-ad h5{ font-size:.85rem; margin-bottom:4px; }
+.float-ad p{ font-size:.68rem; color:#b9bfd1; margin-bottom:10px; }
+.float-ad button{
+    width:100%;
+    border:none;
+    border-radius:10px;
+    padding:8px;
+    background:linear-gradient(135deg,#ff4d6d,#ff8c42);
+    color:white;
+    font-weight:700;
+    font-size:.75rem;
+}
+
+/* System Alert */
+.sys-alert{
+    position:absolute;
+    width:270px;
+    border-radius:16px;
+    background:rgba(40,20,20,.92);
+    border:1px solid rgba(255,80,80,.3);
+    color:white;
+    padding:14px;
+    box-shadow:0 12px 30px rgba(0,0,0,.5);
+    animation:shake .4s ease;
+}
+.sys-alert h5{ font-size:.82rem; margin-bottom:5px; color:#ff6b6b; }
+.sys-alert p{ font-size:.7rem; color:#e0c0c0; margin-bottom:10px; }
+.sys-alert button{
+    width:100%;
+    border:none;
+    border-radius:8px;
+    padding:8px;
+    background:#ff3366;
+    color:white;
+    font-weight:700;
+    font-size:.75rem;
 }
 
 @keyframes pop{
-    from{
-        transform:scale(.7);
-        opacity:0;
-    }
-    to{
-        transform:scale(1);
-        opacity:1;
-    }
+    from{ transform:scale(.7); opacity:0; }
+    to{ transform:scale(1); opacity:1; }
+}
+@keyframes slideUp{
+    from{ transform:translateY(30px); opacity:0; }
+    to{ transform:translateY(0); opacity:1; }
+}
+@keyframes slideIn{
+    from{ transform:translateX(40px); opacity:0; }
+    to{ transform:translateX(0); opacity:1; }
+}
+@keyframes shake{
+    0%,100%{ transform:translateX(0); }
+    20%{ transform:translateX(-6px); }
+    40%{ transform:translateX(6px); }
+    60%{ transform:translateX(-4px); }
+    80%{ transform:translateX(4px); }
 }
 
 #fade{
@@ -370,69 +488,153 @@ Buche deinen Traumurlaub jetzt mit bis zu 65% Rabatt.
 
 <script>
 
-const messages=[
-["🔋 Low Battery","Akkustand nur noch 5%."],
-["⚠ Storage Almost Full","Nur noch 240 MB frei."],
-["🍪 Cookie Notice","Bitte alle Cookies akzeptieren."],
-["🔥 Flash Sale","80% Rabatt nur heute!"],
-["💬 New Message","Du hast 3 neue Nachrichten."],
-["📦 Package Update","Deine Lieferung kommt heute."],
-["🎁 Reward","Du hast einen Bonus erhalten."],
-["📲 Update Available","Jetzt App aktualisieren."],
-["📢 Breaking News","Jetzt weiterlesen..."],
-["⚡ Performance Alert","Gerät wird langsamer."]
+const items = [
+    // Standard Popups
+    { type: "popup", title: "🔋 Low Battery", text: "Akkustand nur noch 5%.", btn: "OK" },
+    { type: "popup", title: "⚠ Speicher voll", text: "Nur noch 240 MB frei.", btn: "Jetzt bereinigen" },
+    { type: "popup", title: "💬 Neue Nachricht", text: "Du hast 3 neue Nachrichten.", btn: "Lesen" },
+    { type: "popup", title: "📦 Lieferung", text: "Dein Paket kommt heute an.", btn: "Verfolgen" },
+    { type: "popup", title: "🎁 Belohnung", text: "Du hast einen Bonus erhalten!", btn: "Einlösen" },
+    { type: "popup", title: "📲 Update verfügbar", text: "Neue Version ist bereit.", btn: "Aktualisieren" },
+    { type: "popup", title: "📢 Breaking News", text: "Das musst du jetzt lesen...", btn: "Weiterlesen" },
+
+    // Ad Banners
+    { type: "ad", label: "Werbung", title: "🔥 Flash Sale!", text: "80% Rabatt – nur heute!", btn: "Jetzt shoppen" },
+    { type: "ad", label: "Gesponsert", title: "Sommer-Sale 2026", text: "Exklusive Angebote entdecken", btn: "Zum Shop" },
+    { type: "ad", label: "Anzeige", title: "Premium Abo – 1 Monat gratis", text: "Unbegrenzter Zugang, keine Werbung", btn: "Gratis starten" },
+    { type: "ad", label: "Partner", title: "Reise-Deal der Woche", text: "Bis zu 65% auf Hotels sparen", btn: "Buchen" },
+
+    // Cookie Bars
+    { type: "cookie", title: "🍪 Cookie-Einstellungen", text: "Wir verwenden Cookies, um dir die beste Erfahrung zu bieten. Bitte alle akzeptieren.", accept: "Alle akzeptieren", reject: "Ablehnen" },
+    { type: "cookie", title: "Datenschutz", text: "Durch die Nutzung stimmst du unseren AGB und der Datenschutzerklärung zu.", accept: "Zustimmen", reject: "Mehr Infos" },
+
+    // Toasts
+    { type: "toast", icon: "⚡", title: "Performance-Warnung", text: "Dein Gerät wird langsamer." },
+    { type: "toast", icon: "🔔", title: "Erinnerung", text: "Du hast ungelesene Benachrichtigungen." },
+    { type: "toast", icon: "💳", title: "Zahlung fehlgeschlagen", text: "Bitte Zahlungsmethode prüfen." },
+    { type: "toast", icon: "📍", title: "Standortzugriff", text: "App möchte deinen Standort nutzen." },
+
+    // Floating Ads
+    { type: "float", title: "Pulse App", text: "Bessere Erfahrung in der App", btn: "Jetzt laden" },
+    { type: "float", title: "VIP werden", text: "Exklusive Features freischalten", btn: "Upgrade" },
+
+    // System Alerts
+    { type: "sys", title: "⚠ Kritischer Fehler", text: "Eine App ist abgestürzt. Daten könnten verloren gehen.", btn: "Neu starten" },
+    { type: "sys", title: "🔒 Sicherheitswarnung", text: "Verdächtige Aktivität erkannt. Sofort handeln!", btn: "Prüfen" },
+    { type: "sys", title: "📵 Netzwerkfehler", text: "Verbindung unterbrochen. Erneut versuchen?", btn: "Wiederholen" }
 ];
 
-const layer=document.getElementById("popupLayer");
+const layer = document.getElementById("popupLayer");
+let running = true;
+const active = [];
 
-let running=true;
-const active=[];
+function randomPos(w = 240, h = 140) {
+    // Keep elements inside the viewport
+    const maxLeft = Math.max(5, 100 - (w / window.innerWidth * 100) - 5);
+    const maxTop  = Math.max(5, 100 - (h / window.innerHeight * 100) - 8);
+    return {
+        left: (Math.random() * Math.min(30, maxLeft) + 5) + "vw",
+        top:  (Math.random() * Math.min(55, maxTop) + 8) + "vh"
+    };
+}
 
-function createPopup(){
+function createItem() {
+    if (!running) return;
 
-    if(!running) return;
-
-    if(active.length>=8){
+    if (active.length >= 10) {
         active.shift().remove();
     }
 
-    const msg=messages[Math.floor(Math.random()*messages.length)];
+    const item = items[Math.floor(Math.random() * items.length)];
+    const div = document.createElement("div");
+    let pos;
 
-    const div=document.createElement("div");
-    div.className="popup";
+    switch (item.type) {
+        case "popup":
+            div.className = "popup";
+            div.innerHTML = `<h5>${item.title}</h5><p>${item.text}</p><button>${item.btn}</button>`;
+            pos = randomPos(240, 140);
+            break;
 
-    div.style.left=(Math.random()*30+5)+"vw";
-    div.style.top=(Math.random()*60+8)+"vh";
+        case "ad":
+            div.className = "ad-banner";
+            div.innerHTML = `
+                <div class="ad-label">${item.label}</div>
+                <h5>${item.title}</h5>
+                <p>${item.text}</p>
+                <button>${item.btn}</button>`;
+            pos = randomPos(280, 130);
+            break;
 
-    div.innerHTML=`
-        <h5>${msg[0]}</h5>
-        <p>${msg[1]}</p>
-        <button>OK</button>
-    `;
+        case "cookie":
+            div.className = "cookie-bar";
+            div.innerHTML = `
+                <h5>${item.title}</h5>
+                <p>${item.text}</p>
+                <div class="btn-row">
+                    <button class="reject">${item.reject}</button>
+                    <button class="accept">${item.accept}</button>
+                </div>`;
+            pos = randomPos(300, 150);
+            break;
+
+        case "toast":
+            div.className = "toast";
+            div.innerHTML = `
+                <div class="icon">${item.icon}</div>
+                <div>
+                    <h5>${item.title}</h5>
+                    <p>${item.text}</p>
+                </div>`;
+            pos = randomPos(260, 80);
+            break;
+
+        case "float":
+            div.className = "float-ad";
+            div.innerHTML = `
+                <div class="badge-new">NEU</div>
+                <h5>${item.title}</h5>
+                <p>${item.text}</p>
+                <button>${item.btn}</button>`;
+            pos = randomPos(200, 150);
+            break;
+
+        case "sys":
+            div.className = "sys-alert";
+            div.innerHTML = `
+                <h5>${item.title}</h5>
+                <p>${item.text}</p>
+                <button>${item.btn}</button>`;
+            pos = randomPos(270, 130);
+            break;
+    }
+
+    div.style.left = pos.left;
+    div.style.top  = pos.top;
 
     layer.appendChild(div);
     active.push(div);
 
-    setTimeout(()=>{
-        if(div.parentNode){
+    // Different lifetimes for different types
+    const lifetime = item.type === "toast" ? 3500 : (item.type === "sys" ? 4500 : 5000);
+
+    setTimeout(() => {
+        if (div.parentNode) {
             div.remove();
-            const i=active.indexOf(div);
-            if(i>-1) active.splice(i,1);
+            const i = active.indexOf(div);
+            if (i > -1) active.splice(i, 1);
         }
-    },5000);
-
+    }, lifetime);
 }
 
-function spam(){
-    if(!running) return;
-
-    createPopup();
-
-    const delay=80+Math.random()*120;
-    setTimeout(spam,delay);
+function spam() {
+    if (!running) return;
+    createItem();
+    const delay = 70 + Math.random() * 110;
+    setTimeout(spam, delay);
 }
 
-setTimeout(spam,200);
+setTimeout(spam, 150);
 
 function finish(){
 
