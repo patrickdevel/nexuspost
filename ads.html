@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Social Feed Prototype</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:
+        radial-gradient(circle at top,#2f3957 0%,#141824 35%,#090b10 100%);
+    color:#fff;
+}
+
+body{
+    position:relative;
+}
+
+#app{
+    height:100%;
+    overflow:auto;
+    padding-bottom:60px;
+    transition:filter 1.5s ease;
+}
+
+header{
+    position:sticky;
+    top:0;
+    z-index:20;
+    padding:18px;
+    backdrop-filter:blur(30px);
+    background:rgba(18,22,34,.55);
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:1.4rem;
+    font-weight:800;
+    letter-spacing:.5px;
+}
+
+.badges{
+    display:flex;
+    gap:10px;
+}
+
+.badge{
+    position:relative;
+    width:42px;
+    height:42px;
+    border-radius:16px;
+    background:rgba(255,255,255,.08);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    backdrop-filter:blur(20px);
+}
+
+.badge span{
+    position:absolute;
+    top:-5px;
+    right:-5px;
+    background:#ff3366;
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    font-size:.65rem;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:bold;
+}
+
+.feed{
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.card{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:24px;
+    overflow:hidden;
+    backdrop-filter:blur(20px);
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+}
+
+.cardHeader{
+    display:flex;
+    justify-content:space-between;
+    padding:16px;
+    align-items:center;
+}
+
+.author{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.avatar{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#6ee7ff,#6f6bff,#ff4fd8);
+}
+
+.author h4{
+    font-size:.95rem;
+}
+
+.author small{
+    color:#b9bfd1;
+}
+
+.tag{
+    font-size:.7rem;
+    padding:5px 10px;
+    border-radius:999px;
+    background:rgba(255,194,74,.15);
+    color:#ffd873;
+}
+
+.image{
+    height:240px;
+    margin:0 16px;
+    border-radius:18px;
+    background:
+        linear-gradient(130deg,#7d53ff,#32d4ff,#54ffb3);
+    position:relative;
+    overflow:hidden;
+}
+
+.image:before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        radial-gradient(circle at 20% 20%,rgba(255,255,255,.4),transparent 40%),
+        radial-gradient(circle at 80% 70%,rgba(255,255,255,.3),transparent 35%);
+    mix-blend-mode:screen;
+}
+
+.text{
+    padding:16px;
+    color:#d7dbe7;
+    line-height:1.45;
+}
+
+.actions{
+    display:flex;
+    justify-content:space-around;
+    padding:14px;
+    border-top:1px solid rgba(255,255,255,.06);
+}
+
+.actions div{
+    color:#cfd5e5;
+}
+
+.popupLayer{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:500;
+}
+
+.popup{
+    position:absolute;
+    width:260px;              /* vorher 170px */
+    min-height:150px;
+    border-radius:24px;
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.15);
+    backdrop-filter:blur(24px);
+    color:white;
+    padding:18px;
+    box-shadow:0 20px 50px rgba(0,0,0,.5);
+    animation:pop .28s ease;
+}
+
+.popup h5{
+    font-size:1.05rem;
+    margin-bottom:10px;
+}
+
+.popup p{
+    font-size:.9rem;
+    line-height:1.4;
+    color:#ebedf5;
+}
+
+.popup button{
+    margin-top:16px;
+    width:100%;
+    border:none;
+    border-radius:14px;
+    padding:12px;
+    font-size:1rem;
+    font-weight:700;
+    background:linear-gradient(135deg,#58b5ff,#7d63ff);
+    color:white;
+}
+
+.popup h5{
+    font-size:.82rem;
+    margin-bottom:6px;
+}
+
+.popup p{
+    font-size:.72rem;
+    color:#ebedf5;
+}
+
+.popup button{
+    margin-top:10px;
+    width:100%;
+    border:none;
+    border-radius:10px;
+    padding:7px;
+    background:linear-gradient(135deg,#58b5ff,#7d63ff);
+    color:white;
+    font-weight:bold;
+}
+
+@keyframes pop{
+    from{
+        transform:scale(.7);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+#fade{
+    position:fixed;
+    inset:0;
+    background:#000;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 1.5s ease;
+    z-index:9999;
+}
+
+.blur{
+    filter:blur(18px);
+}
+
+.fade{
+    opacity:1 !important;
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<header>
+
+<div class="topbar">
+<div class="logo">Pulse™</div>
+
+<div class="badges">
+<div class="badge">❤️<span>9</span></div>
+<div class="badge">💬<span>4</span></div>
+<div class="badge">🔔<span>12</span></div>
+</div>
+
+</div>
+
+</header>
+
+<div class="feed">
+
+<div class="card">
+<div class="cardHeader">
+<div class="author">
+<div class="avatar"></div>
+<div>
+<h4>Sarah Klein</h4>
+<small>Vor 3 Min.</small>
+</div>
+</div>
+<div class="tag">Sponsored</div>
+</div>
+<div class="image"></div>
+<div class="text">
+Neue Sommerkollektion online! ✨ Jetzt entdecken und exklusive Angebote sichern.
+</div>
+<div class="actions">
+<div>❤️ 4.8K</div>
+<div>💬 291</div>
+<div>↗ Teilen</div>
+</div>
+</div>
+
+<div class="card">
+<div class="cardHeader">
+<div class="author">
+<div class="avatar"></div>
+<div>
+<h4>Lucas Weber</h4>
+<small>Vor 12 Min.</small>
+</div>
+</div>
+<div class="tag">Trending</div>
+</div>
+<div class="image" style="background:linear-gradient(135deg,#ff6b8a,#ffb04d,#ffe96f);"></div>
+<div class="text">
+Ich glaube, das ist der schönste Sonnenuntergang, den ich dieses Jahr gesehen habe.
+</div>
+<div class="actions">
+<div>❤️ 18K</div>
+<div>💬 1.2K</div>
+<div>↗ Teilen</div>
+</div>
+</div>
+
+<div class="card">
+<div class="cardHeader">
+<div class="author">
+<div class="avatar"></div>
+<div>
+<h4>Travel Daily</h4>
+<small>Gesponsert</small>
+</div>
+</div>
+<div class="tag">Ad</div>
+</div>
+<div class="image" style="background:linear-gradient(135deg,#00d4ff,#0094ff,#6147ff);"></div>
+<div class="text">
+Buche deinen Traumurlaub jetzt mit bis zu 65% Rabatt.
+</div>
+<div class="actions">
+<div>❤️ 7.9K</div>
+<div>💬 540</div>
+<div>↗ Teilen</div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="popupLayer" id="popupLayer"></div>
+
+<div id="fade"></div>
+
+<script>
+
+const messages=[
+["🔋 Low Battery","Akkustand nur noch 5%."],
+["⚠ Storage Almost Full","Nur noch 240 MB frei."],
+["🍪 Cookie Notice","Bitte alle Cookies akzeptieren."],
+["🔥 Flash Sale","80% Rabatt nur heute!"],
+["💬 New Message","Du hast 3 neue Nachrichten."],
+["📦 Package Update","Deine Lieferung kommt heute."],
+["🎁 Reward","Du hast einen Bonus erhalten."],
+["📲 Update Available","Jetzt App aktualisieren."],
+["📢 Breaking News","Jetzt weiterlesen..."],
+["⚡ Performance Alert","Gerät wird langsamer."]
+];
+
+const layer=document.getElementById("popupLayer");
+
+let running=true;
+const active=[];
+
+function createPopup(){
+
+    if(!running) return;
+
+    if(active.length>=8){
+        active.shift().remove();
+    }
+
+    const msg=messages[Math.floor(Math.random()*messages.length)];
+
+    const div=document.createElement("div");
+    div.className="popup";
+
+    div.style.left=(Math.random()*55+5)+"vw";
+    div.style.top=(Math.random()*70+8)+"vh";
+
+    div.innerHTML=`
+        <h5>${msg[0]}</h5>
+        <p>${msg[1]}</p>
+        <button>OK</button>
+    `;
+
+    layer.appendChild(div);
+    active.push(div);
+
+    setTimeout(()=>{
+        if(div.parentNode){
+            div.remove();
+            const i=active.indexOf(div);
+            if(i>-1) active.splice(i,1);
+        }
+    },5000);
+
+}
+
+function spam(){
+    if(!running) return;
+
+    createPopup();
+
+    const delay=500+Math.random()*300;
+    setTimeout(spam,delay);
+}
+
+setTimeout(spam,500);
+
+function finish(){
+
+    if(!running) return;
+    running=false;
+
+    document.getElementById("app").classList.add("blur");
+    layer.classList.add("blur");
+
+    setTimeout(()=>{
+        document.getElementById("fade").classList.add("fade");
+    },60);
+
+}
+
+document.body.addEventListener("click",finish,{once:true});
+
+</script>
+
+</body>
+</html>
