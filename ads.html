@@ -529,12 +529,12 @@ let running = true;
 const active = [];
 
 function randomPos(w = 240, h = 140) {
-    // Keep elements inside the viewport
-    const maxLeft = Math.max(5, 100 - (w / window.innerWidth * 100) - 5);
-    const maxTop  = Math.max(5, 100 - (h / window.innerHeight * 100) - 8);
+    // Spread across the whole screen, but keep most of the element visible
+    const maxLeft = Math.max(2, 100 - (w / window.innerWidth * 100) - 2);
+    const maxTop  = Math.max(2, 100 - (h / window.innerHeight * 100) - 2);
     return {
-        left: (Math.random() * Math.min(30, maxLeft) + 5) + "vw",
-        top:  (Math.random() * Math.min(55, maxTop) + 8) + "vh"
+        left: (Math.random() * maxLeft + 1) + "vw",
+        top:  (Math.random() * maxTop  + 1) + "vh"
     };
 }
 
