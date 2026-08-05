@@ -229,6 +229,27 @@
                 <div class="theme-dot" style="background:#10b981;" data-theme="green" onclick="setTheme('green',this)"></div>
                 <div class="theme-dot" style="background:#f43f5e;" data-theme="rose" onclick="setTheme('rose',this)"></div>
                 <div class="theme-dot" style="background:#f97316;" data-theme="orange" onclick="setTheme('orange',this)"></div>
+                <input type="color" class="theme-dot-custom" id="theme-dot-custom" data-theme="custom" value="#1877f2" title="Eigene Farbe" onchange="setCustomAccent(this.value, this)">
+            </div>
+        </div>
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;cursor:default;">
+            <div style="display:flex;align-items:center;gap:12px;width:100%;">
+                <div class="settings-row-icon" style="background:linear-gradient(135deg,#0ea5e9,#22c55e);"><i data-lucide="image" style="width:16px;color:white;"></i></div>
+                <span class="settings-row-label">Hintergrund</span>
+            </div>
+            <div class="bg-mode-picker">
+                <button type="button" class="bg-mode-btn active" id="bg-mode-default" onclick="setBgMode('default')">Standard</button>
+                <button type="button" class="bg-mode-btn" id="bg-mode-color" onclick="setBgMode('color')">Farbe</button>
+                <button type="button" class="bg-mode-btn" id="bg-mode-gradient" onclick="setBgMode('gradient')">Farbverlauf</button>
+            </div>
+            <div class="bg-color-row hidden" id="bg-color-row">
+                <input type="color" class="bg-color-swatch" id="bg-color-input" value="#f0f2f5" onchange="setBgColor(this.value)">
+                <span class="settings-row-value">Hintergrundfarbe w&#228;hlen</span>
+            </div>
+            <div class="bg-color-row hidden" id="bg-gradient-row">
+                <input type="color" class="bg-color-swatch" id="bg-gradient-from" value="#1877f2" onchange="setBgGradient()">
+                <input type="color" class="bg-color-swatch" id="bg-gradient-to" value="#8b5cf6" onchange="setBgGradient()">
+                <div class="bg-gradient-preview" id="bg-gradient-preview"></div>
             </div>
         </div>
     </div>
