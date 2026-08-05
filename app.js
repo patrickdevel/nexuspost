@@ -669,6 +669,16 @@
         const r = parseInt(hex.substring(0, 2), 16), g = parseInt(hex.substring(2, 4), 16), b = parseInt(hex.substring(4, 6), 16);
         return `rgba(${r},${g},${b},${alpha})`;
     }
+    function darkenHex(hex, amount) {
+        hex = (hex || '').replace('#', '');
+        if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+        const r = Math.round(parseInt(hex.substring(0, 2), 16) * (1 - amount));
+        const g = Math.round(parseInt(hex.substring(2, 4), 16) * (1 - amount));
+        const b = Math.round(parseInt(hex.substring(4, 6), 16) * (1 - amount));
+        const toHex = n => Math.max(0, Math.min(255, n)).toString(16).padStart(2, '0');
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+    }
+    const BG_DARKEN_AMOUNT = 0.18;
     window.setTheme = (theme, el) => {
         ['theme-purple','theme-green','theme-rose','theme-orange'].forEach(c => document.body.classList.remove(c));
         document.body.style.removeProperty('--nexus');
@@ -690,7 +700,7 @@
         localStorage.setItem('customAccentColor', color);
     };
     function applyBgColor(color) {
-        document.body.style.background = color;
+        document.body.style.background = darkenHex(color, BG_DARKEN_AMOUNT);
         localStorage.setItem('bgColor', color);
     }
     window.setBgColor = (color) => applyBgColor(color);
@@ -699,7 +709,7 @@
         const toEl = document.getElementById('bg-gradient-to');
         const from = fromEl ? fromEl.value : '#1877f2';
         const to = toEl ? toEl.value : '#8b5cf6';
-        const gradient = `linear-gradient(135deg, ${from}, ${to})`;
+        const gradient = `linear-gradient(135deg, ${darkenHex(from, BG_DARKEN_AMOUNT)}, ${darkenHex(to, BG_DARKEN_AMOUNT)})`;
         document.body.style.background = gradient;
         const preview = document.getElementById('bg-gradient-preview');
         if (preview) preview.style.background = gradient;
@@ -740,7 +750,7 @@
             const colorInput = document.getElementById('bg-color-input');
             if (colorInput) colorInput.value = storedColor;
             document.getElementById('bg-color-row')?.classList.remove('hidden');
-            document.body.style.background = storedColor;
+            document.body.style.background = darkenHex(storedColor, BG_DARKEN_AMOUNT);
         } else if (bgMode === 'gradient') {
             const from = localStorage.getItem('bgGradientFrom') || '#1877f2';
             const to = localStorage.getItem('bgGradientTo') || '#8b5cf6';
@@ -749,7 +759,7 @@
             if (fromInput) fromInput.value = from;
             if (toInput) toInput.value = to;
             document.getElementById('bg-gradient-row')?.classList.remove('hidden');
-            const gradient = `linear-gradient(135deg, ${from}, ${to})`;
+            const gradient = `linear-gradient(135deg, ${darkenHex(from, BG_DARKEN_AMOUNT)}, ${darkenHex(to, BG_DARKEN_AMOUNT)})`;
             document.body.style.background = gradient;
             const preview = document.getElementById('bg-gradient-preview');
             if (preview) preview.style.background = gradient;
