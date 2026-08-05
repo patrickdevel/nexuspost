@@ -68,6 +68,10 @@
                 <i data-lucide="bell"></i>
                 <span class="notif-badge hidden" id="notif-badge">0</span>
             </button>
+            <button class="nav-btn" onclick="openDmList()" data-label="Nachrichten" id="dm-nav-btn">
+                <i data-lucide="mail"></i>
+                <span class="notif-badge hidden" id="dm-badge">0</span>
+            </button>
             <button class="nav-btn" onclick="openBookmarks()" data-label="Gespeichert"><i data-lucide="bookmark"></i></button>
             <button class="nav-btn hidden" id="admin-alert-btn" onclick="openAlertModal()" data-label="Neue Meldung"><i data-lucide="plus-circle"></i></button>
         </div>
@@ -108,6 +112,9 @@
         </button>
     </div>
     <div id="feed"></div>
+    <div id="feed-skeleton"></div>
+    <div id="feed-load-more-indicator" class="hidden"></div>
+    <div id="feed-load-more-sentinel" style="height:1px;"></div>
     <div id="trending-section" class="hidden"></div>
 </main>
 
@@ -140,6 +147,34 @@
         <h2>Folge ich</h2>
     </div>
     <div id="following-list"></div>
+</div>
+
+<div id="dm-list-screen" class="container hidden">
+    <div class="bookmarks-header">
+        <button class="settings-back-btn" onclick="closeDmList()"><i data-lucide="arrow-left" style="width:18px;"></i></button>
+        <h2>Nachrichten</h2>
+    </div>
+    <div id="dm-list"></div>
+    <div id="dm-list-empty" class="hidden" style="text-align:center;padding:50px 20px;color:var(--sub);">
+        <i data-lucide="mail" style="width:38px;height:38px;opacity:0.4;margin-bottom:10px;"></i>
+        <div>Noch keine Nachrichten. Schreib jemandem \u00fcber sein Profil!</div>
+    </div>
+</div>
+
+<div id="dm-thread-screen" class="container hidden" style="padding-left:0;padding-right:0;">
+    <div class="dm-thread-header">
+        <button class="settings-back-btn" onclick="closeDmThread()"><i data-lucide="arrow-left" style="width:18px;"></i></button>
+        <img id="dm-thread-avatar" class="dm-thread-avatar" src="" onclick="dmOpenCurrentProfile()">
+        <div class="dm-thread-name" id="dm-thread-name" onclick="dmOpenCurrentProfile()">\u2013</div>
+    </div>
+    <div id="dm-thread-messages"></div>
+</div>
+
+<div id="dm-input-bar" class="hidden">
+    <div style="display:flex;align-items:center;gap:10px;max-width:600px;margin:0 auto;">
+        <div id="dm-thread-input" class="ios-input-container" contenteditable="true" placeholder="Nachricht schreiben..." style="flex:1;"></div>
+        <button id="dm-thread-send-btn" class="send-btn"><i data-lucide="arrow-up" style="width:18px;stroke-width:3;"></i></button>
+    </div>
 </div>
 
 <div id="settings-screen" class="container hidden">
@@ -228,7 +263,7 @@
             <span class="settings-row-label">Version</span>
             <span class="settings-row-value">v155.0</span>
         </div>
-        <div class="settings-row" onclick="showToast('Feedback wurde gesendet!')">
+        <div class="settings-row" onclick="window.open('feedback.html', '_blank')">
             <div class="settings-row-icon" style="background:#ff9500;"><i data-lucide="flag" style="width:16px;color:white;"></i></div>
             <span class="settings-row-label">Feedback senden</span>
             <i data-lucide="chevron-right" class="settings-row-chevron" style="width:16px;"></i>
@@ -323,6 +358,21 @@
         </div>
         <button onclick="addPollOption()" style="background:none;border:1px dashed var(--border);border-radius:10px;padding:9px;width:100%;color:var(--nexus);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:14px;transition:background 0.2s;">+ Option hinzuf&#252;gen</button>
         <button onclick="submitPoll()" class="btn-primary">Umfrage posten</button>
+    </div>
+</div>
+
+<div id="report-modal" class="lightbox">
+    <div class="modal-inner" onclick="event.stopPropagation()">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h3 class="modal-title" style="margin:0;display:flex;align-items:center;gap:8px;">
+                <i data-lucide="flag" style="width:19px;color:var(--danger);"></i> <span id="report-modal-title">Melden</span>
+            </h3>
+            <button onclick="closeReportModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
+        </div>
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);margin-bottom:10px;">Grund ausw&#228;hlen</div>
+        <div id="report-reason-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
+        <textarea id="report-detail" class="modal-input" placeholder="Zus&#228;tzliche Details (optional)..." style="height:70px;resize:none;"></textarea>
+        <button onclick="submitReport()" class="btn-primary" style="background:var(--danger);">Meldung absenden</button>
     </div>
 </div>
 
@@ -459,8 +509,8 @@
     </div>
 </div>
 
-<button id="global-sound-toggle" class="global-sound-toggle hidden" onclick="toggleGlobalSound()" title="Musik-Vorschau an/aus">
-    <i data-lucide="volume-x" style="width:18px;"></i>
+<button id="global-sound-toggle" class="global-sound-toggle on hidden" onclick="toggleGlobalSound()" title="Ton an/aus">
+    <i data-lucide="volume-2" style="width:18px;"></i>
 </button>
 
 <div id="status-feed-overlay">
