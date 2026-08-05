@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Feedback &ndash; cliq.</title>
+    <link rel="icon" href="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; }
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: #1e1f22; color: #dbdee1;
+            min-height: 100vh; display: flex; flex-direction: column;
+            padding: max(20px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom));
+        }
+        .fb-header { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+        .fb-back { background: #2b2d31; border: none; color: #dbdee1; width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+        .fb-back:hover { background: #35373c; }
+        .fb-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #fff; }
+        .fb-card { max-width: 480px; margin: 0 auto; width: 100%; flex: 1; display: flex; flex-direction: column; }
+        .fb-intro { color: #949ba4; font-size: 14.5px; line-height: 1.5; margin-bottom: 24px; }
+        .fb-field { margin-bottom: 18px; }
+        .fb-field label { display: block; font-size: 12.5px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.4px; color: #949ba4; margin-bottom: 8px; }
+        .fb-category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .fb-category-btn { background: #2b2d31; border: 1.5px solid transparent; color: #dbdee1; border-radius: 12px;
+            padding: 12px 6px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; gap: 6px; transition: all 0.15s; }
+        .fb-category-btn i { width: 20px; height: 20px; }
+        .fb-category-btn:hover { background: #33353a; }
+        .fb-category-btn.selected { border-color: #1877f2; background: rgba(24,119,242,0.12); color: #fff; }
+        .fb-textarea { width: 100%; background: #2b2d31; border: 1.5px solid transparent; border-radius: 12px;
+            color: #fff; padding: 14px; font-size: 15px; font-family: inherit; outline: none; resize: none;
+            min-height: 140px; line-height: 1.5; transition: border-color 0.15s; }
+        .fb-textarea:focus { border-color: #1877f2; }
+        .fb-textarea::placeholder { color: #6d6f78; }
+        .fb-char-count { text-align: right; font-size: 12px; color: #6d6f78; margin-top: 6px; }
+        .fb-contact-hint { font-size: 12.5px; color: #6d6f78; margin-top: -8px; margin-bottom: 18px; line-height: 1.4; }
+        .fb-submit { width: 100%; background: #1877f2; color: #fff; border: none; border-radius: 14px;
+            padding: 15px; font-size: 15.5px; font-weight: 700; font-family: inherit; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: auto;
+            transition: opacity 0.15s, transform 0.15s; }
+        .fb-submit:hover { transform: translateY(-1px); }
+        .fb-submit:active { transform: scale(0.98); }
+        .fb-submit:disabled { opacity: 0.5; cursor: default; transform: none; }
+        .hidden { display: none !important; }
+
+        .fb-success { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; gap: 16px; animation: fbFadeIn 0.4s ease; }
+        @keyframes fbFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fb-success-icon { width: 68px; height: 68px; border-radius: 50%; background: rgba(35,165,89,0.15);
+            color: #23a559; display: flex; align-items: center; justify-content: center; }
+        .fb-success h2 { font-family: 'Syne', sans-serif; font-size: 20px; color: #fff; }
+        .fb-success p { color: #949ba4; font-size: 14.5px; max-width: 320px; line-height: 1.5; }
+        .fb-success-close { background: #2b2d31; color: #dbdee1; border: none; border-radius: 12px; padding: 12px 28px;
+            font-family: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+        .fb-success-close:hover { background: #35373c; }
+    </style>
+</head>
+<body>
+
+    <div class="fb-header">
+        <button class="fb-back" onclick="window.close(); setTimeout(()=>location.href='app.html', 200);">
+            <i data-lucide="arrow-left" style="width:18px;"></i>
+        </button>
+        <div class="fb-title">Feedback geben</div>
+    </div>
+
+    <div class="fb-card">
+        <div id="fb-form-view">
+            <div class="fb-intro">Du hast einen Bug gefunden, eine Idee f&uuml;r ein neues Feature oder sonst etwas auf dem Herzen? Schreib es uns &ndash; wir lesen jedes Feedback.</div>
+
+            <div class="fb-field">
+                <label>Worum geht's?</label>
+                <div class="fb-category-grid" id="fb-categories">
+                    <button type="button" class="fb-category-btn selected" data-cat="bug"><i data-lucide="bug"></i>Bug</button>
+                    <button type="button" class="fb-category-btn" data-cat="idea"><i data-lucide="lightbulb"></i>Idee</button>
+                    <button type="button" class="fb-category-btn" data-cat="other"><i data-lucide="message-circle"></i>Sonstiges</button>
+                </div>
+            </div>
+
+            <div class="fb-field">
+                <label>Deine Nachricht</label>
+                <textarea id="fb-message" class="fb-textarea" maxlength="1000" placeholder="Erz&auml;hl uns, was los ist..." oninput="fbUpdateCharCount()"></textarea>
+                <div class="fb-char-count"><span id="fb-char-count">0</span> / 1000</div>
+            </div>
+
+            <div class="fb-contact-hint" id="fb-contact-hint"></div>
+
+            <button class="fb-submit" id="fb-submit-btn" onclick="fbSubmit()">
+                <i data-lucide="send" style="width:16px;"></i> Absenden
+            </button>
+        </div>
+
+        <div id="fb-success-view" class="fb-success hidden">
+            <div class="fb-success-icon"><i data-lucide="check" style="width:32px;"></i></div>
+            <h2>Danke f&uuml;r dein Feedback!</h2>
+            <p>Wir haben deine Nachricht erhalten und schauen sie uns an.</p>
+            <button class="fb-success-close" onclick="window.close(); setTimeout(()=>location.href='app.html', 200);">Schlie&szlig;en</button>
+        </div>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCK6bbGtKyuLphYGtxqnAvvnGtMyh2ejV4",
+        authDomain: "nexuspost-a00b1.firebaseapp.com",
+        projectId: "nexuspost-a00b1",
+        storageBucket: "nexuspost-a00b1.firebasestorage.app",
+        messagingSenderId: "124843068065",
+        appId: "1:124843068065:web:035b15d01910dc6b8d7ee0"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUser = null;
+    onAuthStateChanged(auth, (user) => {
+        currentUser = user;
+        const hint = document.getElementById('fb-contact-hint');
+        hint.textContent = user
+            ? `Wird gesendet als ${user.displayName || 'angemeldeter Nutzer'}, damit wir bei R\u00fcckfragen antworten k\u00f6nnen.`
+            : 'Du bist nicht angemeldet - dein Feedback wird anonym gesendet.';
+    });
+
+    let selectedCategory = 'bug';
+    document.querySelectorAll('.fb-category-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.fb-category-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedCategory = btn.dataset.cat;
+        });
+    });
+
+    window.fbUpdateCharCount = () => {
+        const len = document.getElementById('fb-message').value.length;
+        document.getElementById('fb-char-count').textContent = len;
+    };
+
+    window.fbSubmit = async () => {
+        const message = document.getElementById('fb-message').value.trim();
+        if (!message) {
+            document.getElementById('fb-message').focus();
+            return;
+        }
+        const btn = document.getElementById('fb-submit-btn');
+        btn.disabled = true;
+        btn.innerHTML = '<i data-lucide="loader-2" style="width:16px;animation:spin 0.8s linear infinite;"></i> Wird gesendet...';
+        if (window.lucide) lucide.createIcons();
+        try {
+            await addDoc(collection(db, 'feedback'), {
+                category: selectedCategory,
+                message,
+                uid: currentUser ? currentUser.uid : null,
+                displayName: currentUser ? currentUser.displayName : null,
+                email: currentUser ? currentUser.email : null,
+                createdAt: serverTimestamp(),
+                status: 'new'
+            });
+            document.getElementById('fb-form-view').classList.add('hidden');
+            document.getElementById('fb-success-view').classList.remove('hidden');
+            if (window.lucide) lucide.createIcons();
+        } catch (e) {
+            console.error('Feedback konnte nicht gesendet werden:', e);
+            btn.disabled = false;
+            btn.innerHTML = '<i data-lucide="send" style="width:16px;"></i> Absenden';
+            if (window.lucide) lucide.createIcons();
+            alert('Feedback konnte nicht gesendet werden. Bitte versuch es sp\u00e4ter erneut.');
+        }
+    };
+
+    if (window.lucide) lucide.createIcons();
+</script>
+<style>
+    @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</body>
+</html>
