@@ -1011,3 +1011,14 @@
             padding: 10px 15px calc(10px + env(safe-area-inset-bottom)); z-index: 1000;
         }
         #dm-input-bar.hidden { display: none; }
+
+        #dm-request-banner { position: fixed; bottom: 0; left: 0; right: 0; background: var(--tab-bg);
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-top: 0.5px solid var(--border);
+            padding: 14px 18px calc(14px + env(safe-area-inset-bottom)); z-index: 1000; text-align: center;
+        }
+        #dm-request-banner.hidden { display: none; }
+        .dm-request-text { font-size: 13.5px; color: var(--sub); display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; }
+        .dm-request-btn { flex: 1; border: none; border-radius: 14px; padding: 11px; font-size: 14.5px;
+            font-weight: 700; font-family: inherit; cursor: pointer; }
+        .dm-request-btn.accept { background: var(--nexus); color: #fff; }
+        .dm-request-btn.decline { background: var(--ios-input); color: var(--text); }
