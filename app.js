@@ -2069,7 +2069,7 @@
             query(collection(db, 'dmThreads', currentDmThreadId, 'messages'), orderBy('timestamp', 'asc')),
             (snap) => {
                 if (snap.empty) {
-                    messagesArea.innerHTML = '<div style="text-align:center;color:var(--sub);padding:30px 0;font-size:13.5px;">Noch keine Nachrichten. Schreib die erste!</div>';
+                    messagesArea.innerHTML = '<div style="text-align:center;color:var(--sub);padding:30px 0;font-size:13.5px;">Schreibe deine erste Nachricht \ud83d\udc4b</div>';
                     return;
                 }
                 messagesArea.innerHTML = '';
@@ -2077,9 +2077,9 @@
                     const m = d.data();
                     const mine = m.senderId === auth.currentUser.uid;
                     messagesArea.innerHTML += `<div class="dm-bubble-row ${mine?'mine':''}">
-                        <div>
+                        <div class="dm-bubble-wrap">
                             <div class="dm-bubble">${escapeHtml(m.text || '')}</div>
-                            <div class="dm-bubble-time">${timeAgo(m.timestamp)}</div>
+                            <div class="dm-bubble-time">${m.timestamp ? timeAgo(m.timestamp) : 'Wird gesendet\u2026'}</div>
                         </div>
                     </div>`;
                 });
@@ -2088,6 +2088,18 @@
             },
             (err) => { console.error('Fehler beim Laden der Nachrichten:', err); messagesArea.innerHTML = '<div style="text-align:center;color:var(--sub);padding:30px 0;">Nachrichten konnten nicht geladen werden.</div>'; }
         );
+    }
+    function appendOptimisticDmBubble(text) {
+        const messagesArea = document.getElementById('dm-thread-messages');
+        if (!messagesArea) return;
+        messagesArea.innerHTML += `<div class="dm-bubble-row mine">
+            <div class="dm-bubble-wrap">
+                <div class="dm-bubble">${escapeHtml(text)}</div>
+                <div class="dm-bubble-time">Wird gesendet\u2026</div>
+            </div>
+        </div>`;
+        messagesArea.scrollIntoView({block: 'end'});
+        window.scrollTo(0, document.body.scrollHeight);
     }
     async function sendDmMessage() {
         const inputEl = document.getElementById('dm-thread-input');
@@ -2103,6 +2115,7 @@
         }
         const isNewThread = currentDmThreadStatus === null;
         inputEl.innerText = '';
+        appendOptimisticDmBubble(text); // instant feedback, doesn't wait for the server round-trip
         const threadRef = doc(db, 'dmThreads', currentDmThreadId);
         try {
             await setDoc(threadRef, {
