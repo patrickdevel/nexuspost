@@ -663,13 +663,98 @@
         if (dt) dt.classList.toggle('on', isDark);
     };
     window.toggleDarkModeSettings = () => toggleDarkMode();
+    function hexToRgba(hex, alpha) {
+        hex = (hex || '').replace('#', '');
+        if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+        const r = parseInt(hex.substring(0, 2), 16), g = parseInt(hex.substring(2, 4), 16), b = parseInt(hex.substring(4, 6), 16);
+        return `rgba(${r},${g},${b},${alpha})`;
+    }
     window.setTheme = (theme, el) => {
         ['theme-purple','theme-green','theme-rose','theme-orange'].forEach(c => document.body.classList.remove(c));
+        document.body.style.removeProperty('--nexus');
+        document.body.style.removeProperty('--nexus-soft');
         if (theme !== 'default') document.body.classList.add('theme-'+theme);
         document.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('selected'));
+        document.getElementById('theme-dot-custom')?.classList.remove('selected');
         el.classList.add('selected');
         localStorage.setItem('accentTheme', theme);
+        localStorage.removeItem('customAccentColor');
     };
+    window.setCustomAccent = (color, el) => {
+        ['theme-purple','theme-green','theme-rose','theme-orange'].forEach(c => document.body.classList.remove(c));
+        document.body.style.setProperty('--nexus', color);
+        document.body.style.setProperty('--nexus-soft', hexToRgba(color, 0.12));
+        document.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('selected'));
+        (el || document.getElementById('theme-dot-custom'))?.classList.add('selected');
+        localStorage.setItem('accentTheme', 'custom');
+        localStorage.setItem('customAccentColor', color);
+    };
+    function applyBgColor(color) {
+        document.body.style.background = color;
+        localStorage.setItem('bgColor', color);
+    }
+    window.setBgColor = (color) => applyBgColor(color);
+    function applyBgGradient() {
+        const fromEl = document.getElementById('bg-gradient-from');
+        const toEl = document.getElementById('bg-gradient-to');
+        const from = fromEl ? fromEl.value : '#1877f2';
+        const to = toEl ? toEl.value : '#8b5cf6';
+        const gradient = `linear-gradient(135deg, ${from}, ${to})`;
+        document.body.style.background = gradient;
+        const preview = document.getElementById('bg-gradient-preview');
+        if (preview) preview.style.background = gradient;
+        localStorage.setItem('bgGradientFrom', from);
+        localStorage.setItem('bgGradientTo', to);
+    }
+    window.setBgGradient = () => applyBgGradient();
+    window.setBgMode = (mode) => {
+        document.querySelectorAll('.bg-mode-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('bg-mode-' + mode)?.classList.add('active');
+        document.getElementById('bg-color-row')?.classList.toggle('hidden', mode !== 'color');
+        document.getElementById('bg-gradient-row')?.classList.toggle('hidden', mode !== 'gradient');
+        localStorage.setItem('bgMode', mode);
+        if (mode === 'default') {
+            document.body.style.removeProperty('background');
+        } else if (mode === 'color') {
+            applyBgColor(document.getElementById('bg-color-input')?.value || '#f0f2f5');
+        } else if (mode === 'gradient') {
+            applyBgGradient();
+        }
+    };
+    function restoreThemeAndBackground() {
+        const accent = localStorage.getItem('accentTheme');
+        if (accent === 'custom') {
+            const customColor = localStorage.getItem('customAccentColor') || '#1877f2';
+            const customDot = document.getElementById('theme-dot-custom');
+            if (customDot) customDot.value = customColor;
+            window.setCustomAccent(customColor, customDot);
+        } else if (accent && accent !== 'default') {
+            document.body.classList.add('theme-' + accent);
+            document.querySelector(`.theme-dot[data-theme="${accent}"]`)?.classList.add('selected');
+        }
+        const bgMode = localStorage.getItem('bgMode') || 'default';
+        document.querySelectorAll('.bg-mode-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('bg-mode-' + bgMode)?.classList.add('active');
+        if (bgMode === 'color') {
+            const storedColor = localStorage.getItem('bgColor') || '#f0f2f5';
+            const colorInput = document.getElementById('bg-color-input');
+            if (colorInput) colorInput.value = storedColor;
+            document.getElementById('bg-color-row')?.classList.remove('hidden');
+            document.body.style.background = storedColor;
+        } else if (bgMode === 'gradient') {
+            const from = localStorage.getItem('bgGradientFrom') || '#1877f2';
+            const to = localStorage.getItem('bgGradientTo') || '#8b5cf6';
+            const fromInput = document.getElementById('bg-gradient-from');
+            const toInput = document.getElementById('bg-gradient-to');
+            if (fromInput) fromInput.value = from;
+            if (toInput) toInput.value = to;
+            document.getElementById('bg-gradient-row')?.classList.remove('hidden');
+            const gradient = `linear-gradient(135deg, ${from}, ${to})`;
+            document.body.style.background = gradient;
+            const preview = document.getElementById('bg-gradient-preview');
+            if (preview) preview.style.background = gradient;
+        }
+    }
     window.openSettings = () => {
         if (userData) {
             document.getElementById('settings-avatar').src = userData.photoURL || '';
@@ -1085,8 +1170,7 @@
                 document.body.classList.add('dark'); document.body.classList.remove('light');
                 swapIcon(document.getElementById('bn-theme-btn'), 'sun');
             }
-            const accent = localStorage.getItem('accentTheme');
-            if (accent && accent !== 'default') { document.body.classList.add('theme-'+accent); document.querySelector(`.theme-dot[data-theme="${accent}"]`)?.classList.add('selected'); }
+            restoreThemeAndBackground();
             const soundBtn = document.getElementById('global-sound-toggle');
             soundBtn.classList.remove('hidden');
             const storedSoundPref = localStorage.getItem('cliq_sound_enabled');
