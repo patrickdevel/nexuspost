@@ -781,6 +781,30 @@
         }
         .theme-dot:hover { transform: scale(1.15); }
         .theme-dot.selected { border-color: var(--text); transform: scale(1.1); }
+        .theme-dot-custom { -webkit-appearance: none; appearance: none; width: 34px; height: 34px; border-radius: 50%;
+            cursor: pointer; border: 3px solid transparent; padding: 0; background: conic-gradient(red,yellow,lime,cyan,blue,magenta,red);
+            transition: border-color 0.2s, transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); flex-shrink: 0;
+        }
+        .theme-dot-custom::-webkit-color-swatch-wrapper { padding: 0; border-radius: 50%; }
+        .theme-dot-custom::-webkit-color-swatch { border: none; border-radius: 50%; }
+        .theme-dot-custom::-moz-color-swatch { border: none; border-radius: 50%; }
+        .theme-dot-custom:hover { transform: scale(1.15); }
+        .theme-dot-custom.selected { border-color: var(--text); transform: scale(1.1); }
+        .bg-mode-picker { display: flex; gap: 8px; padding: 4px 16px 14px; width: 100%; }
+        .bg-mode-btn { flex: 1; padding: 9px 0; border-radius: 10px; border: 1.5px solid var(--border);
+            background: var(--ios-input); color: var(--sub); font-size: 12.5px; font-weight: 600; cursor: pointer;
+            transition: all 0.2s; font-family: inherit;
+        }
+        .bg-mode-btn.active { background: var(--nexus); color: #fff; border-color: var(--nexus); }
+        .bg-color-row { display: flex; align-items: center; gap: 14px; padding: 0 16px 14px; width: 100%; }
+        .bg-color-row.hidden { display: none; }
+        .bg-color-swatch { -webkit-appearance: none; appearance: none; width: 40px; height: 40px; border-radius: 12px;
+            cursor: pointer; border: 1.5px solid var(--border); padding: 0; background: none; flex-shrink: 0;
+        }
+        .bg-color-swatch::-webkit-color-swatch-wrapper { padding: 0; border-radius: 10px; }
+        .bg-color-swatch::-webkit-color-swatch { border: none; border-radius: 10px; }
+        .bg-color-swatch::-moz-color-swatch { border: none; border-radius: 10px; }
+        .bg-gradient-preview { flex: 1; height: 40px; border-radius: 12px; border: 1.5px solid var(--border); }
         .profile-preview { display: flex; flex-direction: column; align-items: center; gap: 10px;
             padding: 24px 16px 20px; }
         .profile-preview-img { width: 80px; height: 80px; border-radius: 50%;
