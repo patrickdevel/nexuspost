@@ -796,7 +796,7 @@
             const isFollowing = following.includes(uid);
             followBtnWrap.innerHTML = `<div style="display:flex;gap:8px;">
                 <button class="follow-btn ${isFollowing?'following':''}" data-uid="${uid}" onclick="toggleFollow('${uid}', event)" style="margin:0;flex:1;padding:10px;font-size:14px;">${isFollowing?'Folge ich':'Folgen'}</button>
-                <button onclick="openDmThread('${uid}')" style="flex:1;background:var(--ios-input);color:var(--text);border:none;border-radius:20px;padding:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;"><i data-lucide="mail" style="width:14px;"></i> Nachricht</button>
+                <button onclick="openDmThread('${uid}')" style="flex:1;background:var(--ios-input);color:var(--text);border:none;border-radius:20px;padding:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;text-align:center;">Nachricht</button>
             </div>
                 <button onclick="openReportModal('user','${uid}','${uid}')" style="background:none;border:none;color:var(--sub);font-size:12.5px;font-family:inherit;cursor:pointer;width:100%;text-align:center;margin-top:8px;padding:4px;display:flex;align-items:center;justify-content:center;gap:5px;"><i data-lucide="flag" style="width:12px;"></i> Profil melden</button>`;
         }
@@ -1858,7 +1858,7 @@
         }
     };
 
-    /* ══════════════ DIRECT MESSAGES (DMs) ══════════════ */
+    /* ══════════════ DIRECT MESSAGES (DMs) - request-based ══════════════ */
     function computeDmThreadId(uidA, uidB) { return [uidA, uidB].sort().join('_'); }
     function getCurrentVisibleScreenEl() {
         const ids = ['dm-thread-screen', 'dm-list-screen', 'following-screen', 'bookmarks-screen', 'settings-screen', 'main-content'];
@@ -1870,8 +1870,11 @@
     }
     let dmThreadsUnsubscribe = null;
     let dmThreadMessagesUnsubscribe = null;
+    let dmThreadDocUnsubscribe = null;
     let currentDmOtherUid = null;
     let currentDmThreadId = null;
+    let currentDmThreadStatus = null; // null = no thread yet, 'pending', or 'accepted'
+    let currentDmInitiatedBy = null;
     let dmReturnScreenId = 'main-content';
     let allDmThreads = [];
 
@@ -1902,29 +1905,43 @@
     window.closeDmList = () => {
         swipeToScreen(document.getElementById('dm-list-screen'), document.getElementById('main-content'), 'back');
     };
+    async function renderDmRow(t, isRequestSection) {
+        const otherUid = (t.participants || []).find(u => u !== auth.currentUser.uid);
+        if (!otherUid) return '';
+        const other = await getCachedUser(otherUid);
+        const isUnread = (t.unreadBy || []).includes(auth.currentUser.uid);
+        const iAmInitiator = t.initiatedBy === auth.currentUser.uid;
+        let previewText = escapeHtml((t.lastMessage || '').slice(0, 50));
+        if (t.status === 'pending' && iAmInitiator) previewText = '<i>Anfrage gesendet\u2026</i>';
+        else if (isRequestSection) previewText = '<i>M\u00f6chte dir schreiben</i>';
+        return `<div class="dm-row" onclick="openDmThread('${otherUid}')">
+            <img src="${other.photoURL || ''}" class="dm-row-avatar">
+            <div class="dm-row-info">
+                <div class="dm-row-name">${other.displayname || '\u2013'} ${other.verified ? `<img src="${verifiedIcon}" style="width:13px;height:13px;">` : ''}</div>
+                <div class="dm-row-preview ${isUnread ? 'unread' : ''}">${previewText}</div>
+            </div>
+            <div class="dm-row-meta">
+                <span class="dm-row-time">${t.lastMessageAt ? timeAgo(t.lastMessageAt) : ''}</span>
+                ${isUnread ? '<span class="dm-row-dot"></span>' : ''}
+            </div>
+        </div>`;
+    }
     async function renderDmList() {
         const list = document.getElementById('dm-list');
         const empty = document.getElementById('dm-list-empty');
         if (!allDmThreads.length) { list.innerHTML = ''; empty.classList.remove('hidden'); return; }
         empty.classList.add('hidden');
-        const rows = await Promise.all(allDmThreads.map(async (t) => {
-            const otherUid = (t.participants || []).find(u => u !== auth.currentUser.uid);
-            if (!otherUid) return '';
-            const other = await getCachedUser(otherUid);
-            const isUnread = (t.unreadBy || []).includes(auth.currentUser.uid);
-            return `<div class="dm-row" onclick="openDmThread('${otherUid}')">
-                <img src="${other.photoURL || ''}" class="dm-row-avatar">
-                <div class="dm-row-info">
-                    <div class="dm-row-name">${other.displayname || '\u2013'} ${other.verified ? `<img src="${verifiedIcon}" style="width:13px;height:13px;">` : ''}</div>
-                    <div class="dm-row-preview ${isUnread ? 'unread' : ''}">${escapeHtml((t.lastMessage || '').slice(0, 50))}</div>
-                </div>
-                <div class="dm-row-meta">
-                    <span class="dm-row-time">${t.lastMessageAt ? timeAgo(t.lastMessageAt) : ''}</span>
-                    ${isUnread ? '<span class="dm-row-dot"></span>' : ''}
-                </div>
-            </div>`;
-        }));
-        list.innerHTML = rows.join('');
+        const myUid = auth.currentUser.uid;
+        const requests = allDmThreads.filter(t => t.status === 'pending' && t.initiatedBy !== myUid);
+        const others = allDmThreads.filter(t => !(t.status === 'pending' && t.initiatedBy !== myUid));
+        let html = '';
+        if (requests.length) {
+            html += `<div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);margin:4px 0 8px;">Anfragen (${requests.length})</div>`;
+            html += (await Promise.all(requests.map(t => renderDmRow(t, true)))).join('');
+            if (others.length) html += `<div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);margin:18px 0 8px;">Nachrichten</div>`;
+        }
+        html += (await Promise.all(others.map(t => renderDmRow(t, false)))).join('');
+        list.innerHTML = html;
         if (window.lucide) lucide.createIcons({root: list});
     }
 
@@ -1935,6 +1952,8 @@
         if (fromEl.id !== 'dm-thread-screen') dmReturnScreenId = fromEl.id;
         currentDmOtherUid = otherUid;
         currentDmThreadId = computeDmThreadId(auth.currentUser.uid, otherUid);
+        currentDmThreadStatus = null;
+        currentDmInitiatedBy = null;
         const otherUser = await getCachedUser(otherUid);
         document.getElementById('dm-thread-avatar').src = otherUser.photoURL || '';
         document.getElementById('dm-thread-name').textContent = otherUser.displayname || '\u2013';
@@ -1942,15 +1961,17 @@
         document.getElementById('bottom-nav')?.classList.add('hidden');
         document.getElementById('bottom-fade')?.classList.add('hidden');
         document.getElementById('global-sound-toggle')?.classList.add('hidden');
-        document.getElementById('dm-input-bar').classList.remove('hidden');
         pauseFeedAutoplayObserver();
+        listenDmThreadDoc();
         listenDmThreadMessages();
         markDmThreadRead();
         if (window.lucide) lucide.createIcons();
     };
     window.closeDmThread = () => {
         if (dmThreadMessagesUnsubscribe) { dmThreadMessagesUnsubscribe(); dmThreadMessagesUnsubscribe = null; }
+        if (dmThreadDocUnsubscribe) { dmThreadDocUnsubscribe(); dmThreadDocUnsubscribe = null; }
         document.getElementById('dm-input-bar').classList.add('hidden');
+        document.getElementById('dm-request-banner').classList.add('hidden');
         const inputEl = document.getElementById('dm-thread-input');
         if (inputEl) inputEl.innerText = '';
         const toEl = document.getElementById(dmReturnScreenId) || document.getElementById('main-content');
@@ -1966,6 +1987,8 @@
         }
         currentDmOtherUid = null;
         currentDmThreadId = null;
+        currentDmThreadStatus = null;
+        currentDmInitiatedBy = null;
     };
     window.dmOpenCurrentProfile = () => {
         if (currentDmOtherUid) openProfileModal(currentDmOtherUid);
@@ -1976,6 +1999,68 @@
             await updateDoc(doc(db, 'dmThreads', currentDmThreadId), { unreadBy: arrayRemove(auth.currentUser.uid) });
         } catch (e) { /* thread may not exist yet - fine, nothing to mark read */ }
     }
+    function listenDmThreadDoc() {
+        if (dmThreadDocUnsubscribe) dmThreadDocUnsubscribe();
+        dmThreadDocUnsubscribe = onSnapshot(doc(db, 'dmThreads', currentDmThreadId), (snap) => {
+            if (snap.exists && snap.exists()) {
+                const data = snap.data();
+                currentDmThreadStatus = data.status || 'accepted';
+                currentDmInitiatedBy = data.initiatedBy || null;
+            } else {
+                currentDmThreadStatus = null;
+                currentDmInitiatedBy = null;
+            }
+            updateDmThreadInputState();
+        }, (err) => console.error('Fehler beim Laden des Anfrage-Status:', err));
+    }
+    function updateDmThreadInputState() {
+        if (!auth.currentUser) return;
+        const inputBar = document.getElementById('dm-input-bar');
+        const banner = document.getElementById('dm-request-banner');
+        const iAmInitiator = currentDmInitiatedBy === auth.currentUser.uid;
+        if (currentDmThreadStatus === 'pending' && !iAmInitiator) {
+            inputBar.classList.add('hidden');
+            banner.classList.remove('hidden');
+            banner.innerHTML = `<div class="dm-request-text" style="margin-bottom:10px;">Nachrichtenanfrage</div>
+                <div style="display:flex;gap:8px;">
+                    <button onclick="declineDmRequest()" class="dm-request-btn decline">Ablehnen</button>
+                    <button onclick="acceptDmRequest()" class="dm-request-btn accept">Annehmen</button>
+                </div>`;
+        } else if (currentDmThreadStatus === 'pending' && iAmInitiator) {
+            inputBar.classList.add('hidden');
+            banner.classList.remove('hidden');
+            banner.innerHTML = `<div class="dm-request-text"><i data-lucide="clock" style="width:15px;"></i> Anfrage gesendet - warte auf Antwort\u2026</div>`;
+            if (window.lucide) lucide.createIcons({root: banner});
+        } else {
+            banner.classList.add('hidden');
+            inputBar.classList.remove('hidden');
+        }
+    }
+    window.acceptDmRequest = async () => {
+        if (!currentDmThreadId) return;
+        try {
+            await updateDoc(doc(db, 'dmThreads', currentDmThreadId), { status: 'accepted' });
+            showToast('Anfrage angenommen \ud83d\udc4b');
+        } catch (e) {
+            console.error('Anfrage konnte nicht angenommen werden:', e);
+            showToast('Anfrage konnte nicht angenommen werden.');
+        }
+    };
+    window.declineDmRequest = async () => {
+        if (!currentDmThreadId) return;
+        if (!confirm('Anfrage ablehnen? Die Unterhaltung wird gel\u00f6scht.')) return;
+        const threadIdToDelete = currentDmThreadId;
+        try {
+            const msgsSnap = await getDocs(collection(db, 'dmThreads', threadIdToDelete, 'messages'));
+            await Promise.all(msgsSnap.docs.map(d => deleteDoc(d.ref)));
+            await deleteDoc(doc(db, 'dmThreads', threadIdToDelete));
+            showToast('Anfrage abgelehnt');
+            closeDmThread();
+        } catch (e) {
+            console.error('Anfrage konnte nicht abgelehnt werden:', e);
+            showToast('Anfrage konnte nicht abgelehnt werden.');
+        }
+    };
     function listenDmThreadMessages() {
         if (dmThreadMessagesUnsubscribe) dmThreadMessagesUnsubscribe();
         const messagesArea = document.getElementById('dm-thread-messages');
@@ -2008,6 +2093,15 @@
         const inputEl = document.getElementById('dm-thread-input');
         const text = inputEl.innerText.trim();
         if (!text || !currentDmThreadId || !currentDmOtherUid) return;
+        if (currentDmThreadStatus === 'pending' && currentDmInitiatedBy !== auth.currentUser.uid) {
+            showToast('Bitte nimm zuerst die Anfrage an.');
+            return;
+        }
+        if (currentDmThreadStatus === 'pending' && currentDmInitiatedBy === auth.currentUser.uid) {
+            showToast('Du hast bereits eine Anfrage gesendet. Warte auf Antwort.');
+            return;
+        }
+        const isNewThread = currentDmThreadStatus === null;
         inputEl.innerText = '';
         const threadRef = doc(db, 'dmThreads', currentDmThreadId);
         try {
@@ -2015,7 +2109,8 @@
                 participants: [auth.currentUser.uid, currentDmOtherUid],
                 lastMessage: text.slice(0, 80),
                 lastMessageAt: serverTimestamp(),
-                unreadBy: arrayUnion(currentDmOtherUid)
+                unreadBy: arrayUnion(currentDmOtherUid),
+                ...(isNewThread ? { status: 'pending', initiatedBy: auth.currentUser.uid, createdAt: serverTimestamp() } : {})
             }, { merge: true });
             await addDoc(collection(db, 'dmThreads', currentDmThreadId, 'messages'), {
                 text: text.slice(0, 2000),
