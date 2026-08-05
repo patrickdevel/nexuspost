@@ -995,11 +995,13 @@
         }
         .dm-thread-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; cursor: pointer; }
         .dm-thread-name { font-weight: 700; font-size: 15px; cursor: pointer; }
-        #dm-thread-messages { display: flex; flex-direction: column; gap: 8px; padding-bottom: 20px; min-height: 40vh; }
+        #dm-thread-messages { display: flex; flex-direction: column; gap: 8px; padding: 4px 14px 20px; min-height: 40vh; }
         .dm-bubble-row { display: flex; }
         .dm-bubble-row.mine { justify-content: flex-end; }
+        .dm-bubble-wrap { max-width: 76%; display: flex; flex-direction: column; min-width: 0; }
+        .dm-bubble-row.mine .dm-bubble-wrap { align-items: flex-end; }
         .dm-bubble {
-            max-width: 76%; padding: 9px 13px; border-radius: 18px; font-size: 14.5px; line-height: 1.4;
+            width: fit-content; max-width: 100%; padding: 9px 13px; border-radius: 18px; font-size: 14.5px; line-height: 1.4;
             white-space: pre-wrap; word-break: break-word; animation: postSlideIn 0.25s ease;
         }
         .dm-bubble-row.mine .dm-bubble { background: var(--nexus); color: #fff; border-bottom-right-radius: 5px; }
