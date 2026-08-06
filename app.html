@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>cliq.</title>
     <link rel="icon" href="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&family=Baloo+2:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="style.css">
 <script>
@@ -209,14 +209,11 @@
         <h2>Einstellungen</h2>
     </div>
     <div class="card" style="padding:0;overflow:hidden;margin-bottom:14px;">
-        <div class="profile-preview">
-            <label style="cursor:pointer;position:relative;display:block;">
+        <div class="profile-preview" onclick="openProfileModal(auth.currentUser.uid)" style="cursor:pointer;">
+            <div style="position:relative;display:block;">
                 <img id="settings-avatar" src="" class="profile-preview-img">
-                <div style="position:absolute;bottom:0;right:0;background:var(--nexus);color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(0,0,0,0.3);border:2px solid var(--card);transition:transform 0.2s;">
-                    <i data-lucide="camera" style="width:14px;"></i>
-                </div>
-                <input type="file" id="profile-img-input" accept="image/*" class="hidden" onchange="uploadProfileImage(event)">
-            </label>
+                <span class="presence-dot presence-dot-lg online" id="settings-presence-dot"></span>
+            </div>
             <div class="profile-preview-name" id="settings-preview-name">&ndash;</div>
             <div class="profile-preview-username" id="settings-preview-user">&ndash;</div>
         </div>
@@ -232,6 +229,11 @@
                 <span class="red-dot hidden" id="following-red-dot"></span>
             </div>
             <span class="settings-row-label">Folge ich</span>
+            <i data-lucide="chevron-right" class="settings-row-chevron" style="width:16px;"></i>
+        </div>
+        <div class="settings-row" onclick="openFollowersListFor(auth.currentUser.uid)">
+            <div class="settings-row-icon" style="background:var(--nexus-soft);"><i data-lucide="heart-handshake" style="width:16px;color:var(--nexus);"></i></div>
+            <span class="settings-row-label">Follower</span>
             <i data-lucide="chevron-right" class="settings-row-chevron" style="width:16px;"></i>
         </div>
     </div>
@@ -338,45 +340,141 @@
     <div style="height:30px;"></div>
 </div>
 
-<div id="profile-modal" onclick="closeProfileModal()">
-    <div class="profile-modal-card" onclick="event.stopPropagation()">
-        <div style="width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px;"></div>
-        <div class="profile-modal-header">
-            <img id="pmodal-avatar" src="" class="profile-modal-avatar">
-            <div style="flex:1;">
-                <div class="profile-modal-name" id="pmodal-name">&ndash;</div>
-                <div class="profile-modal-username" id="pmodal-username">&ndash;</div>
+<div id="profile-screen" class="profile-screen">
+    <div class="profile-screen-inner" id="profile-screen-inner">
+        <div class="profile-banner-wrap" id="profile-banner-wrap">
+            <img id="profile-banner-img" class="profile-banner-img" src="" alt="">
+            <button class="profile-close-btn" onclick="closeProfileModal()"><i data-lucide="x"></i></button>
+        </div>
+        <div class="profile-head">
+            <div class="profile-avatar-wrap">
+                <img id="pmodal-avatar" class="profile-screen-avatar" src="">
+                <span class="presence-dot" id="profile-presence-dot"></span>
             </div>
-            <button onclick="closeProfileModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;padding:4px;transition:transform 0.2s;"><i data-lucide="x"></i></button>
+            <div class="profile-head-actions" id="pmodal-follow-btn-wrap"></div>
         </div>
-        <div class="profile-modal-bio" id="pmodal-bio"></div>
-        <div id="pmodal-stats-wrap" style="display:flex;gap:20px;margin-top:14px;">
-            <div><span style="font-weight:700;font-size:15px;" id="pmodal-following-count">0</span> <span style="color:var(--sub);font-size:13px;">Folge ich</span></div>
-            <div><span style="font-weight:700;font-size:15px;" id="pmodal-follower-count">0</span> <span style="color:var(--sub);font-size:13px;">Follower</span></div>
+        <div class="profile-name-block">
+            <div class="profile-screen-name" id="pmodal-name">&ndash;</div>
+            <div class="profile-screen-username" id="pmodal-username">&ndash;</div>
         </div>
-        <div id="pmodal-follow-btn-wrap" style="margin-top:12px;"></div>
-        <div class="profile-modal-posts">
-            <div class="profile-modal-posts-title">Posts</div>
+        <div class="profile-tabs">
+            <button class="profile-tab active" id="profile-tab-info" onclick="switchProfileTab('info')">Info</button>
+            <button class="profile-tab" id="profile-tab-posts" onclick="switchProfileTab('posts')">Posts</button>
+        </div>
+        <div class="profile-tab-content" id="profile-tab-content-info">
+            <div class="profile-info-card">
+                <div class="profile-info-label">Bio</div>
+                <div class="profile-info-bio" id="pmodal-bio"></div>
+                <div id="profile-info-divider" class="profile-info-divider hidden"></div>
+                <div class="profile-info-label">Mitglied seit</div>
+                <div class="profile-info-member-since" id="pmodal-member-since">&ndash;</div>
+            </div>
+            <div class="profile-stats-row" id="pmodal-stats-wrap">
+                <span onclick="openFollowingListFor(currentProfileUid)"><b id="pmodal-following-count">0</b> Folge ich</span>
+                <span onclick="openFollowersListFor(currentProfileUid)"><b id="pmodal-follower-count">0</b> Follower</span>
+            </div>
+            <div class="profile-links-card hidden" id="profile-links-card">
+                <div class="profile-info-label">Verkn&#252;pfungen</div>
+                <div id="profile-links-list"></div>
+            </div>
+            <button class="profile-report-btn hidden" id="profile-report-btn" onclick="openReportModal('user', currentProfileUid, currentProfileUid)"><i data-lucide="flag" style="width:12px;"></i> Profil melden</button>
+        </div>
+        <div class="profile-tab-content hidden" id="profile-tab-content-posts">
             <div class="profile-grid" id="pmodal-grid"></div>
         </div>
     </div>
 </div>
 
-<div id="edit-profile-modal" class="lightbox">
-    <div class="modal-inner" onclick="event.stopPropagation()">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-            <h3 class="modal-title" style="margin:0;">Profil bearbeiten</h3>
-            <button onclick="document.getElementById('edit-profile-modal').style.display='none'" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
+<div id="edit-profile-screen" class="profile-screen">
+    <div class="profile-screen-inner">
+        <div class="edit-profile-header">
+            <button onclick="closeEditProfile()" class="settings-back-btn"><i data-lucide="x" style="width:18px;"></i></button>
+            <h2>Profil</h2>
+            <button onclick="saveProfile()" class="edit-profile-save-btn">Speichern</button>
         </div>
-        <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);display:block;margin-bottom:6px;">Anzeigename</label>
-        <input type="text" id="edit-displayname" class="modal-input" placeholder="Dein Name" style="margin-bottom:2px;">
-        <div id="displayname-cooldown-hint" style="font-size:11.5px;color:var(--warning);margin-bottom:10px;display:none;"></div>
-        <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);display:block;margin-bottom:6px;">Nutzername</label>
-        <input type="text" id="edit-username" class="modal-input" placeholder="@username" style="margin-bottom:2px;">
-        <div id="username-cooldown-hint" style="font-size:11.5px;color:var(--warning);margin-bottom:10px;display:none;"></div>
-        <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);display:block;margin-bottom:6px;">Bio</label>
-        <textarea id="edit-bio" class="modal-input" placeholder="Erz&#228;hl etwas &#252;ber dich..." style="height:80px;resize:none;"></textarea>
-        <button onclick="saveProfile()" class="btn-primary">Speichern</button>
+        <div class="profile-banner-wrap" id="edit-banner-wrap">
+            <img id="edit-banner-preview" class="profile-banner-img" src="" alt="">
+            <div class="profile-preview-label">Profilvorschau</div>
+            <button class="profile-banner-edit-btn" onclick="document.getElementById('profile-banner-input').click()"><i data-lucide="pencil" style="width:14px;"></i></button>
+            <input type="file" id="profile-banner-input" accept="image/*" class="hidden" onchange="uploadProfileBanner(event)">
+        </div>
+        <div class="edit-avatar-row">
+            <label style="cursor:pointer;position:relative;display:inline-block;">
+                <img id="edit-avatar-preview" class="profile-screen-avatar" src="">
+                <div class="profile-avatar-edit-badge"><i data-lucide="pencil" style="width:12px;"></i></div>
+                <input type="file" id="profile-img-input" accept="image/*" class="hidden" onchange="uploadProfileImage(event)">
+            </label>
+        </div>
+        <div class="edit-profile-body">
+            <div class="profile-screen-name" id="edit-preview-name" style="margin-bottom:2px;">&ndash;</div>
+            <div class="profile-screen-username" id="edit-preview-username" style="margin-bottom:18px;">&ndash;</div>
+
+            <label class="edit-field-label">Anzeigename</label>
+            <input type="text" id="edit-displayname" class="modal-input" placeholder="Dein Name" oninput="updateEditProfilePreview()" style="margin-bottom:2px;">
+            <div id="displayname-cooldown-hint" class="cooldown-hint"></div>
+
+            <label class="edit-field-label">Anzeigenamen-Stile</label>
+            <div class="namestyle-row" onclick="openNameStylePicker()">
+                <div class="namestyle-preview-icon" id="namestyle-preview-icon">Gg</div>
+                <div style="flex:1;">
+                    <div class="namestyle-row-label" id="namestyle-row-label">Standard</div>
+                </div>
+                <div class="namestyle-row-swatch" id="namestyle-row-swatch"></div>
+                <i data-lucide="chevron-right" style="width:16px;color:var(--sub);"></i>
+            </div>
+
+            <label class="edit-field-label">Pronomen</label>
+            <div class="pronouns-row">
+                <input type="text" id="edit-pronouns" class="modal-input" placeholder="z. B. Deutsch &#8226; Roblox Dev" oninput="updateEditProfilePreview()" style="margin-bottom:0;">
+                <button type="button" onclick="document.getElementById('edit-pronouns').value='';updateEditProfilePreview();"><i data-lucide="x" style="width:14px;"></i></button>
+            </div>
+
+            <label class="edit-field-label">Bio</label>
+            <textarea id="edit-bio" class="modal-input" placeholder="Erz&#228;hl etwas &#252;ber dich..." style="height:80px;resize:none;" maxlength="200" oninput="updateEditProfilePreview()"></textarea>
+
+            <label class="edit-field-label">Verkn&#252;pfungen</label>
+            <div id="edit-links-list"></div>
+            <button type="button" class="add-link-btn" onclick="addLinkField()"><i data-lucide="plus" style="width:14px;"></i> Link hinzuf&#252;gen</button>
+
+            <label class="edit-field-label">Profilschema</label>
+            <div class="schema-row">
+                <div class="schema-swatch-wrap">
+                    <div class="schema-swatch" id="schema-primary-swatch" onclick="openColorPicker('profilePrimary')"><i data-lucide="pencil" style="width:14px;color:#fff;"></i></div>
+                    <span>Prim&#228;r</span>
+                </div>
+                <div class="schema-swatch-wrap">
+                    <div class="schema-swatch" id="schema-accent-swatch" onclick="openColorPicker('profileAccent')"><i data-lucide="pencil" style="width:14px;color:#fff;"></i></div>
+                    <span>Akzent</span>
+                </div>
+            </div>
+
+            <label class="edit-field-label">Nutzername</label>
+            <input type="text" id="edit-username" class="modal-input" placeholder="@username" style="margin-bottom:2px;">
+            <div id="username-cooldown-hint" class="cooldown-hint"></div>
+        </div>
+    </div>
+</div>
+
+<div id="followers-screen" class="container hidden">
+    <div class="bookmarks-header">
+        <button class="settings-back-btn" onclick="closeFollowersList()"><i data-lucide="arrow-left" style="width:18px;"></i></button>
+        <h2>Follower</h2>
+    </div>
+    <div id="followers-list"></div>
+</div>
+
+<div id="namestyle-modal" class="lightbox">
+    <div class="modal-inner" onclick="event.stopPropagation()">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h3 class="modal-title" style="margin:0;">Anzeigenamen-Stil</h3>
+            <button onclick="closeNameStylePicker()" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
+        </div>
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);margin-bottom:10px;">Farbe</div>
+        <div class="namestyle-preset-grid" id="namestyle-preset-grid"></div>
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);margin:16px 0 10px;">Schriftart</div>
+        <div class="namestyle-font-row" id="namestyle-font-row"></div>
+        <div class="namestyle-live-preview" id="namestyle-live-preview">Vorschau</div>
+        <button onclick="saveNameStyle()" class="btn-primary" style="margin-top:16px;">&#220;bernehmen</button>
     </div>
 </div>
 
