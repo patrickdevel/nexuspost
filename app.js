@@ -12,6 +12,7 @@
     };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    window.auth = auth;
     const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
     const imgbbKey = "1cb3871dd6829d7133f3285c289ffc0a";
@@ -50,7 +51,7 @@
         // Prevents secondary modals (music picker, mini-player, poll, alert) from being
         // left invisibly open/blocking clicks after their parent screen was dismissed.
         stopMusicPreview();
-        const ids = ['music-modal', 'music-player-modal', 'poll-modal', 'alert-modal', 'report-modal', 'color-picker-modal'];
+        const ids = ['music-modal', 'music-player-modal', 'poll-modal', 'alert-modal', 'report-modal', 'color-picker-modal', 'namestyle-modal'];
         ids.forEach(id => {
             const elmt = document.getElementById(id);
             if (elmt) elmt.style.display = 'none';
@@ -373,6 +374,71 @@
         return (str || '').toString()
             .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
+
+    /* ══════════════ PRESENCE (Online/Offline) ══════════════ */
+    const ONLINE_THRESHOLD_MS = 50000; // Heartbeat alle 25s + Puffer
+    let presenceHeartbeatInterval = null;
+    function isUserOnline(lastActive) {
+        if (!lastActive) return false;
+        const t = lastActive.toDate ? lastActive.toDate().getTime() : 0;
+        return (Date.now() - t) < ONLINE_THRESHOLD_MS;
+    }
+    function updatePresenceDot(elId, lastActive) {
+        const dot = document.getElementById(elId);
+        if (!dot) return;
+        const online = isUserOnline(lastActive);
+        dot.classList.toggle('online', online);
+        dot.classList.toggle('offline', !online);
+    }
+    function sendPresenceHeartbeat() {
+        if (!auth.currentUser) return;
+        updateDoc(doc(db, "users", auth.currentUser.uid), { lastActive: serverTimestamp() }).catch(() => {});
+    }
+    function startPresenceHeartbeat() {
+        sendPresenceHeartbeat();
+        if (presenceHeartbeatInterval) clearInterval(presenceHeartbeatInterval);
+        presenceHeartbeatInterval = setInterval(sendPresenceHeartbeat, 25000);
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') sendPresenceHeartbeat();
+        });
+    }
+    function stopPresenceHeartbeat() {
+        if (presenceHeartbeatInterval) { clearInterval(presenceHeartbeatInterval); presenceHeartbeatInterval = null; }
+    }
+
+    /* ══════════════ ANZEIGENAMEN-STILE (Farbe + Schrift, überall angewendet) ══════════════ */
+    const NAME_STYLE_PRESETS = [
+        { id: 'sakura', label: 'Sakura', color1: '#22c55e', color2: '#2dd4bf' },
+        { id: 'ocean', label: 'Ocean', color1: '#0ea5e9', color2: '#22d3ee' },
+        { id: 'sunset', label: 'Sunset', color1: '#f97316', color2: '#ec4899' },
+        { id: 'royal', label: 'Royal', color1: '#8b5cf6', color2: '#6366f1' },
+    ];
+    const NAME_FONTS = [
+        { id: 'default', label: 'Standard', family: 'inherit' },
+        { id: 'display', label: 'Display', family: "'Syne', sans-serif" },
+        { id: 'rounded', label: 'Rund', family: "'Baloo 2', sans-serif" },
+        { id: 'mono', label: 'Mono', family: "'Space Mono', monospace" },
+    ];
+    function nameStyleCss(nameStyle) {
+        if (!nameStyle) return '';
+        let css = '';
+        const font = NAME_FONTS.find(f => f.id === nameStyle.font);
+        if (font && font.id !== 'default') css += `font-family:${font.family};`;
+        if (nameStyle.color1 && nameStyle.color2) {
+            css += `background-image:linear-gradient(90deg,${nameStyle.color1},${nameStyle.color2});`;
+        } else if (nameStyle.color1) {
+            css += `color:${nameStyle.color1};`;
+        }
+        return css;
+    }
+    function styledNameHTML(name, nameStyle) {
+        const text = name || '\u2013';
+        const css = nameStyleCss(nameStyle);
+        if (!css) return text;
+        const cls = (nameStyle && nameStyle.color1 && nameStyle.color2) ? 'styled-name-gradient' : '';
+        return `<span class="${cls}" style="${css}">${text}</span>`;
+    }
+
     window.openMusicModal = (target) => {
         musicPickerTarget = target;
         document.getElementById('music-modal').style.display = 'flex';
@@ -828,8 +894,8 @@
         const { r, g, b } = hexToRgb(hex);
         return rgbToHsv(r, g, b);
     }
-    const CP_SWATCH_MAP = { accent: 'theme-dot-custom', bgColor: 'bg-color-input', bgFrom: 'bg-gradient-from', bgTo: 'bg-gradient-to' };
-    const CP_DEFAULTS = { accent: '#1877f2', bgColor: '#f0f2f5', bgFrom: '#1877f2', bgTo: '#8b5cf6' };
+    const CP_SWATCH_MAP = { accent: 'theme-dot-custom', bgColor: 'bg-color-input', bgFrom: 'bg-gradient-from', bgTo: 'bg-gradient-to', profilePrimary: 'schema-primary-swatch', profileAccent: 'schema-accent-swatch' };
+    const CP_DEFAULTS = { accent: '#1877f2', bgColor: '#f0f2f5', bgFrom: '#1877f2', bgTo: '#8b5cf6', profilePrimary: '#1877f2', profileAccent: '#8b5cf6', nameColor: '#1877f2' };
     let cpTarget = null, cpH = 0, cpS = 1, cpV = 1, cpOriginalHex = '#1877f2';
     function cpCurrentHex() {
         const { r, g, b } = hsvToRgb(cpH, cpS, cpV);
@@ -841,6 +907,14 @@
         else if (cpTarget === 'bgColor') window.previewBgColor(hex);
         else if (cpTarget === 'bgFrom') window.previewBgGradient(hex, undefined);
         else if (cpTarget === 'bgTo') window.previewBgGradient(undefined, hex);
+        else if (cpTarget === 'profilePrimary' || cpTarget === 'profileAccent') {
+            const el = document.getElementById(CP_SWATCH_MAP[cpTarget]);
+            if (el) el.style.background = hex;
+        } else if (cpTarget === 'nameColor') {
+            currentNameStyle.preset = 'custom'; currentNameStyle.color1 = hex; currentNameStyle.color2 = null;
+            renderNameStylePresetGrid();
+            updateNameStyleLivePreview();
+        }
     }
     function cpRender() {
         const hex = cpCurrentHex();
@@ -908,12 +982,17 @@
         el.addEventListener('touchmove', move, { passive: false });
         el.addEventListener('touchend', end);
     }
+    let cpReopenNameStyleModal = false;
     window.openColorPicker = (target) => {
         cpTarget = target;
         const swatchId = CP_SWATCH_MAP[target];
-        cpOriginalHex = getSwatchColor(swatchId) || CP_DEFAULTS[target];
+        cpOriginalHex = target === 'nameColor' ? (currentNameStyle.color1 || CP_DEFAULTS.nameColor) : (getSwatchColor(swatchId) || CP_DEFAULTS[target]);
         const hsv = hexToHsv(cpOriginalHex);
         cpH = hsv.h; cpS = hsv.s; cpV = hsv.v;
+        if (target === 'nameColor') {
+            cpReopenNameStyleModal = document.getElementById('namestyle-modal').style.display === 'flex';
+            document.getElementById('namestyle-modal').style.display = 'none';
+        }
         const modal = document.getElementById('color-picker-modal');
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
@@ -924,13 +1003,24 @@
         requestAnimationFrame(cpRender);
         if (window.lucide) lucide.createIcons({ root: modal });
     };
+    function cpCloseAndMaybeReturn() {
+        document.getElementById('color-picker-modal').style.display = 'none';
+        document.body.style.overflow = '';
+        if (cpReopenNameStyleModal) {
+            document.getElementById('namestyle-modal').style.display = 'flex';
+            cpReopenNameStyleModal = false;
+        }
+        cpTarget = null;
+    }
     window.cancelColorPicker = () => {
         if (cpTarget === 'accent') window.previewCustomAccent(getSwatchColor('theme-dot-custom') || cpOriginalHex);
         else if (cpTarget === 'bgColor') window.previewBgColor(getSwatchColor('bg-color-input') || cpOriginalHex);
         else if (cpTarget === 'bgFrom' || cpTarget === 'bgTo') window.previewBgGradient();
-        document.getElementById('color-picker-modal').style.display = 'none';
-        document.body.style.overflow = '';
-        cpTarget = null;
+        else if (cpTarget === 'profilePrimary' || cpTarget === 'profileAccent') {
+            const el = document.getElementById(CP_SWATCH_MAP[cpTarget]);
+            if (el) el.style.background = el.dataset.color || CP_DEFAULTS[cpTarget];
+        }
+        cpCloseAndMaybeReturn();
     };
     window.saveColorPicker = () => {
         const hex = cpCurrentHex();
@@ -938,9 +1028,15 @@
         else if (cpTarget === 'bgColor') window.setBgColor(hex);
         else if (cpTarget === 'bgFrom') window.setBgGradient(hex, undefined);
         else if (cpTarget === 'bgTo') window.setBgGradient(undefined, hex);
-        document.getElementById('color-picker-modal').style.display = 'none';
-        document.body.style.overflow = '';
-        cpTarget = null;
+        else if (cpTarget === 'profilePrimary' || cpTarget === 'profileAccent') {
+            setSwatchColor(CP_SWATCH_MAP[cpTarget], hex);
+        } else if (cpTarget === 'nameColor') {
+            currentNameStyle.preset = 'custom'; currentNameStyle.color1 = hex; currentNameStyle.color2 = null;
+            renderNameStylePresetGrid();
+            renderNameStyleRowPreview();
+            updateNameStyleLivePreview();
+        }
+        cpCloseAndMaybeReturn();
         showToast('Farbe gespeichert.');
     };
     window.useEyedropper = async () => {
@@ -980,10 +1076,14 @@
         const daysLeft = Math.ceil(remainingMs / DAY_MS);
         return `\u00c4nderbar in ${daysLeft} Tag${daysLeft !== 1 ? 'en' : ''}`;
     }
+    let currentNameStyle = { preset: null, color1: null, color2: null, font: 'default' };
     window.showEditProfile = () => {
         document.getElementById('edit-displayname').value = userData.displayname || '';
         document.getElementById('edit-username').value = userData.username || '';
         document.getElementById('edit-bio').value = userData.bio || '';
+        document.getElementById('edit-pronouns').value = userData.pronouns || '';
+        document.getElementById('edit-avatar-preview').src = userData.photoURL || '';
+        document.getElementById('edit-banner-preview').src = userData.bannerURL || '';
         const dnHint = document.getElementById('displayname-cooldown-hint');
         const unHint = document.getElementById('username-cooldown-hint');
         const dnMsg = formatCooldownHint(userData.displaynameChangedAt, 7);
@@ -992,13 +1092,133 @@
         dnHint.style.display = dnMsg ? 'block' : 'none';
         unHint.textContent = unMsg || '';
         unHint.style.display = unMsg ? 'block' : 'none';
-        document.getElementById('edit-profile-modal').style.display = 'flex';
+
+        currentNameStyle = userData.nameStyle ? { ...userData.nameStyle } : { preset: null, color1: null, color2: null, font: 'default' };
+        renderNameStyleRowPreview();
+
+        const schema = userData.profileSchema || {};
+        setSwatchColor('schema-primary-swatch', schema.primary || '#1877f2');
+        setSwatchColor('schema-accent-swatch', schema.accent || '#8b5cf6');
+
+        renderEditLinks(Array.isArray(userData.links) ? userData.links : []);
+        updateEditProfilePreview();
+
+        const screen = document.getElementById('edit-profile-screen');
+        screen.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        void screen.offsetWidth;
+        requestAnimationFrame(() => screen.classList.add('open'));
+        if(window.lucide) lucide.createIcons({root: screen});
+    };
+    window.closeEditProfile = () => {
+        const screen = document.getElementById('edit-profile-screen');
+        screen.classList.remove('open');
+        setTimeout(() => { screen.style.display = 'none'; }, 380);
+        document.body.style.overflow = '';
+    };
+    window.updateEditProfilePreview = () => {
+        const dn = document.getElementById('edit-displayname').value || userData.displayname || '\u2013';
+        document.getElementById('edit-preview-name').innerHTML = styledNameHTML(dn, currentNameStyle);
+        const pronouns = document.getElementById('edit-pronouns').value;
+        let line = '@' + (userData.username || '\u2013');
+        if (pronouns) line += ' \u00b7 ' + pronouns;
+        document.getElementById('edit-preview-username').textContent = line;
+    };
+    function renderNameStyleRowPreview() {
+        const preset = NAME_STYLE_PRESETS.find(p => p.id === currentNameStyle.preset);
+        const label = currentNameStyle.preset === 'custom' ? 'Eigene Farbe' : (preset ? preset.label : 'Standard');
+        document.getElementById('namestyle-row-label').textContent = label;
+        const swatch = document.getElementById('namestyle-row-swatch');
+        if (currentNameStyle.color1 && currentNameStyle.color2) swatch.style.background = `linear-gradient(90deg,${currentNameStyle.color1},${currentNameStyle.color2})`;
+        else if (currentNameStyle.color1) swatch.style.background = currentNameStyle.color1;
+        else swatch.style.background = 'var(--nexus)';
+    }
+    window.openNameStylePicker = () => {
+        renderNameStylePresetGrid();
+        renderNameStyleFontRow();
+        updateNameStyleLivePreview();
+        document.getElementById('namestyle-modal').style.display = 'flex';
         if(window.lucide) lucide.createIcons();
     };
+    window.closeNameStylePicker = () => {
+        document.getElementById('namestyle-modal').style.display = 'none';
+    };
+    function renderNameStylePresetGrid() {
+        const grid = document.getElementById('namestyle-preset-grid');
+        const items = [{ id: 'default', label: 'Standard' }, ...NAME_STYLE_PRESETS, { id: 'custom', label: 'Eigene Farbe' }];
+        grid.innerHTML = items.map(p => {
+            const selected = (currentNameStyle.preset || 'default') === p.id;
+            let bg;
+            if (p.id === 'default') bg = 'var(--ios-input)';
+            else if (p.id === 'custom') bg = (currentNameStyle.preset === 'custom' && currentNameStyle.color1) ? currentNameStyle.color1 : 'conic-gradient(red,yellow,lime,cyan,blue,magenta,red)';
+            else bg = `linear-gradient(135deg, ${p.color1}, ${p.color2})`;
+            return `<div class="namestyle-preset-item" onclick="selectNameStylePreset('${p.id}')">
+                <div class="namestyle-preset-swatch ${selected?'selected':''}" style="background:${bg};"></div>
+                <span>${p.label}</span>
+            </div>`;
+        }).join('');
+    }
+    window.selectNameStylePreset = (id) => {
+        if (id === 'custom') { openColorPicker('nameColor'); return; }
+        if (id === 'default') {
+            currentNameStyle.preset = null; currentNameStyle.color1 = null; currentNameStyle.color2 = null;
+        } else {
+            const preset = NAME_STYLE_PRESETS.find(p => p.id === id);
+            currentNameStyle.preset = id; currentNameStyle.color1 = preset.color1; currentNameStyle.color2 = preset.color2;
+        }
+        renderNameStylePresetGrid();
+        updateNameStyleLivePreview();
+    };
+    function renderNameStyleFontRow() {
+        const row = document.getElementById('namestyle-font-row');
+        row.innerHTML = NAME_FONTS.map(f => `<button type="button" class="namestyle-font-btn ${(currentNameStyle.font||'default')===f.id?'active':''}" onclick="selectNameStyleFont('${f.id}')" style="font-family:${f.family};">${f.label}</button>`).join('');
+    }
+    window.selectNameStyleFont = (id) => {
+        currentNameStyle.font = id;
+        renderNameStyleFontRow();
+        updateNameStyleLivePreview();
+    };
+    function updateNameStyleLivePreview() {
+        const el = document.getElementById('namestyle-live-preview');
+        el.innerHTML = styledNameHTML(document.getElementById('edit-displayname')?.value || userData?.displayname || 'Vorschau', currentNameStyle);
+    }
+    window.saveNameStyle = () => {
+        renderNameStyleRowPreview();
+        updateEditProfilePreview();
+        closeNameStylePicker();
+    };
+    window.addLinkField = () => addLinkFieldRow('', '');
+    function addLinkFieldRow(label, url) {
+        const wrap = document.getElementById('edit-links-list');
+        if (wrap.children.length >= 5) { showToast('Maximal 5 Verkn\u00fcpfungen'); return; }
+        const row = document.createElement('div');
+        row.className = 'edit-link-row';
+        row.innerHTML = `<input type="text" class="modal-input link-label-input" placeholder="Name (z.B. GitHub)" value="${escapeHtml(label)}" style="margin-bottom:0;">
+            <input type="text" class="modal-input link-url-input" placeholder="https://..." value="${escapeHtml(url)}" style="margin-bottom:0;">
+            <button type="button" onclick="this.parentElement.remove()"><i data-lucide="x" style="width:14px;"></i></button>`;
+        wrap.appendChild(row);
+        if(window.lucide) lucide.createIcons({root: row});
+    }
+    function renderEditLinks(links) {
+        const wrap = document.getElementById('edit-links-list');
+        wrap.innerHTML = '';
+        links.forEach(l => addLinkFieldRow(l.label || '', l.url || ''));
+    }
+    function collectEditLinks() {
+        const rows = document.querySelectorAll('#edit-links-list .edit-link-row');
+        const links = [];
+        rows.forEach(r => {
+            const label = r.querySelector('.link-label-input').value.trim();
+            const url = r.querySelector('.link-url-input').value.trim();
+            if (url) links.push({ label: label || url, url });
+        });
+        return links;
+    }
     window.saveProfile = async () => {
         const dn = document.getElementById('edit-displayname').value.trim();
         const un = document.getElementById('edit-username').value.replace('@','').trim();
         const bio = document.getElementById('edit-bio').value.trim();
+        const pronouns = document.getElementById('edit-pronouns').value.trim();
         if (!dn) return showToast('Bitte Namen eingeben');
         if (!un) return showToast('Bitte Nutzername eingeben');
 
@@ -1027,18 +1247,23 @@
             if (!snap.empty) return showToast('Nutzername bereits vergeben');
         }
 
-        const updates = { displayname: dn, username: un, bio };
+        const links = collectEditLinks();
+        const profileSchema = {
+            primary: getSwatchColor('schema-primary-swatch') || '#1877f2',
+            accent: getSwatchColor('schema-accent-swatch') || '#8b5cf6'
+        };
+        const nameStyle = currentNameStyle.color1 ? { ...currentNameStyle } : null;
+
+        const updates = { displayname: dn, username: un, bio, pronouns, links, nameStyle, profileSchema };
         if (dnChanged) updates.displaynameChangedAt = now;
         if (unChanged) updates.usernameChangedAt = now;
 
         await updateDoc(doc(db, "users", auth.currentUser.uid), updates);
-        userData.displayname = dn; userData.username = un; userData.bio = bio;
-        if (dnChanged) userData.displaynameChangedAt = now;
-        if (unChanged) userData.usernameChangedAt = now;
+        Object.assign(userData, updates);
         const verifiedHtml = userData.verified ? `<img src="${verifiedIcon}" class="verified-badge">` : '';
-        document.getElementById('settings-preview-name').innerHTML = dn + verifiedHtml;
+        document.getElementById('settings-preview-name').innerHTML = styledNameHTML(dn, nameStyle) + verifiedHtml;
         document.getElementById('settings-preview-user').textContent = '@' + un;
-        document.getElementById('edit-profile-modal').style.display = 'none';
+        closeEditProfile();
         showToast('Profil gespeichert \u2713');
     };
     window.uploadProfileImage = async (e) => {
@@ -1055,6 +1280,8 @@
             await updateDoc(doc(db, "users", auth.currentUser.uid), { photoURL: newUrl });
             userData.photoURL = newUrl;
             document.getElementById('settings-avatar').src = newUrl;
+            const editPreview = document.getElementById('edit-avatar-preview');
+            if (editPreview) editPreview.src = newUrl;
             showToast('Profilbild aktualisiert \u2713');
         } catch (err) {
             showToast('Fehler beim Hochladen des Profilbilds.');
@@ -1062,34 +1289,91 @@
             e.target.value = '';
         }
     };
+    window.uploadProfileBanner = async (e) => {
+        const file = e.target.files[0]; if (!file) return;
+        showToast('Banner wird komprimiert\u2026');
+        try {
+            const compressed = await compressImage(file, 1200, 0.82);
+            showToast('Banner wird hochgeladen\u2026');
+            const fd = new FormData(); fd.append("image", compressed);
+            const res = await fetch("https://api.imgbb.com/1/upload?key="+imgbbKey, { method:"POST", body:fd });
+            const j = await res.json();
+            if (!j?.data?.url) throw new Error('Upload fehlgeschlagen');
+            const newUrl = j.data.url;
+            await updateDoc(doc(db, "users", auth.currentUser.uid), { bannerURL: newUrl });
+            userData.bannerURL = newUrl;
+            document.getElementById('edit-banner-preview').src = newUrl;
+            showToast('Banner aktualisiert \u2713');
+        } catch (err) {
+            showToast('Fehler beim Hochladen des Banners.');
+        } finally {
+            e.target.value = '';
+        }
+    };
+    function formatMemberSince(createdAt) {
+        const d = createdAt?.toDate ? createdAt.toDate() : null;
+        if (!d) return 'Unbekannt';
+        return d.toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+    window.currentProfileUid = null;
+    let profileUnsub = null;
+    let profilePresenceInterval = null;
+    let profileLastActiveValue = null;
     window.openProfileModal = async (uid) => {
+        window.currentProfileUid = uid;
         const uSnap = await getDoc(doc(db, "users", uid));
         const u = uSnap.data() || {};
         allUsersCache[uid] = u;
+        document.getElementById('profile-banner-img').src = u.bannerURL || '';
         document.getElementById('pmodal-avatar').src = u.photoURL || '';
-        document.getElementById('pmodal-name').innerHTML = (u.displayname || '\u2013') + (u.verified ? `<img src="${verifiedIcon}" style="width:18px;height:18px;">` : '');
-        document.getElementById('pmodal-username').textContent = '@' + (u.username || '\u2013');
-        document.getElementById('pmodal-bio').textContent = u.bio || '';
+        document.getElementById('pmodal-name').innerHTML = styledNameHTML(u.displayname || '\u2013', u.nameStyle) + (u.verified ? ` <img src="${verifiedIcon}" style="width:18px;height:18px;">` : '');
+        let usernameLine = '@' + (u.username || '\u2013');
+        if (u.pronouns) usernameLine += ' \u00b7 ' + u.pronouns;
+        document.getElementById('pmodal-username').textContent = usernameLine;
+        document.getElementById('pmodal-bio').textContent = u.bio || 'Noch keine Bio.';
+        document.getElementById('pmodal-member-since').textContent = formatMemberSince(u.createdAt);
+
+        profileLastActiveValue = u.lastActive || null;
+        updatePresenceDot('profile-presence-dot', profileLastActiveValue);
+        if (profileUnsub) { profileUnsub(); profileUnsub = null; }
+        profileUnsub = onSnapshot(doc(db, "users", uid), (snap) => {
+            if (!snap.exists()) return;
+            profileLastActiveValue = snap.data().lastActive || null;
+            updatePresenceDot('profile-presence-dot', profileLastActiveValue);
+        }, () => {});
+        if (profilePresenceInterval) clearInterval(profilePresenceInterval);
+        profilePresenceInterval = setInterval(() => updatePresenceDot('profile-presence-dot', profileLastActiveValue), 8000);
+
         const followingCount = Array.isArray(u.following) ? u.following.length : 0;
         document.getElementById('pmodal-following-count').textContent = followingCount;
-        const statsWrap = document.getElementById('pmodal-stats-wrap');
-        const followBtnWrap = document.getElementById('pmodal-follow-btn-wrap');
+        const actionsWrap = document.getElementById('pmodal-follow-btn-wrap');
+        const reportBtn = document.getElementById('profile-report-btn');
         if (uid === auth.currentUser?.uid) {
-            followBtnWrap.innerHTML = '';
+            actionsWrap.innerHTML = `<button class="edit-profile-btn" onclick="closeProfileModal();showEditProfile();"><i data-lucide="pencil" style="width:13px;"></i> Profil bearbeiten</button>`;
+            reportBtn.classList.add('hidden');
         } else {
             const following = Array.isArray(userData?.following) ? userData.following : [];
             const isFollowing = following.includes(uid);
-            followBtnWrap.innerHTML = `<div style="display:flex;gap:8px;">
-                <button class="follow-btn ${isFollowing?'following':''}" data-uid="${uid}" onclick="toggleFollow('${uid}', event)" style="margin:0;flex:1;padding:10px;font-size:14px;">${isFollowing?'Folge ich':'Folgen'}</button>
-                <button onclick="openDmThread('${uid}')" style="flex:1;background:var(--ios-input);color:var(--text);border:none;border-radius:20px;padding:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;text-align:center;">Nachricht</button>
-            </div>
-                <button onclick="openReportModal('user','${uid}','${uid}')" style="background:none;border:none;color:var(--sub);font-size:12.5px;font-family:inherit;cursor:pointer;width:100%;text-align:center;margin-top:8px;padding:4px;display:flex;align-items:center;justify-content:center;gap:5px;"><i data-lucide="flag" style="width:12px;"></i> Profil melden</button>`;
+            actionsWrap.innerHTML = `<button class="follow-btn ${isFollowing?'following':''}" data-uid="${uid}" onclick="toggleFollow('${uid}', event)">${isFollowing?'Folge ich':'Folgen'}</button>
+                <button class="dm-btn-outline" onclick="closeProfileModal();openDmThread('${uid}')">Nachricht</button>`;
+            reportBtn.classList.remove('hidden');
         }
-        // Follower count via query, done async so it doesn't block the rest of the modal
         document.getElementById('pmodal-follower-count').textContent = '\u2026';
         getDocs(query(collection(db, "users"), where("following", "array-contains", uid)))
             .then(snap => { document.getElementById('pmodal-follower-count').textContent = snap.size; })
             .catch(() => { document.getElementById('pmodal-follower-count').textContent = '0'; });
+
+        const linksCard = document.getElementById('profile-links-card');
+        const linksList = document.getElementById('profile-links-list');
+        const links = Array.isArray(u.links) ? u.links.filter(l => l && l.url) : [];
+        if (links.length) {
+            linksList.innerHTML = links.map(l => `<a class="profile-link-row" href="${escapeHtml(l.url)}" target="_blank" rel="noopener noreferrer"><div class="profile-link-icon"><i data-lucide="link" style="width:15px;"></i></div><span class="profile-link-label">${escapeHtml(l.label || l.url)}</span><i data-lucide="arrow-up-right" style="width:14px;color:var(--sub);"></i></a>`).join('');
+            linksCard.classList.remove('hidden');
+        } else {
+            linksCard.classList.add('hidden');
+        }
+
+        window.switchProfileTab('info');
         const grid = document.getElementById('pmodal-grid');
         grid.innerHTML = '';
         const userPosts = allPosts.filter(p => p.uid === uid);
@@ -1097,16 +1381,30 @@
         if (imgPosts.length === 0) {
             grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--sub);font-size:13px;">Noch keine Bilder gepostet.</div>';
         } else {
-            imgPosts.slice(0, 9).forEach(p => {
+            imgPosts.slice(0, 30).forEach(p => {
                 grid.innerHTML += `<div class="profile-grid-item" onclick="closeProfileModal();openLightbox('${p.imageUrl}')"><img src="${p.imageUrl}" loading="lazy"></div>`;
             });
         }
-        document.getElementById('profile-modal').style.display = 'flex';
+        const screen = document.getElementById('profile-screen');
+        screen.style.display = 'flex';
         document.body.style.overflow = 'hidden';
+        void screen.offsetWidth;
+        requestAnimationFrame(() => screen.classList.add('open'));
+        if (window.lucide) lucide.createIcons({root: screen});
     };
     window.closeProfileModal = () => {
-        document.getElementById('profile-modal').style.display = 'none';
+        const screen = document.getElementById('profile-screen');
+        screen.classList.remove('open');
+        setTimeout(() => { screen.style.display = 'none'; }, 380);
         document.body.style.overflow = '';
+        if (profileUnsub) { profileUnsub(); profileUnsub = null; }
+        if (profilePresenceInterval) { clearInterval(profilePresenceInterval); profilePresenceInterval = null; }
+    };
+    window.switchProfileTab = (tab) => {
+        document.getElementById('profile-tab-info').classList.toggle('active', tab === 'info');
+        document.getElementById('profile-tab-posts').classList.toggle('active', tab === 'posts');
+        document.getElementById('profile-tab-content-info').classList.toggle('hidden', tab !== 'info');
+        document.getElementById('profile-tab-content-posts').classList.toggle('hidden', tab !== 'posts');
     };
     window.toggleBookmark = (postId) => {
         const idx = bookmarkedIds.indexOf(postId);
@@ -1290,34 +1588,70 @@
         if (auth.currentUser) {
             try { await setDoc(doc(db, "users", auth.currentUser.uid, "meta", "followingFeed"), { hasNew: false }, { merge: true }); } catch(e) {}
         }
+        followListReturnScreenId = 'settings-screen';
         swipeToScreen(document.getElementById('settings-screen'), document.getElementById('following-screen'), 'forward');
-        const list = document.getElementById('following-list');
         const following = Array.isArray(userData.following) ? userData.following : [];
-        if (!following.length) {
-            list.innerHTML = `<div style="text-align:center;padding:50px 20px;color:var(--sub);">
-                <i data-lucide="users" style="width:38px;height:38px;opacity:0.4;margin-bottom:10px;"></i>
-                <div>Du folgst noch niemandem.</div>
-            </div>`;
-            if(window.lucide) lucide.createIcons({root: list});
-            return;
-        }
-        list.innerHTML = '<div class="music-loading">L\u00e4dt\u2026</div>';
-        const users = await Promise.all(following.map(async uid => ({ uid, data: await getCachedUser(uid) })));
-        list.innerHTML = users.map(({uid, data}) => {
-            const lastPost = allPosts.filter(p => p.uid === uid).sort((a,b) => (b.timestamp?.toMillis?.()||0) - (a.timestamp?.toMillis?.()||0))[0];
-            return `<div class="following-row" onclick="closeFollowingList();openProfileModal('${uid}')">
-                <img src="${data.photoURL||''}" class="following-row-avatar">
-                <div class="following-row-info">
-                    <div class="following-row-name">${data.displayname||'\u2013'} ${data.verified?`<img src="${verifiedIcon}" style="width:14px;height:14px;">`:''}</div>
-                    <div class="following-row-sub">${lastPost ? 'Zuletzt gepostet ' + timeAgo(lastPost.timestamp) : 'Noch nichts gepostet'}</div>
-                </div>
-                <button class="follow-btn following" data-uid="${uid}" onclick="toggleFollow('${uid}', event)">Folge ich</button>
-            </div>`;
-        }).join('');
-        if(window.lucide) lucide.createIcons({root: list});
+        await renderFollowUserList(document.getElementById('following-list'), following, 'Du folgst noch niemandem.');
     };
     window.closeFollowingList = () => {
-        swipeToScreen(document.getElementById('following-screen'), document.getElementById('settings-screen'), 'back');
+        swipeToScreen(document.getElementById('following-screen'), document.getElementById(followListReturnScreenId) || document.getElementById('settings-screen'), 'back');
+    };
+    let followListReturnScreenId = 'settings-screen';
+    async function renderFollowUserList(container, uids, emptyText) {
+        if (!uids.length) {
+            container.innerHTML = `<div style="text-align:center;padding:50px 20px;color:var(--sub);">
+                <i data-lucide="users" style="width:38px;height:38px;opacity:0.4;margin-bottom:10px;"></i>
+                <div>${emptyText}</div>
+            </div>`;
+            if (window.lucide) lucide.createIcons({root: container});
+            return;
+        }
+        container.innerHTML = '<div class="music-loading">L\u00e4dt\u2026</div>';
+        const users = await Promise.all(uids.map(async uid => ({ uid, data: await getCachedUser(uid) })));
+        container.innerHTML = users.map(({uid, data}) => {
+            const lastPost = allPosts.filter(p => p.uid === uid).sort((a,b) => (b.timestamp?.toMillis?.()||0) - (a.timestamp?.toMillis?.()||0))[0];
+            const isSelf = uid === auth.currentUser?.uid;
+            const following = Array.isArray(userData?.following) ? userData.following : [];
+            const isFollowing = following.includes(uid);
+            return `<div class="following-row" onclick="openProfileModal('${uid}')">
+                <img src="${data.photoURL||''}" class="following-row-avatar">
+                <div class="following-row-info">
+                    <div class="following-row-name">${styledNameHTML(data.displayname, data.nameStyle)} ${data.verified?`<img src="${verifiedIcon}" style="width:14px;height:14px;">`:''}</div>
+                    <div class="following-row-sub">${lastPost ? 'Zuletzt gepostet ' + timeAgo(lastPost.timestamp) : 'Noch nichts gepostet'}</div>
+                </div>
+                ${isSelf ? '' : `<button class="follow-btn ${isFollowing?'following':''}" data-uid="${uid}" onclick="toggleFollow('${uid}', event)">${isFollowing?'Folge ich':'Folgen'}</button>`}
+            </div>`;
+        }).join('');
+        if(window.lucide) lucide.createIcons({root: container});
+    }
+    window.openFollowingListFor = async (uid) => {
+        if (!uid) return;
+        if (uid === auth.currentUser?.uid) return window.openFollowingList();
+        if (document.getElementById('profile-screen').classList.contains('open')) closeProfileModal();
+        const fromEl = getCurrentVisibleScreenEl();
+        followListReturnScreenId = fromEl.id;
+        swipeToScreen(fromEl, document.getElementById('following-screen'), 'forward');
+        const u = await getCachedUser(uid);
+        await renderFollowUserList(document.getElementById('following-list'), Array.isArray(u.following) ? u.following : [], 'Folgt noch niemandem.');
+    };
+    window.openFollowersListFor = async (uid) => {
+        if (!uid) return;
+        if (document.getElementById('profile-screen').classList.contains('open')) closeProfileModal();
+        const fromEl = getCurrentVisibleScreenEl();
+        followListReturnScreenId = fromEl.id;
+        swipeToScreen(fromEl, document.getElementById('followers-screen'), 'forward');
+        const list = document.getElementById('followers-list');
+        list.innerHTML = '<div class="music-loading">L\u00e4dt\u2026</div>';
+        try {
+            const snap = await getDocs(query(collection(db, "users"), where("following", "array-contains", uid)));
+            const uids = snap.docs.map(d => d.id);
+            await renderFollowUserList(list, uids, 'Noch keine Follower.');
+        } catch (e) {
+            list.innerHTML = '<div style="text-align:center;padding:50px 20px;color:var(--sub);">Follower konnten nicht geladen werden.</div>';
+        }
+    };
+    window.closeFollowersList = () => {
+        swipeToScreen(document.getElementById('followers-screen'), document.getElementById(followListReturnScreenId) || document.getElementById('main-content'), 'back');
     };
 
     window.toggleNotifPanel = () => {
@@ -1360,11 +1694,17 @@
             document.getElementById('bottom-fade').classList.remove('hidden');
             document.getElementById('main-content').classList.remove('hidden');
             const uDoc = await getDoc(doc(db, "users", user.uid));
-            if (uDoc.exists()) { userData = uDoc.data(); }
-            else {
-                userData = { username: "user_"+Math.floor(Math.random()*9999), displayname: user.displayName, photoURL: user.photoURL, email: user.email, verified: (user.email === adminEmail), bio: '' };
+            if (uDoc.exists()) {
+                userData = uDoc.data();
+                if (!userData.createdAt) {
+                    userData.createdAt = serverTimestamp();
+                    updateDoc(doc(db, "users", user.uid), { createdAt: serverTimestamp() }).catch(() => {});
+                }
+            } else {
+                userData = { username: "user_"+Math.floor(Math.random()*9999), displayname: user.displayName, photoURL: user.photoURL, email: user.email, verified: (user.email === adminEmail), bio: '', createdAt: serverTimestamp() };
                 await setDoc(doc(db, "users", user.uid), userData);
             }
+            startPresenceHeartbeat();
             if (user.email === adminEmail) document.getElementById('admin-alert-btn').classList.remove('hidden');
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark'); document.body.classList.remove('light');
@@ -1384,10 +1724,15 @@
             if(window.lucide) lucide.createIcons();
             setTimeout(adaptNavbar, 300);
         } else {
-            ['navbar','bottom-nav','bottom-fade','main-content','settings-screen','bookmarks-screen','following-screen','dm-list-screen','dm-thread-screen','reports-screen','feedback-screen'].forEach(id => {
+            stopPresenceHeartbeat();
+            ['navbar','bottom-nav','bottom-fade','main-content','settings-screen','bookmarks-screen','following-screen','followers-screen','dm-list-screen','dm-thread-screen','reports-screen','feedback-screen'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.classList.add('hidden');
             });
+            document.getElementById('profile-screen')?.classList.remove('open');
+            document.getElementById('profile-screen')?.style.setProperty('display', 'none');
+            document.getElementById('edit-profile-screen')?.classList.remove('open');
+            document.getElementById('edit-profile-screen')?.style.setProperty('display', 'none');
             document.getElementById('dm-input-bar')?.classList.add('hidden');
             document.getElementById('global-sound-toggle')?.classList.add('hidden');
             document.getElementById('login-screen').classList.remove('hidden');
@@ -1740,7 +2085,7 @@
             <div class="post-header">
                 <img src="${u.photoURL||''}" class="user-img" onclick="openProfileModal('${uid}')">
                 <div style="flex-grow:1;">
-                    <div class="display-name" onclick="openProfileModal('${uid}')">${u.displayname||'\u2013'} ${u.verified?`<img src="${verifiedIcon}" class="verified-badge">`:''}${editedHTML}</div>
+                    <div class="display-name" onclick="openProfileModal('${uid}')">${styledNameHTML(u.displayname, u.nameStyle)} ${u.verified?`<img src="${verifiedIcon}" class="verified-badge">`:''}${editedHTML}</div>
                     <div style="font-size:12px;color:var(--sub);">@${u.username||'\u2013'} \u00b7 <span class="post-time">${timeAgo(p.timestamp)}</span></div>
                 </div>
                 ${followButtonHTML(uid)}
@@ -2048,7 +2393,7 @@
                     list.innerHTML += `<div class="comment-card">
                         <div class="comment-header">
                             <img src="${c.photoURL||''}" class="comment-user-img">
-                            <span class="comment-display-name">${c.displayname||'\u2013'} ${c.verified?`<img src="${verifiedIcon}" style="width:13px;height:13px;">`:''}</span>
+                            <span class="comment-display-name">${styledNameHTML(c.displayname, c.nameStyle)} ${c.verified?`<img src="${verifiedIcon}" style="width:13px;height:13px;">`:''}</span>
                             <span class="comment-time">${timeAgo(c.timestamp)}</span>
                             <div class="comment-actions">
                                 ${(!isCOwner)?`<button class="comment-delete-btn" onclick="openReportModal('comment','${dDoc.id}','${c.uid}',{postId:'${postId}'})" title="Melden"><i data-lucide="flag" style="width:12px;"></i></button>`:''}
@@ -2069,7 +2414,7 @@
         input.value = '';
         const postSnap = await getDoc(doc(db,"posts",postId));
         const postData = postSnap.data();
-        await addDoc(collection(db,"posts",postId,"comments"), { text, uid: auth.currentUser.uid, displayname: userData.displayname, photoURL: userData.photoURL, verified: userData.verified||false, timestamp: serverTimestamp() });
+        await addDoc(collection(db,"posts",postId,"comments"), { text, uid: auth.currentUser.uid, displayname: userData.displayname, photoURL: userData.photoURL, verified: userData.verified||false, nameStyle: userData.nameStyle||null, timestamp: serverTimestamp() });
         sendNotification(postData.uid, 'comment', postId, text.slice(0,50));
     };
     window.deleteComment = async (postId, commentId) => { if(confirm("Kommentar l\u00f6schen?")) await deleteDoc(doc(db,"posts",postId,"comments",commentId)); };
@@ -2272,7 +2617,7 @@
     /* ══════════════ DIRECT MESSAGES (DMs) - request-based ══════════════ */
     function computeDmThreadId(uidA, uidB) { return [uidA, uidB].sort().join('_'); }
     function getCurrentVisibleScreenEl() {
-        const ids = ['dm-thread-screen', 'dm-list-screen', 'reports-screen', 'feedback-screen', 'following-screen', 'bookmarks-screen', 'settings-screen', 'main-content'];
+        const ids = ['dm-thread-screen', 'dm-list-screen', 'reports-screen', 'feedback-screen', 'followers-screen', 'following-screen', 'bookmarks-screen', 'settings-screen', 'main-content'];
         for (const id of ids) {
             const el = document.getElementById(id);
             if (el && !el.classList.contains('hidden')) return el;
@@ -2328,7 +2673,7 @@
         return `<div class="dm-row" onclick="openDmThread('${otherUid}')">
             <img src="${other.photoURL || ''}" class="dm-row-avatar">
             <div class="dm-row-info">
-                <div class="dm-row-name">${other.displayname || '\u2013'} ${other.verified ? `<img src="${verifiedIcon}" style="width:13px;height:13px;">` : ''}</div>
+                <div class="dm-row-name">${styledNameHTML(other.displayname, other.nameStyle)} ${other.verified ? `<img src="${verifiedIcon}" style="width:13px;height:13px;">` : ''}</div>
                 <div class="dm-row-preview ${isUnread ? 'unread' : ''}">${previewText}</div>
             </div>
             <div class="dm-row-meta">
@@ -2367,7 +2712,7 @@
         currentDmInitiatedBy = null;
         const otherUser = await getCachedUser(otherUid);
         document.getElementById('dm-thread-avatar').src = otherUser.photoURL || '';
-        document.getElementById('dm-thread-name').textContent = otherUser.displayname || '\u2013';
+        document.getElementById('dm-thread-name').innerHTML = styledNameHTML(otherUser.displayname, otherUser.nameStyle);
         swipeToScreen(fromEl, document.getElementById('dm-thread-screen'), 'forward');
         document.getElementById('bottom-nav')?.classList.add('hidden');
         document.getElementById('bottom-fade')?.classList.add('hidden');
