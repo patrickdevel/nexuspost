@@ -50,7 +50,7 @@
         // Prevents secondary modals (music picker, mini-player, poll, alert) from being
         // left invisibly open/blocking clicks after their parent screen was dismissed.
         stopMusicPreview();
-        const ids = ['music-modal', 'music-player-modal', 'poll-modal', 'alert-modal', 'report-modal'];
+        const ids = ['music-modal', 'music-player-modal', 'poll-modal', 'alert-modal', 'report-modal', 'color-picker-modal'];
         ids.forEach(id => {
             const elmt = document.getElementById(id);
             if (elmt) elmt.style.display = 'none';
@@ -679,6 +679,13 @@
         return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
     }
     const BG_DARKEN_AMOUNT = 0.18;
+    function getSwatchColor(id) {
+        return document.getElementById(id)?.dataset.color || null;
+    }
+    function setSwatchColor(id, hex) {
+        const el = document.getElementById(id);
+        if (el) { el.dataset.color = hex; el.style.background = hex; }
+    }
     window.setTheme = (theme, el) => {
         ['theme-purple','theme-green','theme-rose','theme-orange'].forEach(c => document.body.classList.remove(c));
         document.body.style.removeProperty('--nexus');
@@ -690,33 +697,51 @@
         localStorage.setItem('accentTheme', theme);
         localStorage.removeItem('customAccentColor');
     };
-    window.setCustomAccent = (color, el) => {
+    function applyCustomAccentVisual(color) {
         ['theme-purple','theme-green','theme-rose','theme-orange'].forEach(c => document.body.classList.remove(c));
         document.body.style.setProperty('--nexus', color);
         document.body.style.setProperty('--nexus-soft', hexToRgba(color, 0.12));
         document.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('selected'));
-        (el || document.getElementById('theme-dot-custom'))?.classList.add('selected');
+        document.getElementById('theme-dot-custom')?.classList.add('selected');
+    }
+    window.previewCustomAccent = (color) => applyCustomAccentVisual(color);
+    window.setCustomAccent = (color) => {
+        applyCustomAccentVisual(color);
+        setSwatchColor('theme-dot-custom', color);
         localStorage.setItem('accentTheme', 'custom');
         localStorage.setItem('customAccentColor', color);
     };
-    function applyBgColor(color) {
+    function applyBgColorVisual(color) {
         document.body.style.background = darkenHex(color, BG_DARKEN_AMOUNT);
+    }
+    window.previewBgColor = (color) => applyBgColorVisual(color);
+    function applyBgColor(color) {
+        applyBgColorVisual(color);
+        setSwatchColor('bg-color-input', color);
         localStorage.setItem('bgColor', color);
     }
     window.setBgColor = (color) => applyBgColor(color);
-    function applyBgGradient() {
-        const fromEl = document.getElementById('bg-gradient-from');
-        const toEl = document.getElementById('bg-gradient-to');
-        const from = fromEl ? fromEl.value : '#1877f2';
-        const to = toEl ? toEl.value : '#8b5cf6';
+    function applyBgGradientVisual(from, to) {
         const gradient = `linear-gradient(135deg, ${darkenHex(from, BG_DARKEN_AMOUNT)}, ${darkenHex(to, BG_DARKEN_AMOUNT)})`;
         document.body.style.background = gradient;
         const preview = document.getElementById('bg-gradient-preview');
         if (preview) preview.style.background = gradient;
+    }
+    window.previewBgGradient = (from, to) => {
+        from = from || getSwatchColor('bg-gradient-from') || '#1877f2';
+        to = to || getSwatchColor('bg-gradient-to') || '#8b5cf6';
+        applyBgGradientVisual(from, to);
+    };
+    function applyBgGradient(from, to) {
+        from = from || getSwatchColor('bg-gradient-from') || '#1877f2';
+        to = to || getSwatchColor('bg-gradient-to') || '#8b5cf6';
+        applyBgGradientVisual(from, to);
+        setSwatchColor('bg-gradient-from', from);
+        setSwatchColor('bg-gradient-to', to);
         localStorage.setItem('bgGradientFrom', from);
         localStorage.setItem('bgGradientTo', to);
     }
-    window.setBgGradient = () => applyBgGradient();
+    window.setBgGradient = (from, to) => applyBgGradient(from, to);
     window.setBgMode = (mode) => {
         document.querySelectorAll('.bg-mode-btn').forEach(b => b.classList.remove('active'));
         document.getElementById('bg-mode-' + mode)?.classList.add('active');
@@ -726,7 +751,7 @@
         if (mode === 'default') {
             document.body.style.removeProperty('background');
         } else if (mode === 'color') {
-            applyBgColor(document.getElementById('bg-color-input')?.value || '#f0f2f5');
+            applyBgColor(getSwatchColor('bg-color-input') || '#f0f2f5');
         } else if (mode === 'gradient') {
             applyBgGradient();
         }
@@ -735,9 +760,8 @@
         const accent = localStorage.getItem('accentTheme');
         if (accent === 'custom') {
             const customColor = localStorage.getItem('customAccentColor') || '#1877f2';
-            const customDot = document.getElementById('theme-dot-custom');
-            if (customDot) customDot.value = customColor;
-            window.setCustomAccent(customColor, customDot);
+            setSwatchColor('theme-dot-custom', customColor);
+            window.setCustomAccent(customColor);
         } else if (accent && accent !== 'default') {
             document.body.classList.add('theme-' + accent);
             document.querySelector(`.theme-dot[data-theme="${accent}"]`)?.classList.add('selected');
@@ -747,17 +771,14 @@
         document.getElementById('bg-mode-' + bgMode)?.classList.add('active');
         if (bgMode === 'color') {
             const storedColor = localStorage.getItem('bgColor') || '#f0f2f5';
-            const colorInput = document.getElementById('bg-color-input');
-            if (colorInput) colorInput.value = storedColor;
+            setSwatchColor('bg-color-input', storedColor);
             document.getElementById('bg-color-row')?.classList.remove('hidden');
             document.body.style.background = darkenHex(storedColor, BG_DARKEN_AMOUNT);
         } else if (bgMode === 'gradient') {
             const from = localStorage.getItem('bgGradientFrom') || '#1877f2';
             const to = localStorage.getItem('bgGradientTo') || '#8b5cf6';
-            const fromInput = document.getElementById('bg-gradient-from');
-            const toInput = document.getElementById('bg-gradient-to');
-            if (fromInput) fromInput.value = from;
-            if (toInput) toInput.value = to;
+            setSwatchColor('bg-gradient-from', from);
+            setSwatchColor('bg-gradient-to', to);
             document.getElementById('bg-gradient-row')?.classList.remove('hidden');
             const gradient = `linear-gradient(135deg, ${darkenHex(from, BG_DARKEN_AMOUNT)}, ${darkenHex(to, BG_DARKEN_AMOUNT)})`;
             document.body.style.background = gradient;
@@ -765,6 +786,171 @@
             if (preview) preview.style.background = gradient;
         }
     }
+
+    /* ── Eigener Color Picker (SV-Feld + Hue-Slider + RGB) ── */
+    function hexToRgb(hex) {
+        hex = (hex || '').replace('#', '');
+        if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+        return { r: parseInt(hex.substring(0, 2), 16) || 0, g: parseInt(hex.substring(2, 4), 16) || 0, b: parseInt(hex.substring(4, 6), 16) || 0 };
+    }
+    function rgbToHexStr(r, g, b) {
+        const toHex = n => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0');
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+    }
+    function rgbToHsv(r, g, b) {
+        r /= 255; g /= 255; b /= 255;
+        const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
+        let h = 0;
+        if (d !== 0) {
+            if (max === r) h = ((g - b) / d) % 6;
+            else if (max === g) h = (b - r) / d + 2;
+            else h = (r - g) / d + 4;
+            h *= 60;
+            if (h < 0) h += 360;
+        }
+        const s = max === 0 ? 0 : d / max;
+        return { h, s, v: max };
+    }
+    function hsvToRgb(h, s, v) {
+        const c = v * s;
+        const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+        const m = v - c;
+        let r = 0, g = 0, b = 0;
+        if (h < 60) { r = c; g = x; b = 0; }
+        else if (h < 120) { r = x; g = c; b = 0; }
+        else if (h < 180) { r = 0; g = c; b = x; }
+        else if (h < 240) { r = 0; g = x; b = c; }
+        else if (h < 300) { r = x; g = 0; b = c; }
+        else { r = c; g = 0; b = x; }
+        return { r: (r + m) * 255, g: (g + m) * 255, b: (b + m) * 255 };
+    }
+    function hexToHsv(hex) {
+        const { r, g, b } = hexToRgb(hex);
+        return rgbToHsv(r, g, b);
+    }
+    const CP_SWATCH_MAP = { accent: 'theme-dot-custom', bgColor: 'bg-color-input', bgFrom: 'bg-gradient-from', bgTo: 'bg-gradient-to' };
+    const CP_DEFAULTS = { accent: '#1877f2', bgColor: '#f0f2f5', bgFrom: '#1877f2', bgTo: '#8b5cf6' };
+    let cpTarget = null, cpH = 0, cpS = 1, cpV = 1, cpOriginalHex = '#1877f2';
+    function cpCurrentHex() {
+        const { r, g, b } = hsvToRgb(cpH, cpS, cpV);
+        return rgbToHexStr(r, g, b);
+    }
+    function cpApplyPreview() {
+        const hex = cpCurrentHex();
+        if (cpTarget === 'accent') window.previewCustomAccent(hex);
+        else if (cpTarget === 'bgColor') window.previewBgColor(hex);
+        else if (cpTarget === 'bgFrom') window.previewBgGradient(hex, undefined);
+        else if (cpTarget === 'bgTo') window.previewBgGradient(undefined, hex);
+    }
+    function cpRender() {
+        const hex = cpCurrentHex();
+        const { r, g, b } = hexToRgb(hex);
+        const hueRgb = hsvToRgb(cpH, 1, 1);
+        const svArea = document.getElementById('cp-sv-area');
+        if (svArea) svArea.style.background = `rgb(${Math.round(hueRgb.r)},${Math.round(hueRgb.g)},${Math.round(hueRgb.b)})`;
+        const svCursor = document.getElementById('cp-sv-cursor');
+        if (svArea && svCursor) {
+            svCursor.style.left = (cpS * svArea.clientWidth) + 'px';
+            svCursor.style.top = ((1 - cpV) * svArea.clientHeight) + 'px';
+        }
+        const hueSlider = document.getElementById('cp-hue-slider');
+        const hueCursor = document.getElementById('cp-hue-cursor');
+        if (hueSlider && hueCursor) hueCursor.style.left = ((cpH / 360) * hueSlider.clientWidth) + 'px';
+        const preview = document.getElementById('cp-preview');
+        if (preview) preview.style.background = hex;
+        const rInput = document.getElementById('cp-r-input'), gInput = document.getElementById('cp-g-input'), bInput = document.getElementById('cp-b-input');
+        if (rInput) rInput.value = Math.round(r);
+        if (gInput) gInput.value = Math.round(g);
+        if (bInput) bInput.value = Math.round(b);
+    }
+    function cpUpdateFromRgb(r, g, b) {
+        const hsv = rgbToHsv(r, g, b);
+        cpH = hsv.h; cpS = hsv.s; cpV = hsv.v;
+        cpRender();
+        cpApplyPreview();
+    }
+    window.cpRgbInputChanged = () => {
+        const clamp = n => Math.max(0, Math.min(255, parseInt(n, 10) || 0));
+        const r = clamp(document.getElementById('cp-r-input').value);
+        const g = clamp(document.getElementById('cp-g-input').value);
+        const b = clamp(document.getElementById('cp-b-input').value);
+        cpUpdateFromRgb(r, g, b);
+    };
+    function cpSvPointerHandler(e) {
+        const svArea = document.getElementById('cp-sv-area');
+        const rect = svArea.getBoundingClientRect();
+        const x = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
+        const y = Math.max(0, Math.min(rect.height, e.clientY - rect.top));
+        cpS = rect.width ? x / rect.width : 0;
+        cpV = rect.height ? 1 - (y / rect.height) : 1;
+        cpRender();
+        cpApplyPreview();
+    }
+    function cpHuePointerHandler(e) {
+        const hueSlider = document.getElementById('cp-hue-slider');
+        const rect = hueSlider.getBoundingClientRect();
+        const x = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
+        cpH = rect.width ? (x / rect.width) * 360 : 0;
+        cpRender();
+        cpApplyPreview();
+    }
+    function cpBindDrag(el, handler) {
+        if (!el || el.dataset.cpBound) return;
+        el.dataset.cpBound = '1';
+        let dragging = false;
+        const start = (e) => { dragging = true; handler(e.touches ? e.touches[0] : e); e.preventDefault(); };
+        const move = (e) => { if (!dragging) return; handler(e.touches ? e.touches[0] : e); e.preventDefault(); };
+        const end = () => { dragging = false; };
+        el.addEventListener('mousedown', start);
+        window.addEventListener('mousemove', move);
+        window.addEventListener('mouseup', end);
+        el.addEventListener('touchstart', start, { passive: false });
+        el.addEventListener('touchmove', move, { passive: false });
+        el.addEventListener('touchend', end);
+    }
+    window.openColorPicker = (target) => {
+        cpTarget = target;
+        const swatchId = CP_SWATCH_MAP[target];
+        cpOriginalHex = getSwatchColor(swatchId) || CP_DEFAULTS[target];
+        const hsv = hexToHsv(cpOriginalHex);
+        cpH = hsv.h; cpS = hsv.s; cpV = hsv.v;
+        const modal = document.getElementById('color-picker-modal');
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        cpBindDrag(document.getElementById('cp-sv-area'), cpSvPointerHandler);
+        cpBindDrag(document.getElementById('cp-hue-slider'), cpHuePointerHandler);
+        const eyedropperBtn = document.getElementById('cp-eyedropper-btn');
+        if (eyedropperBtn) eyedropperBtn.classList.toggle('hidden', typeof window.EyeDropper === 'undefined');
+        requestAnimationFrame(cpRender);
+        if (window.lucide) lucide.createIcons({ root: modal });
+    };
+    window.cancelColorPicker = () => {
+        if (cpTarget === 'accent') window.previewCustomAccent(getSwatchColor('theme-dot-custom') || cpOriginalHex);
+        else if (cpTarget === 'bgColor') window.previewBgColor(getSwatchColor('bg-color-input') || cpOriginalHex);
+        else if (cpTarget === 'bgFrom' || cpTarget === 'bgTo') window.previewBgGradient();
+        document.getElementById('color-picker-modal').style.display = 'none';
+        document.body.style.overflow = '';
+        cpTarget = null;
+    };
+    window.saveColorPicker = () => {
+        const hex = cpCurrentHex();
+        if (cpTarget === 'accent') window.setCustomAccent(hex);
+        else if (cpTarget === 'bgColor') window.setBgColor(hex);
+        else if (cpTarget === 'bgFrom') window.setBgGradient(hex, undefined);
+        else if (cpTarget === 'bgTo') window.setBgGradient(undefined, hex);
+        document.getElementById('color-picker-modal').style.display = 'none';
+        document.body.style.overflow = '';
+        cpTarget = null;
+        showToast('Farbe gespeichert.');
+    };
+    window.useEyedropper = async () => {
+        if (typeof window.EyeDropper === 'undefined') return;
+        try {
+            const result = await new window.EyeDropper().open();
+            const { r, g, b } = hexToRgb(result.sRGBHex);
+            cpUpdateFromRgb(r, g, b);
+        } catch (e) { /* Nutzer hat abgebrochen */ }
+    };
     window.openSettings = () => {
         if (userData) {
             document.getElementById('settings-avatar').src = userData.photoURL || '';
@@ -773,6 +959,10 @@
             document.getElementById('settings-preview-user').textContent = '@' + (userData.username || '\u2013');
         }
         document.getElementById('dark-toggle').classList.toggle('on', document.body.classList.contains('dark'));
+        const isAdminUser = auth.currentUser?.email === adminEmail;
+        document.getElementById('admin-settings-title')?.classList.toggle('hidden', !isAdminUser);
+        document.getElementById('admin-settings-section')?.classList.toggle('hidden', !isAdminUser);
+        if (isAdminUser) refreshAdminBadgeCounts();
         swipeToScreen(document.getElementById('main-content'), document.getElementById('settings-screen'), 'forward');
         setActiveBnTab(null);
         if(window.lucide) lucide.createIcons();
@@ -1194,7 +1384,7 @@
             if(window.lucide) lucide.createIcons();
             setTimeout(adaptNavbar, 300);
         } else {
-            ['navbar','bottom-nav','bottom-fade','main-content','settings-screen','bookmarks-screen','following-screen','dm-list-screen','dm-thread-screen'].forEach(id => {
+            ['navbar','bottom-nav','bottom-fade','main-content','settings-screen','bookmarks-screen','following-screen','dm-list-screen','dm-thread-screen','reports-screen','feedback-screen'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.classList.add('hidden');
             });
@@ -1952,10 +2142,137 @@
         }
     };
 
+    /* ══════════════ ADMIN: MELDUNGEN & FEEDBACK ══════════════ */
+    async function refreshAdminBadgeCounts() {
+        try {
+            const reportsSnap = await getDocs(query(collection(db, 'reports'), where('status', '==', 'pending')));
+            const badge1 = document.getElementById('reports-count-badge');
+            if (badge1) badge1.textContent = reportsSnap.size ? String(reportsSnap.size) : '';
+        } catch (e) { console.error('Meldungen konnten nicht geladen werden:', e); }
+        try {
+            const feedbackSnap = await getDocs(collection(db, 'feedback'));
+            const badge2 = document.getElementById('feedback-count-badge');
+            if (badge2) badge2.textContent = feedbackSnap.size ? String(feedbackSnap.size) : '';
+        } catch (e) { console.error('Feedback konnte nicht geladen werden:', e); }
+    }
+    window.openReports = async () => {
+        swipeToScreen(document.getElementById('settings-screen'), document.getElementById('reports-screen'), 'forward');
+        await loadReports();
+        if(window.lucide) lucide.createIcons();
+    };
+    window.closeReports = () => {
+        swipeToScreen(document.getElementById('reports-screen'), document.getElementById('settings-screen'), 'back');
+    };
+    async function loadReports() {
+        const list = document.getElementById('reports-list');
+        const empty = document.getElementById('reports-empty');
+        list.innerHTML = '<div class="music-loading">L\u00e4dt\u2026</div>';
+        empty.classList.add('hidden');
+        try {
+            const snap = await getDocs(query(collection(db, 'reports'), orderBy('createdAt', 'desc')));
+            if (snap.empty) { list.innerHTML = ''; empty.classList.remove('hidden'); return; }
+            const reasonLabel = (id) => REPORT_REASONS.find(r => r.id === id)?.label || id || '\u2013';
+            const typeLabel = { post: 'Post', comment: 'Kommentar', user: 'Profil' };
+            list.innerHTML = snap.docs.map(d => {
+                const r = d.data();
+                const isPending = (r.status || 'pending') === 'pending';
+                return `<div class="admin-item-card" id="report-${d.id}">
+                    <div class="admin-item-top">
+                        <span class="admin-item-badge ${isPending ? 'pending' : 'resolved'}">${isPending ? 'Offen' : 'Erledigt'}</span>
+                        <span class="admin-item-time">${timeAgo(r.createdAt)}</span>
+                    </div>
+                    <div class="admin-item-title">${typeLabel[r.type] || r.type || '\u2013'} gemeldet \u2013 ${reasonLabel(r.reason)}</div>
+                    ${r.detail ? `<div class="admin-item-detail">${escapeHtml(r.detail)}</div>` : ''}
+                    <div class="admin-item-meta">Gemeldet von ${escapeHtml(r.reporterName || 'Unbekannt')} \u00b7 Ziel-ID: ${escapeHtml(r.targetId || '\u2013')}</div>
+                    <div class="admin-item-actions">
+                        ${isPending ? `<button onclick="resolveReport('${d.id}')" class="admin-action-btn resolve">Als erledigt markieren</button>` : ''}
+                        <button onclick="deleteReportItem('${d.id}')" class="admin-action-btn delete">L\u00f6schen</button>
+                    </div>
+                </div>`;
+            }).join('');
+            if(window.lucide) lucide.createIcons({root: list});
+        } catch (e) {
+            console.error('Meldungen konnten nicht geladen werden:', e);
+            list.innerHTML = '';
+            empty.classList.remove('hidden');
+            showToast('Meldungen konnten nicht geladen werden.');
+        }
+    }
+    window.resolveReport = async (id) => {
+        try {
+            await updateDoc(doc(db, 'reports', id), { status: 'resolved' });
+            await loadReports();
+            refreshAdminBadgeCounts();
+        } catch (e) { showToast('Konnte nicht aktualisiert werden.'); }
+    };
+    window.deleteReportItem = async (id) => {
+        if (!confirm('Diese Meldung wirklich l\u00f6schen?')) return;
+        try {
+            await deleteDoc(doc(db, 'reports', id));
+            document.getElementById('report-' + id)?.remove();
+            refreshAdminBadgeCounts();
+        } catch (e) { showToast('Konnte nicht gel\u00f6scht werden.'); }
+    };
+    window.openFeedback = async () => {
+        swipeToScreen(document.getElementById('settings-screen'), document.getElementById('feedback-screen'), 'forward');
+        await loadFeedback();
+        if(window.lucide) lucide.createIcons();
+    };
+    window.closeFeedback = () => {
+        swipeToScreen(document.getElementById('feedback-screen'), document.getElementById('settings-screen'), 'back');
+    };
+    async function loadFeedback() {
+        const list = document.getElementById('feedback-list');
+        const empty = document.getElementById('feedback-empty');
+        list.innerHTML = '<div class="music-loading">L\u00e4dt\u2026</div>';
+        empty.classList.add('hidden');
+        try {
+            let docs;
+            try {
+                docs = (await getDocs(query(collection(db, 'feedback'), orderBy('createdAt', 'desc')))).docs;
+            } catch (e) {
+                docs = (await getDocs(collection(db, 'feedback'))).docs;
+            }
+            if (!docs.length) { list.innerHTML = ''; empty.classList.remove('hidden'); return; }
+            const knownKeys = ['createdAt', 'timestamp'];
+            list.innerHTML = docs.map(d => {
+                const f = d.data();
+                const mainText = f.message || f.text || f.feedback || f.comment || '';
+                const contact = f.email || f.contact || f.name || '';
+                const extraEntries = Object.entries(f).filter(([k]) => !['message','text','feedback','comment','email','contact','name',...knownKeys].includes(k));
+                return `<div class="admin-item-card" id="feedback-${d.id}">
+                    <div class="admin-item-top">
+                        <span class="admin-item-time">${timeAgo(f.createdAt || f.timestamp)}</span>
+                    </div>
+                    ${mainText ? `<div class="admin-item-detail">${escapeHtml(String(mainText))}</div>` : ''}
+                    ${contact ? `<div class="admin-item-meta">Von: ${escapeHtml(String(contact))}</div>` : ''}
+                    ${extraEntries.length ? `<div class="admin-item-meta">${extraEntries.map(([k,v]) => `${escapeHtml(k)}: ${escapeHtml(String(v))}`).join(' \u00b7 ')}</div>` : ''}
+                    <div class="admin-item-actions">
+                        <button onclick="deleteFeedbackItem('${d.id}')" class="admin-action-btn delete">L\u00f6schen</button>
+                    </div>
+                </div>`;
+            }).join('');
+            if(window.lucide) lucide.createIcons({root: list});
+        } catch (e) {
+            console.error('Feedback konnte nicht geladen werden:', e);
+            list.innerHTML = '';
+            empty.classList.remove('hidden');
+            showToast('Feedback konnte nicht geladen werden.');
+        }
+    }
+    window.deleteFeedbackItem = async (id) => {
+        if (!confirm('Dieses Feedback wirklich l\u00f6schen?')) return;
+        try {
+            await deleteDoc(doc(db, 'feedback', id));
+            document.getElementById('feedback-' + id)?.remove();
+            refreshAdminBadgeCounts();
+        } catch (e) { showToast('Konnte nicht gel\u00f6scht werden.'); }
+    };
+
     /* ══════════════ DIRECT MESSAGES (DMs) - request-based ══════════════ */
     function computeDmThreadId(uidA, uidB) { return [uidA, uidB].sort().join('_'); }
     function getCurrentVisibleScreenEl() {
-        const ids = ['dm-thread-screen', 'dm-list-screen', 'following-screen', 'bookmarks-screen', 'settings-screen', 'main-content'];
+        const ids = ['dm-thread-screen', 'dm-list-screen', 'reports-screen', 'feedback-screen', 'following-screen', 'bookmarks-screen', 'settings-screen', 'main-content'];
         for (const id of ids) {
             const el = document.getElementById(id);
             if (el && !el.classList.contains('hidden')) return el;
@@ -2451,6 +2768,7 @@
             scroller.innerHTML = `<div class="sf-empty-state">
                 <i data-lucide="image-off" style="width:40px;height:40px;opacity:0.6;"></i>
                 <div>Noch keine Stories oder Bilder vorhanden.</div>
+                <button class="sf-empty-back-btn" onclick="closeStatusFeed()"><i data-lucide="arrow-left" style="width:16px;"></i> Zur\u00fcck</button>
             </div>`;
             overlay.style.display = 'flex';
             document.body.style.overflow = 'hidden';

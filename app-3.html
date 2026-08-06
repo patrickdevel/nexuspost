@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>cliq.</title>
+    <link rel="icon" href="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+<script>
+    window.__cliqErrors = [];
+    function __cliqShowError(msg) {
+        window.__cliqErrors.push(msg);
+        let stack = document.getElementById('cliq-error-stack');
+        if (!stack) {
+            stack = document.createElement('div');
+            stack.id = 'cliq-error-stack';
+            stack.style.cssText = 'position:fixed;top:max(10px,env(safe-area-inset-top));left:10px;right:10px;z-index:99999;display:flex;flex-direction:column;gap:8px;pointer-events:none;align-items:center;';
+            const attach = () => document.body.prepend(stack);
+            document.body ? attach() : document.addEventListener('DOMContentLoaded', attach);
+        }
+        const card = document.createElement('div');
+        card.style.cssText = 'pointer-events:auto;width:100%;max-width:480px;background:linear-gradient(135deg,#7f1d1d,#5c1414);color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 8px 28px rgba(0,0,0,0.45);display:flex;gap:10px;align-items:flex-start;font-family:-apple-system,BlinkMacSystemFont,sans-serif;border:1px solid rgba(255,255,255,0.12);opacity:0;transform:translateY(-12px);transition:opacity 0.25s ease,transform 0.25s ease;';
+        card.innerHTML =
+            '<div style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-top:1px;">!</div>' +
+            '<div style="flex:1;min-width:0;font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;word-break:break-word;"></div>' +
+            '<button style="flex-shrink:0;background:rgba(255,255,255,0.12);border:none;color:#fff;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;">\u00d7</button>';
+        card.querySelector('div:nth-child(2)').textContent = msg;
+        const dismiss = () => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(-12px)';
+            setTimeout(() => card.remove(), 250);
+        };
+        card.querySelector('button').onclick = dismiss;
+        const autoTimer = setTimeout(dismiss, 9000);
+        card.querySelector('button').addEventListener('mouseenter', () => clearTimeout(autoTimer));
+        stack.appendChild(card);
+        requestAnimationFrame(() => { card.style.opacity = '1'; card.style.transform = 'translateY(0)'; });
+    }
+    window.addEventListener('error', (e) => {
+        __cliqShowError('Fehler: ' + (e.message || e.error) + (e.filename ? ('\n  bei ' + e.filename + ':' + e.lineno + ':' + e.colno) : ''));
+    });
+    window.addEventListener('unhandledrejection', (e) => {
+        __cliqShowError('Unbehandelter Promise-Fehler: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+    });
+</script>
+</head>
+<body class="light">
+
+<nav id="navbar" class="hidden">
+    <div class="logo" id="nav-logo">
+        <div class="logo-icon"><img src="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW" alt="logo"></div>
+        cliq.
+    </div>
+    <div class="search-wrapper" id="search-wrapper">
+        <div class="search-container" onclick="expandSearch()">
+            <i data-lucide="search" style="width:16px; color:var(--sub);"></i>
+            <input type="text" class="search-input" id="search-input" placeholder="Suchen...">
+        </div>
+        <button 
+            id="btn-close-search" class="hidden" onclick="collapseSearch()" style="background:none;border:none;color:var(--nexus);font-weight:600;font-size:15px;white-space:nowrap;font-family:inherit;transition:transform 0.2s;">Abbrechen</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:4px;position:relative;">
+        <div id="nav-actions-items" style="display:flex;align-items:center;gap:4px;">
+            <button class="nav-btn" onclick="toggleAiAssistant()" data-label="KI Assistent"><i data-lucide="bot"></i></button>
+            <button class="nav-btn" onclick="toggleNotifPanel()" data-label="Benachrichtigungen" id="notif-btn">
+                <i data-lucide="bell"></i>
+                <span class="notif-badge hidden" id="notif-badge">0</span>
+            </button>
+            <button class="nav-btn" onclick="openDmList()" data-label="Nachrichten" id="dm-nav-btn">
+                <i data-lucide="mail"></i>
+                <span class="notif-badge hidden" id="dm-badge">0</span>
+            </button>
+            <button class="nav-btn" onclick="openBookmarks()" data-label="Gespeichert"><i data-lucide="bookmark"></i></button>
+            <button class="nav-btn hidden" id="admin-alert-btn" onclick="openAlertModal()" data-label="Neue Meldung"><i data-lucide="plus-circle"></i></button>
+        </div>
+        <button class="nav-btn" id="nav-more-btn" onclick="toggleNavDropdown()" style="display:none;"><i data-lucide="more-vertical"></i></button>
+        <div id="nav-dropdown" class="admin-menu hidden" style="top:42px;right:0;min-width:180px;"></div>
+    </div>
+</nav>
+
+<div id="login-screen">
+    <div class="login-phone">
+        <div class="login-logo-container"><img src="https://lh3.googleusercontent.com/d/1JNuBX1KLoY-rA54zFz_ocflS-F7HQvHW" alt="cliq. Logo"></div>
+        <h1>cliq.</h1>
+        <div class="login-subtitle-new">Verbinde dich mit der Welt. Teile deine Momente.</div>
+        <div class="login-spacer"></div>
+        <div class="login-buttons">
+            <button type="button" id="btn-login">
+                <span class="btn-login-label">
+                    <svg width="22" height="22" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="m6.306 14.691 6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 
+                    16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
+                    Mit Google anmelden
+                </span>
+                <span class="btn-login-dots"><span></span><span></span><span></span></span>
+            </button>
+        </div>
+    </div>
+    <div class="login-screen-stack" id="loginScreenStack"></div>
+</div>
+
+<main id="main-content" class="container hidden">
+    <div id="global-alerts"></div>
+    <div id="stories-bar"></div>
+    <div class="feed-tabs">
+        <button class="feed-tab active" id="tab-feed" onclick="switchTab('feed')" style="display:flex;align-items:center;justify-content:center;gap:6px;">
+            <i data-lucide="home" style="width:16px;"></i> Feed
+        </button>
+        <button class="feed-tab" id="tab-trending" onclick="switchTab('trending')" style="display:flex;align-items:center;justify-content:center;gap:6px;">
+            <i data-lucide="flame" style="width:16px;"></i> Trending
+        </button>
+    </div>
+    <div id="feed"></div>
+    <div id="feed-skeleton"></div>
+    <div id="feed-load-more-indicator" class="hidden"></div>
+    <div id="feed-load-more-sentinel" style="height:1px;"></div>
+    <div id="trending-section" class="hidden"></div>
+</main>
+
+<div id="notif-panel">
+    <div class="notif-panel-header">
+        <span class="notif-panel-title">Benachrichtigungen</span>
+        <div style="display:flex;gap:8px;align-items:center;">
+            <button onclick="markAllNotifsRead()" style="background:none;border:none;color:var(--nexus);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:transform 0.2s;">Alle gelesen</button>
+            <button onclick="toggleNotifPanel()" class="nav-btn"><i data-lucide="x" style="width:18px;"></i></button>
+        </div>
+    </div>
+    <div id="notif-list"></div>
+</div>
+
+<div id="bookmarks-screen" class="container hidden">
+    <div class="bookmarks-header">
+        <button class="settings-back-btn" onclick="closeBookmarks()"><i data-lucide="arrow-left" style="width:18px;"></i></button>
+        <h2>Gespeicherte Posts</h2>
+    </div>
+    <div id="bookmarks-feed"></div>
+    <div id="bookmarks-empty" class="hidden" style="text-align:center;padding:40px 20px;color:var(--sub);animation:fadeIn 0.5s;">
+        <i data-lucide="bookmark" style="width:40px;height:40px;margin-bottom:12px;opacity:0.4;"></i>
+        <div>Noch keine gespeicherten Posts.</div>
+    </div>
+</div>
+
+<div id="following-screen" class="container hidden">
+    <div class="bookmarks-header">
+        <button class="settings-back-btn" onclick="closeFollowingList()"><i data-lucide="arrow-left" style="width:18px;"></i></button>
+        <h2>Folge ich</h2>
+    </div>
+    <div id="following-list"></div>
+</div>
+
+<div id="reports-screen" class="container hidden">
+    <div class="bookmarks-header">
+        <button class="settings-back-btn" onclick="closeReports()"><i data-lucide="arrow-left" style="width:18px;"></i></button>
+        <h2>Meldungen</h2>
+    </div>
+    <div id="reports-list"></div>
+    <div id="reports-empty" class="hidden" style="text-align:center;padding:50px 20px;color:var(--sub);">
+        <i data-lucide="flag" style="width:38px;height:38px;opacity:0.4;margin-bottom:10px;"></i>
+        <div>Keine Meldungen vorhanden.</div>
+    </div>
+</div>
+
+<div id="feedback-screen" class="container hidden">
+    <div class="bookmarks-header">
+        <button class="settings-back-btn" onclick="closeFeedback()"><i data-lucide="arrow-left" style="width:18px;"></i></button>
+        <h2>Feedback</h2>
+    </div>
+    <div id="feedback-list"></div>
+    <div id="feedback-empty" class="hidden" style="text-align:center;padding:50px 20px;color:var(--sub);">
+        <i data-lucide="message-square" style="width:38px;height:38px;opacity:0.4;margin-bottom:10px;"></i>
+        <div>Kein Feedback vorhanden.</div>
+    </div>
+</div>
+
+<div id="dm-list-screen" class="container hidden">
+    <div class="bookmarks-header">
+        <button class="settings-back-btn" onclick="closeDmList()"><i data-lucide="arrow-left" style="width:18px;"></i></button>
+        <h2>Nachrichten</h2>
+    </div>
+    <div id="dm-list"></div>
+    <div id="dm-list-empty" class="hidden" style="text-align:center;padding:50px 20px;color:var(--sub);">
+        <i data-lucide="mail" style="width:38px;height:38px;opacity:0.4;margin-bottom:10px;"></i>
+        <div>Noch keine Nachrichten. Schreib jemandem \u00fcber sein Profil!</div>
+    </div>
+</div>
+
+<div id="dm-thread-screen" class="container hidden" style="padding-left:0;padding-right:0;">
+    <div class="dm-thread-header">
+        <button class="settings-back-btn" onclick="closeDmThread()"><i data-lucide="arrow-left" style="width:18px;"></i></button>
+        <img id="dm-thread-avatar" class="dm-thread-avatar" src="" onclick="dmOpenCurrentProfile()">
+        <div class="dm-thread-name" id="dm-thread-name" onclick="dmOpenCurrentProfile()">\u2013</div>
+    </div>
+    <div id="dm-thread-messages"></div>
+</div>
+
+<div id="dm-input-bar" class="hidden">
+    <div style="display:flex;align-items:center;gap:10px;max-width:600px;margin:0 auto;">
+        <div id="dm-thread-input" class="ios-input-container" contenteditable="true" placeholder="Nachricht schreiben..." style="flex:1;"></div>
+        <button id="dm-thread-send-btn" class="send-btn"><i data-lucide="arrow-up" style="width:18px;stroke-width:3;"></i></button>
+    </div>
+</div>
+
+<div id="dm-request-banner" class="hidden"></div>
+
+<div id="settings-screen" class="container hidden">
+    <div class="settings-header">
+        <button class="settings-back-btn" onclick="closeSettings()"><i data-lucide="arrow-left" style="width:18px;"></i></button>
+        <h2>Einstellungen</h2>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden;margin-bottom:14px;">
+        <div class="profile-preview">
+            <label style="cursor:pointer;position:relative;display:block;">
+                <img id="settings-avatar" src="" class="profile-preview-img">
+                <div style="position:absolute;bottom:0;right:0;background:var(--nexus);color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(0,0,0,0.3);border:2px solid var(--card);transition:transform 0.2s;">
+                    <i data-lucide="camera" style="width:14px;"></i>
+                </div>
+                <input type="file" id="profile-img-input" accept="image/*" class="hidden" onchange="uploadProfileImage(event)">
+            </label>
+            <div class="profile-preview-name" id="settings-preview-name">&ndash;</div>
+            <div class="profile-preview-username" id="settings-preview-user">&ndash;</div>
+        </div>
+        <div class="divider"></div>
+        <div class="settings-row" onclick="showEditProfile()">
+            <div class="settings-row-icon" style="background:var(--nexus-soft);"><i data-lucide="user-pen" style="width:16px;color:var(--nexus);"></i></div>
+            <span class="settings-row-label">Profil bearbeiten</span>
+            <i data-lucide="chevron-right" class="settings-row-chevron" style="width:16px;"></i>
+        </div>
+        <div class="settings-row" onclick="openFollowingList()">
+            <div class="settings-row-icon-wrap">
+                <div class="settings-row-icon" style="background:var(--nexus-soft);"><i data-lucide="users" style="width:16px;color:var(--nexus);"></i></div>
+                <span class="red-dot hidden" id="following-red-dot"></span>
+            </div>
+            <span class="settings-row-label">Folge ich</span>
+            <i data-lucide="chevron-right" class="settings-row-chevron" style="width:16px;"></i>
+        </div>
+    </div>
+    <div class="settings-section-title">Darstellung</div>
+    <div class="settings-card">
+        <div class="settings-row" style="cursor:default;">
+            <div class="settings-row-icon" style="background:#1c1c1e;"><i data-lucide="moon" style="width:16px;color:white;"></i></div>
+            <span class="settings-row-label">Dunkler Modus</span>
+            <button class="settings-toggle" id="dark-toggle" onclick="toggleDarkModeSettings()"></button>
+        </div>
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;cursor:default;">
+            <div style="display:flex;align-items:center;gap:12px;width:100%;">
+                <div class="settings-row-icon" style="background:linear-gradient(135deg,#1877f2,#8b5cf6);"><i data-lucide="palette" style="width:16px;color:white;"></i></div>
+                <span class="settings-row-label">Akzentfarbe</span>
+            </div>
+            <div class="theme-picker">
+                <div class="theme-dot selected" style="background:#1877f2;" data-theme="default" onclick="setTheme('default',this)"></div>
+                <div class="theme-dot" style="background:#8b5cf6;" data-theme="purple" onclick="setTheme('purple',this)"></div>
+                <div class="theme-dot" style="background:#10b981;" data-theme="green" onclick="setTheme('green',this)"></div>
+                <div class="theme-dot" style="background:#f43f5e;" data-theme="rose" onclick="setTheme('rose',this)"></div>
+                <div class="theme-dot" style="background:#f97316;" data-theme="orange" onclick="setTheme('orange',this)"></div>
+                <div class="theme-dot-custom" id="theme-dot-custom" data-theme="custom" data-color="#1877f2" style="background:#1877f2;" title="Eigene Farbe" onclick="openColorPicker('accent')"></div>
+            </div>
+        </div>
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;cursor:default;">
+            <div style="display:flex;align-items:center;gap:12px;width:100%;">
+                <div class="settings-row-icon" style="background:linear-gradient(135deg,#0ea5e9,#22c55e);"><i data-lucide="image" style="width:16px;color:white;"></i></div>
+                <span class="settings-row-label">Hintergrund</span>
+            </div>
+            <div class="bg-mode-picker">
+                <button type="button" class="bg-mode-btn active" id="bg-mode-default" onclick="setBgMode('default')">Standard</button>
+                <button type="button" class="bg-mode-btn" id="bg-mode-color" onclick="setBgMode('color')">Farbe</button>
+                <button type="button" class="bg-mode-btn" id="bg-mode-gradient" onclick="setBgMode('gradient')">Farbverlauf</button>
+            </div>
+            <div class="bg-color-row hidden" id="bg-color-row">
+                <div class="bg-color-swatch" id="bg-color-input" data-color="#f0f2f5" style="background:#f0f2f5;" onclick="openColorPicker('bgColor')"></div>
+                <span class="settings-row-value">Hintergrundfarbe w&#228;hlen</span>
+            </div>
+            <div class="bg-color-row hidden" id="bg-gradient-row">
+                <div class="bg-color-swatch" id="bg-gradient-from" data-color="#1877f2" style="background:#1877f2;" onclick="openColorPicker('bgFrom')"></div>
+                <div class="bg-color-swatch" id="bg-gradient-to" data-color="#8b5cf6" style="background:#8b5cf6;" onclick="openColorPicker('bgTo')"></div>
+                <div class="bg-gradient-preview" id="bg-gradient-preview"></div>
+            </div>
+        </div>
+    </div>
+    <div class="settings-section-title">Benachrichtigungen</div>
+    <div class="settings-card">
+        <div class="settings-row" style="cursor:default;">
+            <div class="settings-row-icon" style="background:#ff3b30;"><i data-lucide="bell" style="width:16px;color:white;"></i></div>
+            <span class="settings-row-label">Likes</span>
+            <button class="settings-toggle on" id="notif-likes-toggle" onclick="this.classList.toggle('on')"></button>
+        </div>
+        <div class="settings-row" style="cursor:default;">
+            <div class="settings-row-icon" style="background:#34c759;"><i data-lucide="message-circle" style="width:16px;color:white;"></i></div>
+            <span class="settings-row-label">Kommentare</span>
+            <button class="settings-toggle on" id="notif-comments-toggle" onclick="this.classList.toggle('on')"></button>
+        </div>
+    </div>
+    <div class="settings-section-title">Privatsph&#228;re</div>
+    <div class="settings-card">
+        <div class="settings-row" style="cursor:default;">
+            <div class="settings-row-icon" style="background:#ff9500;"><i data-lucide="eye-off" style="width:16px;color:white;"></i></div>
+            <span class="settings-row-label">Profil privat</span>
+            <button class="settings-toggle" id="private-toggle" onclick="this.classList.toggle('on')"></button>
+        </div>
+        <div class="settings-row" style="cursor:default;">
+            <div class="settings-row-icon" style="background:#5856d6;"><i data-lucide="user-check" style="width:16px;color:white;"></i></div>
+            <span class="settings-row-label">Aktivit&#228;tsstatus anzeigen</span>
+            <button class="settings-toggle on" onclick="this.classList.toggle('on')"></button>
+        </div>
+    </div>
+    <div class="settings-section-title hidden" id="admin-settings-title">Admin-Bereich</div>
+    <div class="settings-card hidden" id="admin-settings-section">
+        <div class="settings-row" onclick="openReports()">
+            <div class="settings-row-icon" style="background:#ff3b30;"><i data-lucide="flag" style="width:16px;color:white;"></i></div>
+            <span class="settings-row-label">Meldungen</span>
+            <span class="settings-row-value" id="reports-count-badge"></span>
+            <i data-lucide="chevron-right" class="settings-row-chevron" style="width:16px;"></i>
+        </div>
+        <div class="settings-row" onclick="openFeedback()">
+            <div class="settings-row-icon" style="background:#5856d6;"><i data-lucide="message-square" style="width:16px;color:white;"></i></div>
+            <span class="settings-row-label">Feedback</span>
+            <span class="settings-row-value" id="feedback-count-badge"></span>
+            <i data-lucide="chevron-right" class="settings-row-chevron" style="width:16px;"></i>
+        </div>
+    </div>
+    <div class="settings-section-title">Info</div>
+    <div class="settings-card">
+        <div class="settings-row" onclick="showToast('cliq. v155.0 &ndash; Danke f&#252;rs Nutzen! &#128153;')">
+            <div class="settings-row-icon" style="background:#1877f2;"><i data-lucide="info" style="width:16px;color:white;"></i></div>
+            <span class="settings-row-label">Version</span>
+            <span class="settings-row-value">v155.0</span>
+        </div>
+        <div class="settings-row" onclick="window.open('feedback.html', '_blank')">
+            <div class="settings-row-icon" style="background:#ff9500;"><i data-lucide="flag" style="width:16px;color:white;"></i></div>
+            <span class="settings-row-label">Feedback senden</span>
+            <i data-lucide="chevron-right" class="settings-row-chevron" style="width:16px;"></i>
+        </div>
+        <div class="settings-row" onclick="logoutUser()" style="color:var(--danger);">
+            <div class="settings-row-icon" style="background:rgba(255,59,48,0.12);"><i data-lucide="log-out" style="width:16px;color:var(--danger);"></i></div>
+            <span class="settings-row-label" style="color:var(--danger);">Abmelden</span>
+        </div>
+    </div>
+    <div style="height:30px;"></div>
+</div>
+
+<div id="profile-modal" onclick="closeProfileModal()">
+    <div class="profile-modal-card" onclick="event.stopPropagation()">
+        <div style="width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px;"></div>
+        <div class="profile-modal-header">
+            <img id="pmodal-avatar" src="" class="profile-modal-avatar">
+            <div style="flex:1;">
+                <div class="profile-modal-name" id="pmodal-name">&ndash;</div>
+                <div class="profile-modal-username" id="pmodal-username">&ndash;</div>
+            </div>
+            <button onclick="closeProfileModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;padding:4px;transition:transform 0.2s;"><i data-lucide="x"></i></button>
+        </div>
+        <div class="profile-modal-bio" id="pmodal-bio"></div>
+        <div id="pmodal-stats-wrap" style="display:flex;gap:20px;margin-top:14px;">
+            <div><span style="font-weight:700;font-size:15px;" id="pmodal-following-count">0</span> <span style="color:var(--sub);font-size:13px;">Folge ich</span></div>
+            <div><span style="font-weight:700;font-size:15px;" id="pmodal-follower-count">0</span> <span style="color:var(--sub);font-size:13px;">Follower</span></div>
+        </div>
+        <div id="pmodal-follow-btn-wrap" style="margin-top:12px;"></div>
+        <div class="profile-modal-posts">
+            <div class="profile-modal-posts-title">Posts</div>
+            <div class="profile-grid" id="pmodal-grid"></div>
+        </div>
+    </div>
+</div>
+
+<div id="edit-profile-modal" class="lightbox">
+    <div class="modal-inner" onclick="event.stopPropagation()">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <h3 class="modal-title" style="margin:0;">Profil bearbeiten</h3>
+            <button onclick="document.getElementById('edit-profile-modal').style.display='none'" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
+        </div>
+        <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);display:block;margin-bottom:6px;">Anzeigename</label>
+        <input type="text" id="edit-displayname" class="modal-input" placeholder="Dein Name" style="margin-bottom:2px;">
+        <div id="displayname-cooldown-hint" style="font-size:11.5px;color:var(--warning);margin-bottom:10px;display:none;"></div>
+        <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);display:block;margin-bottom:6px;">Nutzername</label>
+        <input type="text" id="edit-username" class="modal-input" placeholder="@username" style="margin-bottom:2px;">
+        <div id="username-cooldown-hint" style="font-size:11.5px;color:var(--warning);margin-bottom:10px;display:none;"></div>
+        <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);display:block;margin-bottom:6px;">Bio</label>
+        <textarea id="edit-bio" class="modal-input" placeholder="Erz&#228;hl etwas &#252;ber dich..." style="height:80px;resize:none;"></textarea>
+        <button onclick="saveProfile()" class="btn-primary">Speichern</button>
+    </div>
+</div>
+
+<div id="ai-overlay" class="lightbox" style="display:none;" onclick="toggleAiAssistant()">
+    <div id="ai-overlay-container" onclick="event.stopPropagation()">
+        <div style="padding:14px 16px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--header-bg);backdrop-filter:blur(10px);">
+            <div style="display:flex;align-items:center;gap:9px;font-weight:700;font-family:'Syne',sans-serif;font-size:16px;">
+                <i data-lucide="bot" style="color:var(--nexus);animation:pulse 2s infinite;"></i> cliq. KI Assistent
+            </div>
+            <button onclick="toggleAiAssistant()" class="nav-btn"><i data-lucide="x"></i></button>
+        </div>
+        <iframe src="https://ki-assistent-alpha.vercel.app/" style="width:100%;flex-grow:1;border:none;"></iframe>
+    </div>
+</div>
+
+<div id="alert-modal" class="lightbox">
+    <div class="modal-inner" onclick="event.stopPropagation()">
+        <h3 class="modal-title">Neue Meldung</h3>
+        <select id="alert-type" class="modal-input"><option value="warning">&#9888;&#65039; Warnung</option><option value="info">&#8505;&#65039; Information</option><option value="success">&#9989; Erfolg</option></select>
+        <textarea id="alert-text" class="modal-input" placeholder="Nachricht eingeben..." style="height:90px;resize:none;"></textarea>
+        <select id="alert-duration" class="modal-input"><option value="0">Dauerhaft anzeigen</option><option value="1">1 Stunde</option><option value="24">24 Stunden</option></select>
+        <div style="display:flex;gap:10px;margin-top:4px;">
+            <button id="save-alert-btn" class="btn-primary">Erstellen</button>
+            <button onclick="closeAlertModal()" class="btn-ghost" style="width:auto;padding:13px 18px;">Abbrechen</button>
+        </div>
+    </div>
+</div>
+
+<div id="poll-modal" class="lightbox">
+    <div class="modal-inner" onclick="event.stopPropagation()">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h3 class="modal-title" style="margin:0;display:flex;align-items:center;gap:8px;">
+                <i data-lucide="bar-chart-2" style="width:20px;"></i> Umfrage erstellen
+            </h3>
+            <button onclick="closePollModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
+        </div>
+         <textarea id="poll-question" class="modal-input" placeholder="Frage stellen..." style="height:60px;resize:none;margin-bottom:14px;"></textarea>
+        <div id="poll-options-container">
+            <div class="poll-option-input"><input type="text" class="poll-opt" placeholder="Option 1" maxlength="50"><button onclick="removePollOpt(this)" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;transition:color 0.2s;">&#215;</button></div>
+            <div class="poll-option-input"><input type="text" class="poll-opt" placeholder="Option 2" maxlength="50"><button onclick="removePollOpt(this)" style="background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;transition:color 0.2s;">&#215;</button></div>
+        </div>
+        <button onclick="addPollOption()" style="background:none;border:1px dashed var(--border);border-radius:10px;padding:9px;width:100%;color:var(--nexus);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:14px;transition:background 0.2s;">+ Option hinzuf&#252;gen</button>
+        <button onclick="submitPoll()" class="btn-primary">Umfrage posten</button>
+    </div>
+</div>
+
+<div id="report-modal" class="lightbox">
+    <div class="modal-inner" onclick="event.stopPropagation()">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h3 class="modal-title" style="margin:0;display:flex;align-items:center;gap:8px;">
+                <i data-lucide="flag" style="width:19px;color:var(--danger);"></i> <span id="report-modal-title">Melden</span>
+            </h3>
+            <button onclick="closeReportModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
+        </div>
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);margin-bottom:10px;">Grund ausw&#228;hlen</div>
+        <div id="report-reason-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
+        <textarea id="report-detail" class="modal-input" placeholder="Zus&#228;tzliche Details (optional)..." style="height:70px;resize:none;"></textarea>
+        <button onclick="submitReport()" class="btn-primary" style="background:var(--danger);">Meldung absenden</button>
+    </div>
+</div>
+
+<div id="color-picker-modal" class="lightbox">
+    <div class="modal-inner cp-modal" onclick="event.stopPropagation()">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h3 class="modal-title" style="margin:0;">Farbe w&#228;hlen</h3>
+            <button onclick="cancelColorPicker()" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
+        </div>
+        <div class="cp-sv-area" id="cp-sv-area">
+            <div class="cp-sv-white-overlay"></div>
+            <div class="cp-sv-black-overlay"></div>
+            <div class="cp-sv-cursor" id="cp-sv-cursor"></div>
+        </div>
+        <div class="cp-controls-row">
+            <button type="button" class="cp-eyedropper-btn" id="cp-eyedropper-btn" onclick="useEyedropper()" title="Farbe vom Bildschirm aufnehmen"><i data-lucide="pipette" style="width:18px;"></i></button>
+            <div class="cp-preview" id="cp-preview"></div>
+            <div class="cp-hue-slider" id="cp-hue-slider">
+                <div class="cp-hue-cursor" id="cp-hue-cursor"></div>
+            </div>
+        </div>
+        <div class="cp-rgb-row">
+            <div class="cp-rgb-field">
+                <input type="text" inputmode="numeric" maxlength="3" id="cp-r-input" onchange="cpRgbInputChanged()">
+                <label>R</label>
+            </div>
+            <div class="cp-rgb-field">
+                <input type="text" inputmode="numeric" maxlength="3" id="cp-g-input" onchange="cpRgbInputChanged()">
+                <label>G</label>
+            </div>
+            <div class="cp-rgb-field">
+                <input type="text" inputmode="numeric" maxlength="3" id="cp-b-input" onchange="cpRgbInputChanged()">
+                <label>B</label>
+            </div>
+        </div>
+        <button onclick="saveColorPicker()" class="btn-primary" style="margin-top:18px;">Speichern</button>
+    </div>
+</div>
+
+<div id="music-modal" class="lightbox">
+    <div class="modal-inner" onclick="event.stopPropagation()" style="max-height:80vh;display:flex;flex-direction:column;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-shrink:0;">
+            <h3 class="modal-title" style="margin:0;display:flex;align-items:center;gap:8px;">
+                <i data-lucide="music-4" style="width:20px;"></i> Sound ausw&#228;hlen
+            </h3>
+            <button onclick="closeMusicModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
+        </div>
+        <div style="position:relative;flex-shrink:0;margin-bottom:10px;">
+            <input type="text" id="music-search-input" class="modal-input" placeholder="Song oder Artist suchen&hellip;" style="margin-bottom:0;padding-left:36px;">
+            <i data-lucide="search" style="width:15px;position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--sub);"></i>
+        </div>
+        <div id="music-results-label" style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--sub);margin-bottom:8px;flex-shrink:0;display:flex;align-items:center;gap:6px;">
+            <i data-lucide="flame" style="width:13px;color:var(--warning);"></i> Viral gerade
+        </div>
+        <div id="music-results-list" style="overflow-y:auto;flex:1;margin:-4px;padding:4px;"></div>
+    </div>
+</div>
+
+<div id="music-player-modal" class="lightbox">
+    <div class="modal-inner" onclick="event.stopPropagation()" style="text-align:center;">
+        <button onclick="closeMusicPlayerModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;float:right;transition:transform 0.2s;"><i data-lucide="x"></i></button>
+        <img id="mp-cover" src="" style="width:120px;height:120px;border-radius:16px;object-fit:cover;box-shadow:0 10px 30px rgba(0,0,0,0.25);margin:10px auto 16px;display:block;">
+        <div id="mp-title" style="font-family:'Syne',sans-serif;font-weight:800;font-size:17px;margin-bottom:2px;">&ndash;</div>
+        <div id="mp-artist" style="font-size:14px;color:var(--sub);margin-bottom:18px;">&ndash;</div>
+        <button id="mp-play-btn" onclick="toggleMpPreview()" class="btn-primary" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;">
+            <span id="mp-play-icon-wrap" style="display:flex;align-items:center;"><i data-lucide="play" style="width:16px;"></i></span> <span id="mp-play-label">Vorschau abspielen</span>
+        </button>
+        <div style="display:flex;gap:8px;">
+            <a id="mp-spotify-link" href="#" target="_blank" rel="noopener" style="flex:1;background:#1DB954;color:white;text-decoration:none;padding:11px;border-radius:10px;font-size:13.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;">
+                <i data-lucide="music" style="width:14px;"></i> Spotify
+            </a>
+            <a id="mp-apple-link" href="#" target="_blank" rel="noopener" style="flex:1;background:linear-gradient(135deg,#fa233b,#fb5c74);color:white;text-decoration:none;padding:11px;border-radius:10px;font-size:13.5px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;">
+                <i data-lucide="apple" style="width:14px;"></i> Apple Music
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="story-confirm-modal" class="lightbox">
+    <div class="modal-inner" onclick="event.stopPropagation()">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <h3 class="modal-title" style="margin:0;">Story posten</h3>
+            <button onclick="closeStoryConfirmModal()" style="background:none;border:none;color:var(--sub);cursor:pointer;transition:transform 0.2s;"><i data-lucide="x"></i></button>
+        </div>
+        <img id="story-confirm-preview" src="" style="width:100%;max-height:320px;object-fit:contain;border-radius:14px;background:var(--ios-input);margin-bottom:14px;">
+        <button onclick="openMusicModal('story')" id="story-confirm-music-btn" class="btn-ghost" style="width:100%;color:var(--nexus);background:var(--nexus-soft);display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;font-weight:700;margin-bottom:10px;">
+            <i data-lucide="music-4" style="width:16px;"></i> <span>Musik hinzuf&#252;gen</span>
+        </button>
+        <div id="story-confirm-music-chip-wrap"></div>
+        <button onclick="publishStory()" class="btn-primary">Story ver&#246;ffentlichen</button>
+    </div>
+</div>
+
+<div id="story-lightbox" class="lightbox" onclick="closeStoryViewer()">
+    <div id="story-viewer" onclick="event.stopPropagation()">
+        <div id="story-progress"></div>
+        <div id="story-header-overlay">
+            <img id="story-avi" src="" class="story-header-img">
+            <span id="story-name" class="story-header-name"></span>
+            <span id="story-time" class="story-header-time"></span>
+            <span id="story-follow-btn-wrap" style="pointer-events:auto;"></span>
+        </div>
+        <div class="story-action-btns">
+            <button id="story-del-btn" class="hidden story-action-btn" style="background:rgba(255,59,48,0.8);"><i data-lucide="trash-2" style="width:16px;"></i></button>
+            <button id="story-close-btn" class="story-action-btn" onclick="closeStoryViewer()"><i data-lucide="x" style="width:16px;"></i></button>
+        </div>
+        <div style="position:absolute;top:60px;left:0;width:35%;height:calc(100% - 60px);z-index:10;cursor:pointer;" 
+             onclick="prevStory(event)"
+             onmousedown="pauseStory()" onmouseup="resumeStory()" onmouseleave="resumeStory()"
+             ontouchstart="pauseStory()" ontouchend="resumeStory()" ontouchcancel="resumeStory()"></div>
+        <div style="position:absolute;top:60px;right:0;width:65%;height:calc(100% - 60px);z-index:10;cursor:pointer;" 
+             onclick="nextStory(event)"
+             onmousedown="pauseStory()" onmouseup="resumeStory()" onmouseleave="resumeStory()"
+             ontouchstart="pauseStory()" ontouchend="resumeStory()" ontouchcancel="resumeStory()"></div>
+        <img id="story-img" src="">
+        <div id="story-music-badge-wrap"></div>
+        <div id="story-time-left"></div>
+    </div>
+</div>
+
+<div id="bottom-fade" class="hidden"></div>
+<div id="bottom-nav" class="hidden">
+    <div class="bn-shell" id="bn-shell">
+        <div class="bn-tabs" id="bn-tabs">
+            <button class="bn-item active" id="bn-home" onclick="bnGoHome()">
+                <i data-lucide="home" style="width:21px;"></i><span>Home</span>
+            </button>
+            <button class="bn-item" id="bn-status" onclick="openStatusFeed()">
+                <i data-lucide="circle-play" style="width:21px;"></i><span>Status</span>
+            </button>
+            <div class="bn-compose-wrap">
+                <button class="bn-compose" id="bn-compose-btn" onclick="openComposeBar()" title="Posten">
+                    <i data-lucide="plus" style="width:24px;height:24px;stroke-width:2.6;"></i>
+                </button>
+            </div>
+            <button class="bn-item" id="bn-settings-btn" onclick="openSettings()">
+                <i data-lucide="settings" style="width:21px;"></i><span>Einst.</span>
+            </button>
+            <button class="bn-item" id="bn-theme-btn" onclick="toggleDarkMode()">
+                <i data-lucide="moon" id="bn-theme-icon" style="width:21px;"></i><span>Theme</span>
+            </button>
+        </div>
+        <div class="bn-compose-panel" id="bn-compose-panel">
+            <button class="bn-close-compose" onclick="closeComposeBar()"><i data-lucide="chevron-down" style="width:18px;"></i></button>
+            <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <div class="media-btn-group">
+                        <label style="color:var(--nexus);cursor:pointer;display:flex;align-items:center;transition:transform 0.2s;">
+                            <i data-lucide="image-plus" style="width:24px;height:24px;"></i>
+                            <input type="file" id="image-input" accept="image/*,video/*" class="hidden" onchange="showPreview(event)">
+                        </label>
+                        <button onclick="openPollModal()" title="Umfrage erstellen" style="background:none;border:none;color:var(--nexus);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform 0.2s;">
+                            <i data-lucide="bar-chart-2" style="width:24px;height:24px;"></i>
+                        </button>
+                        <button class="music-add-btn" id="composer-music-add-btn" onclick="openMusicModal('post')" title="Musik hinzuf&#252;gen">
+                            <i data-lucide="music-4" style="width:23px;height:23px;"></i>
+                        </button>
+                    </div>
+                    <div id="post-input" class="ios-input-container" contenteditable="true" placeholder="Was gibt's Neues?" oninput="onPostInput()"></div>
+                    <button id="btn-share" class="send-btn"><i data-lucide="arrow-up" style="width:18px;stroke-width:3;"></i></button>
+                </div>
+                <div id="composer-music-chip-wrap"></div>
+            </div>
+        </div>
+        <div id="preview-container" class="hidden" style="position:absolute;bottom:74px;left:15px;background:var(--card);padding:5px;border-radius:12px;box-shadow:0 5px 20px rgba(0,0,0,0.15);animation:postSlideIn 0.3s ease;">
+            <img id="preview-img" src="" style="width:80px;height:80px;object-fit:cover;border-radius:8px;display:block;">
+             <button onclick="clearPreview()" style="position:absolute;top:-6px;right:-6px;background:var(--danger);color:white;border:none;border-radius:50%;cursor:pointer;width:22px;height:22px;font-size:14px;display:flex;align-items:center;justify-content:center;transition:transform 0.2s;">&#215;</button>
+        </div>
+        <div class="char-counter hidden" id="char-counter" style="position:absolute;bottom:-20px;right:10px;">0 / 500</div>
+    </div>
+</div>
+
+<button id="global-sound-toggle" class="global-sound-toggle on hidden" onclick="toggleGlobalSound()" title="Ton an/aus">
+    <i data-lucide="volume-2" style="width:18px;"></i>
+</button>
+
+<div id="status-feed-overlay">
+    <div id="status-feed-scroller"></div>
+</div>
+
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <button class="close-lightbox-btn" onclick="closeLightbox()"><i data-lucide="x" style="width:22px;"></i></button>
+    <img id="lightbox-img" src="" onclick="event.stopPropagation()">
+</div>
+
+<div id="toast"></div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
