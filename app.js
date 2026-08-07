@@ -910,6 +910,12 @@
         else if (cpTarget === 'profilePrimary' || cpTarget === 'profileAccent') {
             const el = document.getElementById(CP_SWATCH_MAP[cpTarget]);
             if (el) el.style.background = hex;
+            if (editBannerMode === 'color') {
+                const wrap = document.getElementById('edit-banner-wrap');
+                const primary = cpTarget === 'profilePrimary' ? hex : (getSwatchColor('schema-primary-swatch') || '#1877f2');
+                const accent = cpTarget === 'profileAccent' ? hex : (getSwatchColor('schema-accent-swatch') || '#8b5cf6');
+                if (wrap) wrap.style.background = `linear-gradient(135deg, ${primary}, ${accent})`;
+            }
         } else if (cpTarget === 'nameColor') {
             currentNameStyle.preset = 'custom'; currentNameStyle.color1 = hex; currentNameStyle.color2 = null;
             renderNameStylePresetGrid();
@@ -1019,6 +1025,7 @@
         else if (cpTarget === 'profilePrimary' || cpTarget === 'profileAccent') {
             const el = document.getElementById(CP_SWATCH_MAP[cpTarget]);
             if (el) el.style.background = el.dataset.color || CP_DEFAULTS[cpTarget];
+            if (typeof updateEditBannerPreview === 'function') updateEditBannerPreview();
         }
         cpCloseAndMaybeReturn();
     };
@@ -1030,6 +1037,7 @@
         else if (cpTarget === 'bgTo') window.setBgGradient(undefined, hex);
         else if (cpTarget === 'profilePrimary' || cpTarget === 'profileAccent') {
             setSwatchColor(CP_SWATCH_MAP[cpTarget], hex);
+            if (typeof updateEditBannerPreview === 'function') updateEditBannerPreview();
         } else if (cpTarget === 'nameColor') {
             currentNameStyle.preset = 'custom'; currentNameStyle.color1 = hex; currentNameStyle.color2 = null;
             renderNameStylePresetGrid();
@@ -1077,13 +1085,34 @@
         return `\u00c4nderbar in ${daysLeft} Tag${daysLeft !== 1 ? 'en' : ''}`;
     }
     let currentNameStyle = { preset: null, color1: null, color2: null, font: 'default' };
+    let editBannerMode = 'color';
+    window.setBannerMode = (mode) => {
+        editBannerMode = mode;
+        document.getElementById('banner-mode-color-btn').classList.toggle('active', mode === 'color');
+        document.getElementById('banner-mode-image-btn').classList.toggle('active', mode === 'image');
+        document.getElementById('profile-banner-edit-btn').classList.toggle('hidden', mode !== 'image');
+        updateEditBannerPreview();
+    };
+    function updateEditBannerPreview() {
+        const wrap = document.getElementById('edit-banner-wrap');
+        const img = document.getElementById('edit-banner-preview');
+        if (editBannerMode === 'image') {
+            img.src = userData.bannerURL || '';
+            img.classList.remove('hidden');
+            wrap.style.background = '';
+        } else {
+            img.classList.add('hidden');
+            const primary = getSwatchColor('schema-primary-swatch') || '#1877f2';
+            const accent = getSwatchColor('schema-accent-swatch') || '#8b5cf6';
+            wrap.style.background = `linear-gradient(135deg, ${primary}, ${accent})`;
+        }
+    }
     window.showEditProfile = () => {
         document.getElementById('edit-displayname').value = userData.displayname || '';
         document.getElementById('edit-username').value = userData.username || '';
         document.getElementById('edit-bio').value = userData.bio || '';
         document.getElementById('edit-pronouns').value = userData.pronouns || '';
         document.getElementById('edit-avatar-preview').src = userData.photoURL || '';
-        document.getElementById('edit-banner-preview').src = userData.bannerURL || '';
         const dnHint = document.getElementById('displayname-cooldown-hint');
         const unHint = document.getElementById('username-cooldown-hint');
         const dnMsg = formatCooldownHint(userData.displaynameChangedAt, 7);
@@ -1096,9 +1125,10 @@
         currentNameStyle = userData.nameStyle ? { ...userData.nameStyle } : { preset: null, color1: null, color2: null, font: 'default' };
         renderNameStyleRowPreview();
 
-        const schema = userData.profileSchema || {};
+        const schema = userData.profileSchema || randomProfileSchema();
         setSwatchColor('schema-primary-swatch', schema.primary || '#1877f2');
         setSwatchColor('schema-accent-swatch', schema.accent || '#8b5cf6');
+        window.setBannerMode(userData.bannerMode === 'image' ? 'image' : 'color');
 
         renderEditLinks(Array.isArray(userData.links) ? userData.links : []);
         updateEditProfilePreview();
@@ -1254,7 +1284,7 @@
         };
         const nameStyle = currentNameStyle.color1 ? { ...currentNameStyle } : null;
 
-        const updates = { displayname: dn, username: un, bio, pronouns, links, nameStyle, profileSchema };
+        const updates = { displayname: dn, username: un, bio, pronouns, links, nameStyle, profileSchema, bannerMode: editBannerMode };
         if (dnChanged) updates.displaynameChangedAt = now;
         if (unChanged) updates.usernameChangedAt = now;
 
@@ -1315,6 +1345,32 @@
         if (!d) return 'Unbekannt';
         return d.toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
     }
+    function hslToHexStr(h, s, l) {
+        s /= 100; l /= 100;
+        const k = n => (n + h / 30) % 12;
+        const a = s * Math.min(l, 1 - l);
+        const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+        const toHex = x => Math.round(x * 255).toString(16).padStart(2, '0');
+        return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`;
+    }
+    function randomProfileSchema() {
+        const hue1 = Math.floor(Math.random() * 360);
+        const hue2 = (hue1 + 50 + Math.floor(Math.random() * 90)) % 360;
+        return { primary: hslToHexStr(hue1, 72, 52), accent: hslToHexStr(hue2, 72, 52) };
+    }
+    function applyProfileBannerDisplay(wrapEl, imgEl, u) {
+        if (!wrapEl || !imgEl) return;
+        if (u.bannerMode === 'image' && u.bannerURL) {
+            imgEl.src = u.bannerURL;
+            imgEl.classList.remove('hidden');
+            wrapEl.style.background = '';
+        } else {
+            imgEl.classList.add('hidden');
+            imgEl.src = '';
+            const schema = u.profileSchema || { primary: '#1877f2', accent: '#8b5cf6' };
+            wrapEl.style.background = `linear-gradient(135deg, ${schema.primary}, ${schema.accent})`;
+        }
+    }
     window.currentProfileUid = null;
     let profileUnsub = null;
     let profilePresenceInterval = null;
@@ -1325,6 +1381,7 @@
         const u = uSnap.data() || {};
         allUsersCache[uid] = u;
         document.getElementById('profile-banner-img').src = u.bannerURL || '';
+        applyProfileBannerDisplay(document.getElementById('profile-banner-wrap'), document.getElementById('profile-banner-img'), u);
         document.getElementById('pmodal-avatar').src = u.photoURL || '';
         document.getElementById('pmodal-name').innerHTML = styledNameHTML(u.displayname || '\u2013', u.nameStyle) + (u.verified ? ` <img src="${verifiedIcon}" style="width:18px;height:18px;">` : '');
         let usernameLine = '@' + (u.username || '\u2013');
@@ -1700,8 +1757,13 @@
                     userData.createdAt = serverTimestamp();
                     updateDoc(doc(db, "users", user.uid), { createdAt: serverTimestamp() }).catch(() => {});
                 }
+                if (!userData.profileSchema) {
+                    userData.profileSchema = randomProfileSchema();
+                    userData.bannerMode = userData.bannerMode || 'color';
+                    updateDoc(doc(db, "users", user.uid), { profileSchema: userData.profileSchema, bannerMode: userData.bannerMode }).catch(() => {});
+                }
             } else {
-                userData = { username: "user_"+Math.floor(Math.random()*9999), displayname: user.displayName, photoURL: user.photoURL, email: user.email, verified: (user.email === adminEmail), bio: '', createdAt: serverTimestamp() };
+                userData = { username: "user_"+Math.floor(Math.random()*9999), displayname: user.displayName, photoURL: user.photoURL, email: user.email, verified: (user.email === adminEmail), bio: '', createdAt: serverTimestamp(), profileSchema: randomProfileSchema(), bannerMode: 'color' };
                 await setDoc(doc(db, "users", user.uid), userData);
             }
             startPresenceHeartbeat();
