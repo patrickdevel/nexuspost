@@ -910,11 +910,16 @@
         else if (cpTarget === 'profilePrimary' || cpTarget === 'profileAccent') {
             const el = document.getElementById(CP_SWATCH_MAP[cpTarget]);
             if (el) el.style.background = hex;
+            const primary = cpTarget === 'profilePrimary' ? hex : (getSwatchColor('schema-primary-swatch') || '#1877f2');
+            const accent = cpTarget === 'profileAccent' ? hex : (getSwatchColor('schema-accent-swatch') || '#8b5cf6');
             if (editBannerMode === 'color') {
                 const wrap = document.getElementById('edit-banner-wrap');
-                const primary = cpTarget === 'profilePrimary' ? hex : (getSwatchColor('schema-primary-swatch') || '#1877f2');
-                const accent = cpTarget === 'profileAccent' ? hex : (getSwatchColor('schema-accent-swatch') || '#8b5cf6');
                 if (wrap) wrap.style.background = `linear-gradient(135deg, ${primary}, ${accent})`;
+            }
+            const screen = document.getElementById('edit-profile-screen');
+            if (screen) {
+                if (currentProfileBgMode === 'color') screen.style.background = darkenHex(primary, 0.18);
+                else if (currentProfileBgMode === 'gradient') screen.style.background = `linear-gradient(160deg, ${darkenHex(primary, 0.18)}, ${darkenHex(accent, 0.18)})`;
             }
         } else if (cpTarget === 'nameColor') {
             currentNameStyle.preset = 'custom'; currentNameStyle.color1 = hex; currentNameStyle.color2 = null;
@@ -1026,6 +1031,7 @@
             const el = document.getElementById(CP_SWATCH_MAP[cpTarget]);
             if (el) el.style.background = el.dataset.color || CP_DEFAULTS[cpTarget];
             if (typeof updateEditBannerPreview === 'function') updateEditBannerPreview();
+            if (typeof updateEditProfileBgPreview === 'function') updateEditProfileBgPreview();
         }
         cpCloseAndMaybeReturn();
     };
@@ -1038,6 +1044,7 @@
         else if (cpTarget === 'profilePrimary' || cpTarget === 'profileAccent') {
             setSwatchColor(CP_SWATCH_MAP[cpTarget], hex);
             if (typeof updateEditBannerPreview === 'function') updateEditBannerPreview();
+            if (typeof updateEditProfileBgPreview === 'function') updateEditProfileBgPreview();
         } else if (cpTarget === 'nameColor') {
             currentNameStyle.preset = 'custom'; currentNameStyle.color1 = hex; currentNameStyle.color2 = null;
             renderNameStylePresetGrid();
@@ -1107,6 +1114,21 @@
             wrap.style.background = `linear-gradient(135deg, ${primary}, ${accent})`;
         }
     }
+    let currentProfileBgMode = 'default';
+    window.setProfileBgMode = (mode) => {
+        currentProfileBgMode = mode;
+        ['default','color','gradient'].forEach(m => document.getElementById('profile-bgmode-'+m+'-btn')?.classList.toggle('active', m === mode));
+        updateEditProfileBgPreview();
+    };
+    function updateEditProfileBgPreview() {
+        const screen = document.getElementById('edit-profile-screen');
+        if (!screen) return;
+        const primary = getSwatchColor('schema-primary-swatch') || '#1877f2';
+        const accent = getSwatchColor('schema-accent-swatch') || '#8b5cf6';
+        if (currentProfileBgMode === 'color') screen.style.background = darkenHex(primary, 0.18);
+        else if (currentProfileBgMode === 'gradient') screen.style.background = `linear-gradient(160deg, ${darkenHex(primary, 0.18)}, ${darkenHex(accent, 0.18)})`;
+        else screen.style.background = '';
+    }
     window.showEditProfile = () => {
         document.getElementById('edit-displayname').value = userData.displayname || '';
         document.getElementById('edit-username').value = userData.username || '';
@@ -1129,6 +1151,7 @@
         setSwatchColor('schema-primary-swatch', schema.primary || '#1877f2');
         setSwatchColor('schema-accent-swatch', schema.accent || '#8b5cf6');
         window.setBannerMode(userData.bannerMode === 'image' ? 'image' : 'color');
+        window.setProfileBgMode(schema.bgMode || 'default');
 
         renderEditLinks(Array.isArray(userData.links) ? userData.links : []);
         updateEditProfilePreview();
@@ -1280,7 +1303,8 @@
         const links = collectEditLinks();
         const profileSchema = {
             primary: getSwatchColor('schema-primary-swatch') || '#1877f2',
-            accent: getSwatchColor('schema-accent-swatch') || '#8b5cf6'
+            accent: getSwatchColor('schema-accent-swatch') || '#8b5cf6',
+            bgMode: currentProfileBgMode
         };
         const nameStyle = currentNameStyle.color1 ? { ...currentNameStyle } : null;
 
@@ -1371,6 +1395,18 @@
             wrapEl.style.background = `linear-gradient(135deg, ${schema.primary}, ${schema.accent})`;
         }
     }
+    function applyProfileScreenBg(screenEl, u) {
+        if (!screenEl) return;
+        const schema = u.profileSchema || {};
+        const mode = schema.bgMode || 'default';
+        if (mode === 'color') {
+            screenEl.style.background = darkenHex(schema.primary || '#1877f2', 0.18);
+        } else if (mode === 'gradient') {
+            screenEl.style.background = `linear-gradient(160deg, ${darkenHex(schema.primary || '#1877f2', 0.18)}, ${darkenHex(schema.accent || '#8b5cf6', 0.18)})`;
+        } else {
+            screenEl.style.background = '';
+        }
+    }
     window.currentProfileUid = null;
     let profileUnsub = null;
     let profilePresenceInterval = null;
@@ -1382,6 +1418,7 @@
         allUsersCache[uid] = u;
         document.getElementById('profile-banner-img').src = u.bannerURL || '';
         applyProfileBannerDisplay(document.getElementById('profile-banner-wrap'), document.getElementById('profile-banner-img'), u);
+        applyProfileScreenBg(document.getElementById('profile-screen'), u);
         document.getElementById('pmodal-avatar').src = u.photoURL || '';
         document.getElementById('pmodal-name').innerHTML = styledNameHTML(u.displayname || '\u2013', u.nameStyle) + (u.verified ? ` <img src="${verifiedIcon}" style="width:18px;height:18px;">` : '');
         let usernameLine = '@' + (u.username || '\u2013');
