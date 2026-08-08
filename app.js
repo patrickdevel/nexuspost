@@ -2688,7 +2688,18 @@
     window.toggleAdminMenu = (id) => { 
         document.querySelectorAll('.admin-menu').forEach(m => { if(m.id !== 'menu-'+id) { m.classList.add('hidden'); const c = m.closest('.card'); if(c) c.style.zIndex = ''; } }); 
         const menu = document.getElementById('menu-'+id);
-        if (menu) { menu.classList.toggle('hidden'); const card = menu.closest('.card'); if (card) card.style.zIndex = menu.classList.contains('hidden') ? '' : '50'; }
+        if (menu) {
+            menu.classList.toggle('hidden');
+            const card = menu.closest('.card'); if (card) card.style.zIndex = menu.classList.contains('hidden') ? '' : '50';
+            if (id === 'profile' && !menu.classList.contains('hidden')) {
+                const btn = document.getElementById('profile-admin-menu-btn');
+                if (btn) {
+                    const r = btn.getBoundingClientRect();
+                    menu.style.top = (r.bottom + 8) + 'px';
+                    menu.style.right = (window.innerWidth - r.right) + 'px';
+                }
+            }
+        }
         if(window.lucide) lucide.createIcons(); 
     };
     window.deletePost = async (id) => { if(confirm("Post wirklich l\u00f6schen?")) { await deleteDoc(doc(db,"posts",id)); showToast('Post gel\u00f6scht'); } };
