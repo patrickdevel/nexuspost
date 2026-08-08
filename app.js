@@ -375,6 +375,33 @@
             .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
+    /* ══════════════ RATE LIMITING (clientseitig) ══════════════
+       Bremst versehentliches Spammen (Doppelklicks, hastiges Wiederholen) und
+       macht absichtliche Flut-Angriffe unbequemer. WICHTIG: Das ist reine
+       Browser-Logik und kein echter Serverschutz - ein Angreifer könnte sie über
+       die Konsole umgehen. Für harten Schutz braucht es zusätzlich serverseitige
+       Firestore Security Rules oder eine Cloud Function. */
+    function checkRateLimit(actionKey, { minIntervalMs = 0, maxCount = Infinity, windowMs = 0 } = {}) {
+        const uid = auth.currentUser?.uid || 'anon';
+        const storageKey = `rl_${uid}_${actionKey}`;
+        let timestamps = [];
+        try { timestamps = JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch(e) { timestamps = []; }
+        const now = Date.now();
+        if (windowMs > 0) timestamps = timestamps.filter(t => now - t < windowMs);
+        if (minIntervalMs > 0 && timestamps.length > 0) {
+            const waitMs = minIntervalMs - (now - timestamps[timestamps.length - 1]);
+            if (waitMs > 0) return { allowed: false, waitSeconds: Math.ceil(waitMs / 1000) };
+        }
+        if (timestamps.length >= maxCount) {
+            const waitMs = windowMs - (now - timestamps[0]);
+            return { allowed: false, waitSeconds: Math.max(1, Math.ceil(waitMs / 1000)) };
+        }
+        return { allowed: true, commit: () => {
+            timestamps.push(now);
+            try { localStorage.setItem(storageKey, JSON.stringify(timestamps)); } catch(e) {}
+        }};
+    }
+
     /* ══════════════ PRESENCE (Online/Offline) ══════════════ */
     const ONLINE_THRESHOLD_MS = 50000; // Heartbeat alle 25s + Puffer
     let presenceHeartbeatInterval = null;
@@ -707,12 +734,24 @@
         resultsSection.classList.remove('hidden');
 
         const users = await loadAllUsersForSearch();
-        searchUserResults = users.filter(u =>
-            (u.username || '').toLowerCase().includes(trimmed) ||
-            (u.displayname || '').toLowerCase().includes(trimmed)
-        );
+        const myBlocked = Array.isArray(userData?.blockedUsers) ? userData.blockedUsers : [];
+        const myUid = auth.currentUser?.uid;
+        const usersMap = {};
+        users.forEach(u => { usersMap[u.uid] = u; });
 
-        searchPostResults = allPosts.filter(p => (p.text || '').toLowerCase().includes(trimmed));
+        searchUserResults = users.filter(u => {
+            const theirBlocked = Array.isArray(u.blockedUsers) ? u.blockedUsers : [];
+            if (myBlocked.includes(u.uid) || theirBlocked.includes(myUid)) return false;
+            return (u.username || '').toLowerCase().includes(trimmed) ||
+                (u.displayname || '').toLowerCase().includes(trimmed);
+        });
+
+        searchPostResults = allPosts.filter(p => {
+            if (myBlocked.includes(p.uid)) return false;
+            const owner = usersMap[p.uid];
+            if (owner && Array.isArray(owner.blockedUsers) && owner.blockedUsers.includes(myUid)) return false;
+            return (p.text || '').toLowerCase().includes(trimmed);
+        });
 
         searchUsersShown = SEARCH_PAGE_SIZE;
         searchPostsShown = SEARCH_PAGE_SIZE;
@@ -1555,6 +1594,32 @@
             screenEl.style.background = '';
         }
     }
+    function applyProfileBlockState(iBlockedThem, theyBlockedMe) {
+        const tabs = document.getElementById('profile-tabs');
+        const banner = document.getElementById('profile-blocked-banner');
+        const bannerText = document.getElementById('profile-blocked-text');
+        const unblockBtn = document.getElementById('profile-unblock-btn');
+        const infoTab = document.getElementById('profile-tab-content-info');
+        const postsTab = document.getElementById('profile-tab-content-posts');
+        if (!iBlockedThem && !theyBlockedMe) {
+            banner.classList.add('hidden');
+            tabs.classList.remove('hidden');
+            window.switchProfileTab('info');
+            return;
+        }
+        tabs.classList.add('hidden');
+        infoTab.classList.add('hidden');
+        postsTab.classList.add('hidden');
+        banner.classList.remove('hidden');
+        if (iBlockedThem) {
+            bannerText.textContent = 'Du hast dieses Profil blockiert. Beitr\u00e4ge und Nachrichten sind ausgeblendet.';
+            unblockBtn.classList.remove('hidden');
+        } else {
+            bannerText.textContent = 'Dieses Profil ist f\u00fcr dich nicht verf\u00fcgbar.';
+            unblockBtn.classList.add('hidden');
+        }
+        if (window.lucide) lucide.createIcons({root: banner});
+    }
     window.currentProfileUid = null;
     let profileUnsub = null;
     let profilePresenceInterval = null;
@@ -1596,16 +1661,30 @@
         document.getElementById('pmodal-following-count').textContent = followingCount;
         const actionsWrap = document.getElementById('pmodal-follow-btn-wrap');
         const reportBtn = document.getElementById('profile-report-btn');
+        const blockBtn = document.getElementById('profile-block-btn');
+        const myBlocked = Array.isArray(userData?.blockedUsers) ? userData.blockedUsers : [];
+        const iBlockedThem = myBlocked.includes(uid);
+        const theyBlockedMe = Array.isArray(u.blockedUsers) && u.blockedUsers.includes(auth.currentUser?.uid);
         if (uid === auth.currentUser?.uid) {
             actionsWrap.innerHTML = `<button class="edit-profile-btn" onclick="closeProfileModal();showEditProfile();"><i data-lucide="pencil" style="width:13px;"></i> Profil bearbeiten</button>`;
             reportBtn.classList.add('hidden');
+            blockBtn.classList.add('hidden');
+        } else if (theyBlockedMe) {
+            actionsWrap.innerHTML = '';
+            reportBtn.classList.add('hidden');
+            blockBtn.classList.add('hidden');
         } else {
             const following = Array.isArray(userData?.following) ? userData.following : [];
             const isFollowing = following.includes(uid);
             actionsWrap.innerHTML = `<button class="follow-btn ${isFollowing?'following':''}" data-uid="${uid}" onclick="toggleFollow('${uid}', event)">${isFollowing?'Folge ich':'Folgen'}</button>
                 <button class="dm-btn-outline" onclick="closeProfileModal();openDmThread('${uid}')">Nachricht</button>`;
             reportBtn.classList.remove('hidden');
+            blockBtn.classList.remove('hidden');
+            blockBtn.innerHTML = iBlockedThem
+                ? `<i data-lucide="ban" style="width:12px;"></i> Entblocken`
+                : `<i data-lucide="ban" style="width:12px;"></i> Blockieren`;
         }
+        applyProfileBlockState(iBlockedThem, theyBlockedMe);
         document.getElementById('pmodal-follower-count').textContent = '\u2026';
         getDocs(query(collection(db, "users"), where("following", "array-contains", uid)))
             .then(snap => { document.getElementById('pmodal-follower-count').textContent = snap.size; })
@@ -1632,17 +1711,20 @@
             linksCard.classList.add('hidden');
         }
 
-        window.switchProfileTab('info');
-        const grid = document.getElementById('pmodal-grid');
-        grid.innerHTML = '';
-        const userPosts = allPosts.filter(p => p.uid === uid);
-        const imgPosts = userPosts.filter(p => p.imageUrl);
-        if (imgPosts.length === 0) {
-            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--sub);font-size:13px;">Noch keine Bilder gepostet.</div>';
-        } else {
-            imgPosts.slice(0, 30).forEach(p => {
-                grid.innerHTML += `<div class="profile-grid-item" onclick="closeProfileModal();openLightbox('${p.imageUrl}')"><img src="${p.imageUrl}" loading="lazy"></div>`;
-            });
+        const isBlockedEitherWay = iBlockedThem || theyBlockedMe;
+        if (!isBlockedEitherWay) {
+            window.switchProfileTab('info');
+            const grid = document.getElementById('pmodal-grid');
+            grid.innerHTML = '';
+            const userPosts = allPosts.filter(p => p.uid === uid);
+            const imgPosts = userPosts.filter(p => p.imageUrl);
+            if (imgPosts.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--sub);font-size:13px;">Noch keine Bilder gepostet.</div>';
+            } else {
+                imgPosts.slice(0, 30).forEach(p => {
+                    grid.innerHTML += `<div class="profile-grid-item" onclick="closeProfileModal();openLightbox('${p.imageUrl}')"><img src="${p.imageUrl}" loading="lazy"></div>`;
+                });
+            }
         }
         const screen = document.getElementById('profile-screen');
         screen.style.display = 'flex';
@@ -1760,6 +1842,34 @@
     }
 
     /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 FOLLOW SYSTEM \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+    /* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 BLOCK SYSTEM \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+    window.toggleBlockUser = async (targetUid) => {
+        if (!auth.currentUser || !targetUid || targetUid === auth.currentUser.uid) return;
+        const blocked = Array.isArray(userData.blockedUsers) ? userData.blockedUsers : [];
+        const isBlocked = blocked.includes(targetUid);
+        if (!isBlocked && !confirm('Diese Person blockieren? Ihr seht dann gegenseitig keine Beitr\u00e4ge und Nachrichten mehr voneinander.')) return;
+        const newBlocked = isBlocked ? blocked.filter(u => u !== targetUid) : [...blocked, targetUid];
+        userData.blockedUsers = newBlocked;
+        try {
+            const updates = { blockedUsers: newBlocked };
+            if (!isBlocked) {
+                const following = Array.isArray(userData.following) ? userData.following : [];
+                if (following.includes(targetUid)) updates.following = following.filter(u => u !== targetUid);
+            }
+            await updateDoc(doc(db, "users", auth.currentUser.uid), updates);
+            if (updates.following) userData.following = updates.following;
+            showToast(isBlocked ? 'Nutzer entblockt' : 'Nutzer blockiert');
+        } catch (e) {
+            userData.blockedUsers = blocked;
+            showToast('Aktion fehlgeschlagen, bitte erneut versuchen.');
+            return;
+        }
+        loadFeed();
+        if (document.getElementById('search-input')?.value.trim()) runSearch(document.getElementById('search-input').value);
+        if (window.currentProfileUid === targetUid) openProfileModal(targetUid);
+        if (currentDmOtherUid === targetUid) updateDmThreadInputState();
+    };
+
     window.toggleFollow = async (targetUid, event) => {
         if (event) event.stopPropagation();
         if (!auth.currentUser || targetUid === auth.currentUser.uid) return;
@@ -2481,6 +2591,13 @@
                         try {
                             const u = uSnap.data() || {};
                             const pid = 'post-'+p.id;
+                            // Beiträge blockierter bzw. blockierender Nutzer ausblenden.
+                            const myBlocked = Array.isArray(userData?.blockedUsers) ? userData.blockedUsers : [];
+                            const theirBlocked = Array.isArray(u.blockedUsers) ? u.blockedUsers : [];
+                            if (myBlocked.includes(p.uid) || theirBlocked.includes(auth.currentUser?.uid)) {
+                                document.getElementById(pid)?.remove();
+                                return;
+                            }
                             const likes = Array.isArray(p.likes) ? p.likes : [];
                             const hasLiked = likes.includes(auth.currentUser?.uid);
                             const isBookmarked = bookmarkedIds.includes(p.id);
@@ -2676,6 +2793,9 @@
     window.addComment = async (postId) => {
         const input = document.getElementById('input-'+postId);
         const text = input.value.trim(); if(!text) return;
+        const rl = checkRateLimit('comment', { minIntervalMs: 4000, maxCount: 20, windowMs: 5 * 60 * 1000 });
+        if (!rl.allowed) return showToast(`Bitte warte noch ${rl.waitSeconds}s, bevor du erneut kommentierst.`);
+        rl.commit();
         input.value = '';
         const postSnap = await getDoc(doc(db,"posts",postId));
         const postData = postSnap.data();
@@ -2907,6 +3027,7 @@
     let currentDmThreadId = null;
     let currentDmThreadStatus = null; // null = no thread yet, 'pending', or 'accepted'
     let currentDmInitiatedBy = null;
+    let currentDmOtherBlockedMe = false; // true, wenn der Gesprächspartner mich blockiert hat
     let dmReturnScreenId = 'main-content';
     let allDmThreads = [];
 
@@ -2989,6 +3110,12 @@
         const otherUser = await getCachedUser(otherUid);
         document.getElementById('dm-thread-avatar').src = otherUser.photoURL || '';
         document.getElementById('dm-thread-name').innerHTML = styledNameHTML(otherUser.displayname, otherUser.nameStyle);
+        // Blockierstatus frisch laden (nicht aus Cache) - entscheidend dafür, ob Senden erlaubt ist.
+        try {
+            const otherSnap = await getDoc(doc(db, 'users', otherUid));
+            const otherFresh = otherSnap.exists() ? otherSnap.data() : {};
+            currentDmOtherBlockedMe = Array.isArray(otherFresh.blockedUsers) && otherFresh.blockedUsers.includes(auth.currentUser.uid);
+        } catch (e) { currentDmOtherBlockedMe = false; }
         swipeToScreen(fromEl, document.getElementById('dm-thread-screen'), 'forward');
         document.getElementById('bottom-nav')?.classList.add('hidden');
         document.getElementById('bottom-fade')?.classList.add('hidden');
@@ -3049,6 +3176,16 @@
         if (!auth.currentUser) return;
         const inputBar = document.getElementById('dm-input-bar');
         const banner = document.getElementById('dm-request-banner');
+        const iAmBlocking = Array.isArray(userData?.blockedUsers) && userData.blockedUsers.includes(currentDmOtherUid);
+        if (iAmBlocking || currentDmOtherBlockedMe) {
+            inputBar.classList.add('hidden');
+            banner.classList.remove('hidden');
+            banner.innerHTML = iAmBlocking
+                ? `<div class="dm-request-text">Du hast diese Person blockiert.</div>
+                   <button onclick="toggleBlockUser('${currentDmOtherUid}')" class="dm-request-btn decline" style="margin-top:8px;">Entblocken</button>`
+                : `<div class="dm-request-text">Ihr k\u00f6nnt euch gerade keine Nachrichten schreiben.</div>`;
+            return;
+        }
         const iAmInitiator = currentDmInitiatedBy === auth.currentUser.uid;
         if (currentDmThreadStatus === 'pending' && !iAmInitiator) {
             inputBar.classList.add('hidden');
@@ -3137,6 +3274,11 @@
         const inputEl = document.getElementById('dm-thread-input');
         const text = inputEl.innerText.trim();
         if (!text || !currentDmThreadId || !currentDmOtherUid) return;
+        const iAmBlocking = Array.isArray(userData?.blockedUsers) && userData.blockedUsers.includes(currentDmOtherUid);
+        if (iAmBlocking || currentDmOtherBlockedMe) {
+            showToast('Nachricht konnte nicht gesendet werden.');
+            return;
+        }
         if (currentDmThreadStatus === 'pending' && currentDmInitiatedBy !== auth.currentUser.uid) {
             showToast('Bitte nimm zuerst die Anfrage an.');
             return;
@@ -3145,6 +3287,9 @@
             showToast('Du hast bereits eine Anfrage gesendet. Warte auf Antwort.');
             return;
         }
+        const rl = checkRateLimit('dm', { minIntervalMs: 1200, maxCount: 40, windowMs: 5 * 60 * 1000 });
+        if (!rl.allowed) { showToast(`Zu schnell - warte ${rl.waitSeconds}s.`); return; }
+        rl.commit();
         const isNewThread = currentDmThreadStatus === null;
         inputEl.innerText = '';
         appendOptimisticDmBubble(text); // instant feedback, doesn't wait for the server round-trip
@@ -3209,10 +3354,13 @@
         const fileInput = document.getElementById('image-input');
         const rawFile = fileInput.files[0];
         if (!txt && !rawFile) return;
+        const rl = checkRateLimit('post', { minIntervalMs: 15000, maxCount: 8, windowMs: 10 * 60 * 1000 });
+        if (!rl.allowed) return showToast(`Bitte warte noch ${rl.waitSeconds}s, bevor du erneut postest.`);
         const shareBtn = document.getElementById('btn-share');
         if (shareBtn.disabled) return; // guard against double-submit
         shareBtn.disabled = true;
         shareBtn.style.opacity = '0.5';
+        rl.commit();
         let imageUrl = null; let videoUrl = null;
         try {
             if (rawFile) {
