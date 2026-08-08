@@ -372,7 +372,7 @@
             <div class="profile-screen-name" id="pmodal-name">&ndash;</div>
             <div class="profile-screen-username" id="pmodal-username">&ndash;</div>
         </div>
-        <div class="profile-tabs">
+        <div class="profile-tabs" id="profile-tabs">
             <button class="profile-tab active" id="profile-tab-info" onclick="switchProfileTab('info')">Info</button>
             <button class="profile-tab" id="profile-tab-posts" onclick="switchProfileTab('posts')">Posts</button>
         </div>
@@ -392,7 +392,15 @@
                 <div class="profile-info-label">Verkn&#252;pfungen</div>
                 <div id="profile-links-list"></div>
             </div>
-            <button class="profile-report-btn hidden" id="profile-report-btn" onclick="openReportModal('user', currentProfileUid, currentProfileUid)"><i data-lucide="flag" style="width:12px;"></i> Profil melden</button>
+            <div class="profile-action-row">
+                <button class="profile-report-btn hidden" id="profile-report-btn" onclick="openReportModal('user', currentProfileUid, currentProfileUid)"><i data-lucide="flag" style="width:12px;"></i> Melden</button>
+                <button class="profile-report-btn hidden" id="profile-block-btn" onclick="toggleBlockUser(currentProfileUid)"><i data-lucide="ban" style="width:12px;"></i> Blockieren</button>
+            </div>
+        </div>
+        <div class="profile-blocked-banner hidden" id="profile-blocked-banner">
+            <i data-lucide="ban" style="width:30px;color:var(--sub);"></i>
+            <div id="profile-blocked-text"></div>
+            <button id="profile-unblock-btn" class="hidden" onclick="toggleBlockUser(currentProfileUid)">Entblocken</button>
         </div>
         <div class="profile-tab-content hidden" id="profile-tab-content-posts">
             <div class="profile-grid" id="pmodal-grid"></div>
