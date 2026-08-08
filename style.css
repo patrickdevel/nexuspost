@@ -759,7 +759,16 @@
         .profile-link-icon { width: 34px; height: 34px; border-radius: 50%; background: var(--ios-input); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .profile-link-label { flex: 1; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .profile-report-btn { background: none; border: none; color: var(--sub); font-size: 12.5px; font-family: inherit; cursor: pointer;
-            width: 100%; text-align: center; margin-top: 16px; padding: 4px; display: flex; align-items: center; justify-content: center; gap: 5px;
+            flex: 1; text-align: center; padding: 9px 4px; display: flex; align-items: center; justify-content: center; gap: 5px;
+            border-radius: 10px; transition: background 0.2s;
+        }
+        .profile-report-btn:hover { background: var(--ios-input); }
+        #profile-block-btn:not(.hidden) { color: var(--danger); }
+        .profile-action-row { display: flex; gap: 8px; margin-top: 16px; }
+        .profile-blocked-banner { text-align: center; padding: 60px 24px; color: var(--sub); display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        #profile-blocked-text { font-size: 14px; max-width: 280px; line-height: 1.5; }
+        #profile-unblock-btn { margin-top: 6px; background: var(--ios-input); color: var(--text); border: none; border-radius: 14px;
+            padding: 10px 22px; font-size: 13.5px; font-weight: 600; font-family: inherit; cursor: pointer;
         }
         .profile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; border-radius: 12px; overflow: hidden; }
         .profile-grid-item { aspect-ratio: 1; overflow: hidden; cursor: pointer; background: var(--ios-input); position: relative; }
