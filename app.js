@@ -438,7 +438,7 @@
         return css;
     }
     function styledNameHTML(name, nameStyle) {
-        const text = name || '\u2013';
+        const text = escapeHtml(name || '\u2013');
         const css = nameStyleCss(nameStyle);
         if (!css) return text;
         const cls = (nameStyle && nameStyle.color1 && nameStyle.color2) ? 'styled-name-gradient' : '';
@@ -1178,7 +1178,7 @@
         if (userData) {
             document.getElementById('settings-avatar').src = userData.photoURL || '';
             const verifiedHtml = userData.verified ? `<img src="${verifiedIcon}" class="verified-badge">` : '';
-            document.getElementById('settings-preview-name').innerHTML = (userData.displayname || '\u2013') + verifiedHtml;
+            document.getElementById('settings-preview-name').innerHTML = escapeHtml(userData.displayname || '\u2013') + verifiedHtml;
             document.getElementById('settings-preview-user').textContent = '@' + (userData.username || '\u2013');
         }
         document.getElementById('dark-toggle').classList.toggle('on', document.body.classList.contains('dark'));
