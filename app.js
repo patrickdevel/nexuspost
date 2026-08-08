@@ -418,6 +418,12 @@
         { id: 'display', label: 'Display', family: "'Syne', sans-serif" },
         { id: 'rounded', label: 'Rund', family: "'Baloo 2', sans-serif" },
         { id: 'mono', label: 'Mono', family: "'Space Mono', monospace" },
+        { id: 'serif', label: 'Serif', family: "'Playfair Display', serif" },
+        { id: 'elegant', label: 'Elegant', family: "'Cormorant Garamond', serif" },
+        { id: 'script', label: 'Handschrift', family: "'Caveat', cursive" },
+        { id: 'condensed', label: 'Schmal', family: "'Bebas Neue', sans-serif" },
+        { id: 'retro', label: 'Retro', family: "'Press Start 2P', monospace" },
+        { id: 'slab', label: 'Slab', family: "'Roboto Slab', serif" },
     ];
     function nameStyleCss(nameStyle) {
         if (!nameStyle) return '';
@@ -651,12 +657,126 @@
             .replace(/#(\w+)/g, '<span class="hashtag" onclick="searchHashtag(\'#$1\')">#$1</span>')
             .replace(/@(\w+)/g, '<span class="mention">@$1</span>');
     }
+    window.expandSearch = () => {
+        document.getElementById('nav-logo').classList.add('hidden');
+        document.getElementById('nav-actions-items').style.display = 'none';
+        document.getElementById('nav-more-btn').style.display = 'none';
+        document.getElementById('search-wrapper').classList.add('active');
+        document.getElementById('btn-close-search').classList.remove('hidden');
+        document.getElementById('search-input').focus();
+    };
+    window.collapseSearch = () => {
+        document.getElementById('search-wrapper').classList.remove('active');
+        document.getElementById('nav-logo').classList.remove('hidden');
+        document.getElementById('nav-actions-items').style.display = 'flex';
+        document.getElementById('btn-close-search').classList.add('hidden');
+        document.getElementById('search-input').value = '';
+        document.getElementById('search-results-section').classList.add('hidden');
+        document.getElementById('feed').classList.remove('hidden');
+        adaptNavbar();
+    };
+
+    // ── Suche: Nutzer + Beiträge, jeweils 2 initial mit "Mehr anzeigen" ──
+    const SEARCH_PAGE_SIZE = 2;
+    let searchUserResults = [];
+    let searchPostResults = [];
+    let searchUsersShown = SEARCH_PAGE_SIZE;
+    let searchPostsShown = SEARCH_PAGE_SIZE;
+    let allUsersForSearch = null; // lazy-loaded cache of all users for client-side search
+    let searchDebounce;
+
+    async function loadAllUsersForSearch() {
+        if (allUsersForSearch) return allUsersForSearch;
+        const snap = await getDocs(collection(db, "users"));
+        const list = [];
+        snap.forEach(d => list.push({ uid: d.id, ...d.data() }));
+        allUsersForSearch = list;
+        return list;
+    }
+
+    async function runSearch(term) {
+        const trimmed = term.trim().toLowerCase();
+        const resultsSection = document.getElementById('search-results-section');
+        const feed = document.getElementById('feed');
+        if (!trimmed) {
+            resultsSection.classList.add('hidden');
+            feed.classList.remove('hidden');
+            return;
+        }
+        feed.classList.add('hidden');
+        resultsSection.classList.remove('hidden');
+
+        const users = await loadAllUsersForSearch();
+        searchUserResults = users.filter(u =>
+            (u.username || '').toLowerCase().includes(trimmed) ||
+            (u.displayname || '').toLowerCase().includes(trimmed)
+        );
+
+        searchPostResults = allPosts.filter(p => (p.text || '').toLowerCase().includes(trimmed));
+
+        searchUsersShown = SEARCH_PAGE_SIZE;
+        searchPostsShown = SEARCH_PAGE_SIZE;
+        renderSearchResults();
+    }
+
+    function renderSearchResults() {
+        const usersBlock = document.getElementById('search-users-block');
+        const postsBlock = document.getElementById('search-posts-block');
+        const emptyState = document.getElementById('search-empty-state');
+        const usersList = document.getElementById('search-users-list');
+        const postsList = document.getElementById('search-posts-list');
+        const usersMoreBtn = document.getElementById('search-users-more-btn');
+        const postsMoreBtn = document.getElementById('search-posts-more-btn');
+
+        const hasUsers = searchUserResults.length > 0;
+        const hasPosts = searchPostResults.length > 0;
+        usersBlock.classList.toggle('hidden', !hasUsers);
+        postsBlock.classList.toggle('hidden', !hasPosts);
+        emptyState.classList.toggle('hidden', hasUsers || hasPosts);
+
+        if (hasUsers) {
+            const visible = searchUserResults.slice(0, searchUsersShown);
+            usersList.innerHTML = visible.map(u => {
+                const isSelf = u.uid === auth.currentUser?.uid;
+                const following = Array.isArray(userData?.following) ? userData.following : [];
+                const isFollowing = following.includes(u.uid);
+                return `<div class="following-row" onclick="openProfileModal('${u.uid}')">
+                    <img src="${u.photoURL||''}" class="following-row-avatar">
+                    <div class="following-row-info">
+                        <div class="following-row-name">${styledNameHTML(u.displayname, u.nameStyle)} ${u.verified?`<img src="${verifiedIcon}" style="width:14px;height:14px;">`:''}</div>
+                        <div class="following-row-sub">@${u.username||'\u2013'}</div>
+                    </div>
+                    ${isSelf ? '' : `<button class="follow-btn ${isFollowing?'following':''}" data-uid="${u.uid}" onclick="toggleFollow('${u.uid}', event)">${isFollowing?'Folge ich':'Folgen'}</button>`}
+                </div>`;
+            }).join('');
+            usersMoreBtn.classList.toggle('hidden', searchUsersShown >= searchUserResults.length);
+            if(window.lucide) lucide.createIcons({root: usersList});
+        }
+
+        if (hasPosts) {
+            const visible = searchPostResults.slice(0, searchPostsShown);
+            postsList.innerHTML = '';
+            visible.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'card';
+                div.id = 'search-post-' + p.id;
+                postsList.appendChild(div);
+                getCachedUser(p.uid).then(u => {
+                    div.innerHTML = renderPostHTML(p, u || {});
+                    if(window.lucide) lucide.createIcons({root: div});
+                });
+            });
+            postsMoreBtn.classList.toggle('hidden', searchPostsShown >= searchPostResults.length);
+        }
+    }
+    window.showMoreSearchUsers = () => { searchUsersShown += SEARCH_PAGE_SIZE; renderSearchResults(); };
+    window.showMoreSearchPosts = () => { searchPostsShown += SEARCH_PAGE_SIZE; renderSearchResults(); };
+
     window.searchHashtag = (tag) => {
         switchTab('feed');
         document.getElementById('search-input').value = tag;
-        document.querySelectorAll('#feed .card').forEach(c => c.style.display = c.innerText.toLowerCase().includes(tag.toLowerCase()) ? '' : 'none');
         expandSearch();
-        showToast(`Zeige Posts mit ${tag}`);
+        runSearch(tag);
     };
     window.switchTab = (tab) => {
         const wasTrending = document.getElementById('tab-trending').classList.contains('active');
@@ -665,6 +785,7 @@
         document.getElementById('tab-trending').classList.toggle('active', tab === 'trending');
         document.getElementById('feed').classList.toggle('hidden', tab !== 'feed');
         document.getElementById('trending-section').classList.toggle('hidden', tab !== 'trending');
+        document.getElementById('search-results-section').classList.add('hidden');
         const activeEl = document.getElementById(tab === 'feed' ? 'feed' : 'trending-section');
         activeEl.classList.remove('tab-slide-in-right', 'tab-slide-in-left');
         void activeEl.offsetWidth;
@@ -698,26 +819,10 @@
         </div>`;
         if(window.lucide) lucide.createIcons({root: sec});
     }
-    window.expandSearch = () => {
-        document.getElementById('nav-logo').classList.add('hidden');
-        document.getElementById('nav-actions-items').style.display = 'none';
-        document.getElementById('nav-more-btn').style.display = 'none';
-        document.getElementById('search-wrapper').classList.add('active');
-        document.getElementById('btn-close-search').classList.remove('hidden');
-        document.getElementById('search-input').focus();
-    };
-    window.collapseSearch = () => {
-        document.getElementById('search-wrapper').classList.remove('active');
-        document.getElementById('nav-logo').classList.remove('hidden');
-        document.getElementById('nav-actions-items').style.display = 'flex';
-        document.getElementById('btn-close-search').classList.add('hidden');
-        document.getElementById('search-input').value = '';
-        document.querySelectorAll('.card').forEach(p => p.style.display = '');
-        adaptNavbar();
-    };
     document.getElementById('search-input').oninput = (e) => {
-        const term = e.target.value.toLowerCase();
-        document.querySelectorAll('#feed .card').forEach(c => c.style.display = c.innerText.toLowerCase().includes(term) ? '' : 'none');
+        const term = e.target.value;
+        clearTimeout(searchDebounce);
+        searchDebounce = setTimeout(() => runSearch(term), 250);
     };
     window.toggleDarkMode = () => {
         const isDark = document.body.classList.toggle('dark');
@@ -894,8 +999,8 @@
         const { r, g, b } = hexToRgb(hex);
         return rgbToHsv(r, g, b);
     }
-    const CP_SWATCH_MAP = { accent: 'theme-dot-custom', bgColor: 'bg-color-input', bgFrom: 'bg-gradient-from', bgTo: 'bg-gradient-to', profilePrimary: 'schema-primary-swatch', profileAccent: 'schema-accent-swatch' };
-    const CP_DEFAULTS = { accent: '#1877f2', bgColor: '#f0f2f5', bgFrom: '#1877f2', bgTo: '#8b5cf6', profilePrimary: '#1877f2', profileAccent: '#8b5cf6', nameColor: '#1877f2' };
+    const CP_SWATCH_MAP = { accent: 'theme-dot-custom', bgColor: 'bg-color-input', bgFrom: 'bg-gradient-from', bgTo: 'bg-gradient-to', profilePrimary: 'schema-primary-swatch', profileAccent: 'schema-accent-swatch', bannerColor: 'banner-color-swatch' };
+    const CP_DEFAULTS = { accent: '#1877f2', bgColor: '#f0f2f5', bgFrom: '#1877f2', bgTo: '#8b5cf6', profilePrimary: '#1877f2', profileAccent: '#8b5cf6', nameColor: '#1877f2', bannerColor: '#1877f2' };
     let cpTarget = null, cpH = 0, cpS = 1, cpV = 1, cpOriginalHex = '#1877f2';
     function cpCurrentHex() {
         const { r, g, b } = hsvToRgb(cpH, cpS, cpV);
@@ -925,6 +1030,13 @@
             currentNameStyle.preset = 'custom'; currentNameStyle.color1 = hex; currentNameStyle.color2 = null;
             renderNameStylePresetGrid();
             updateNameStyleLivePreview();
+        } else if (cpTarget === 'bannerColor') {
+            const el = document.getElementById(CP_SWATCH_MAP.bannerColor);
+            if (el) el.style.background = hex;
+            if (editBannerMode === 'color') {
+                const wrap = document.getElementById('edit-banner-wrap');
+                if (wrap) wrap.style.background = hex;
+            }
         }
     }
     function cpRender() {
@@ -1091,6 +1203,27 @@
         const daysLeft = Math.ceil(remainingMs / DAY_MS);
         return `\u00c4nderbar in ${daysLeft} Tag${daysLeft !== 1 ? 'en' : ''}`;
     }
+    // Nutzername: max. USERNAME_CHANGE_LIMIT Änderungen innerhalb der letzten USERNAME_CHANGE_WINDOW_DAYS Tage (rollierendes Fenster).
+    const USERNAME_CHANGE_LIMIT = 2;
+    const USERNAME_CHANGE_WINDOW_DAYS = 14;
+    function getRecentUsernameChanges(history) {
+        const DAY_MS = 24 * 60 * 60 * 1000;
+        const cutoff = Date.now() - USERNAME_CHANGE_WINDOW_DAYS * DAY_MS;
+        return (Array.isArray(history) ? history : []).filter(ts => ts > cutoff).sort((a, b) => a - b);
+    }
+    function formatUsernameChangeHint(history) {
+        const recent = getRecentUsernameChanges(history);
+        const DAY_MS = 24 * 60 * 60 * 1000;
+        const remaining = USERNAME_CHANGE_LIMIT - recent.length;
+        if (remaining > 0) {
+            return `Du kannst deinen Nutzernamen noch ${remaining}\u00d7 in den n\u00e4chsten 14 Tagen \u00e4ndern.`;
+        }
+        // Limit erreicht: Datum nennen, ab dem die älteste Änderung aus dem 14-Tage-Fenster fällt.
+        const oldest = recent[0];
+        const freeAt = new Date(oldest + USERNAME_CHANGE_WINDOW_DAYS * DAY_MS);
+        const dateStr = freeAt.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        return `\u00c4nderungslimit erreicht (${USERNAME_CHANGE_LIMIT}\u00d7 in 14 Tagen). Wieder m\u00f6glich ab ${dateStr}.`;
+    }
     let currentNameStyle = { preset: null, color1: null, color2: null, font: 'default' };
     let editBannerMode = 'color';
     window.setBannerMode = (mode) => {
@@ -1098,6 +1231,9 @@
         document.getElementById('banner-mode-color-btn').classList.toggle('active', mode === 'color');
         document.getElementById('banner-mode-image-btn').classList.toggle('active', mode === 'image');
         document.getElementById('profile-banner-edit-btn').classList.toggle('hidden', mode !== 'image');
+        // Die Bannerfarbe-Auswahl erscheint nur, wenn "Farbe" gewählt ist.
+        const colorRow = document.getElementById('banner-color-row');
+        if (colorRow) colorRow.classList.toggle('hidden', mode !== 'color');
         updateEditBannerPreview();
     };
     function updateEditBannerPreview() {
@@ -1109,15 +1245,21 @@
             wrap.style.background = '';
         } else {
             img.classList.add('hidden');
-            const primary = getSwatchColor('schema-primary-swatch') || '#1877f2';
-            const accent = getSwatchColor('schema-accent-swatch') || '#8b5cf6';
-            wrap.style.background = `linear-gradient(135deg, ${primary}, ${accent})`;
+            const bannerColor = getSwatchColor('banner-color-swatch') || '#1877f2';
+            wrap.style.background = bannerColor;
         }
     }
     let currentProfileBgMode = 'default';
     window.setProfileBgMode = (mode) => {
         currentProfileBgMode = mode;
         ['default','color','gradient'].forEach(m => document.getElementById('profile-bgmode-'+m+'-btn')?.classList.toggle('active', m === mode));
+        // Farbwahl nur zeigen, wenn nötig: bei "Standard" keine, bei "Farbe" nur Primär, bei "Farbverlauf" beide.
+        const colorsRow = document.getElementById('profile-schema-colors-row');
+        const accentWrap = document.getElementById('schema-accent-wrap');
+        const primaryLabel = document.getElementById('schema-primary-label');
+        if (colorsRow) colorsRow.classList.toggle('hidden', mode === 'default');
+        if (accentWrap) accentWrap.classList.toggle('hidden', mode !== 'gradient');
+        if (primaryLabel) primaryLabel.textContent = mode === 'gradient' ? 'Prim\u00e4r' : 'Farbe';
         updateEditProfileBgPreview();
     };
     function updateEditProfileBgPreview() {
@@ -1138,11 +1280,12 @@
         const dnHint = document.getElementById('displayname-cooldown-hint');
         const unHint = document.getElementById('username-cooldown-hint');
         const dnMsg = formatCooldownHint(userData.displaynameChangedAt, 7);
-        const unMsg = formatCooldownHint(userData.usernameChangedAt, 14);
         dnHint.textContent = dnMsg || '';
         dnHint.style.display = dnMsg ? 'block' : 'none';
-        unHint.textContent = unMsg || '';
-        unHint.style.display = unMsg ? 'block' : 'none';
+        // Nutzername-Hinweis wird immer angezeigt: wie oft noch änderbar bzw. bis wann gesperrt.
+        const unMsg = formatUsernameChangeHint(userData.usernameChangeHistory);
+        unHint.textContent = unMsg;
+        unHint.style.display = 'block';
 
         currentNameStyle = userData.nameStyle ? { ...userData.nameStyle } : { preset: null, color1: null, color2: null, font: 'default' };
         renderNameStyleRowPreview();
@@ -1150,6 +1293,7 @@
         const schema = userData.profileSchema || randomProfileSchema();
         setSwatchColor('schema-primary-swatch', schema.primary || '#1877f2');
         setSwatchColor('schema-accent-swatch', schema.accent || '#8b5cf6');
+        setSwatchColor('banner-color-swatch', userData.bannerColor || '#1877f2');
         window.setBannerMode(userData.bannerMode === 'image' ? 'image' : 'color');
         window.setProfileBgMode(schema.bgMode || 'default');
 
@@ -1287,12 +1431,11 @@
                 return showToast(`Anzeigename erst in ${daysLeft} Tag${daysLeft !== 1 ? 'en' : ''} wieder \u00e4nderbar`);
             }
         }
-        if (unChanged && userData.usernameChangedAt) {
-            const elapsed = now - userData.usernameChangedAt;
-            if (elapsed < 14 * DAY_MS) {
-                const daysLeft = Math.ceil((14 * DAY_MS - elapsed) / DAY_MS);
-                return showToast(`Nutzername erst in ${daysLeft} Tag${daysLeft !== 1 ? 'en' : ''} wieder \u00e4nderbar`);
-            }
+        let recentUsernameChanges = getRecentUsernameChanges(userData.usernameChangeHistory);
+        if (unChanged && recentUsernameChanges.length >= USERNAME_CHANGE_LIMIT) {
+            const freeAt = new Date(recentUsernameChanges[0] + USERNAME_CHANGE_WINDOW_DAYS * DAY_MS);
+            const dateStr = freeAt.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            return showToast(`\u00c4nderungslimit erreicht (${USERNAME_CHANGE_LIMIT}\u00d7 in 14 Tagen). Wieder m\u00f6glich ab ${dateStr}.`);
         }
         if (unChanged) {
             const q = query(collection(db, "users"), where("username", "==", un));
@@ -1306,11 +1449,16 @@
             accent: getSwatchColor('schema-accent-swatch') || '#8b5cf6',
             bgMode: currentProfileBgMode
         };
-        const nameStyle = currentNameStyle.color1 ? { ...currentNameStyle } : null;
+        const hasCustomFont = currentNameStyle.font && currentNameStyle.font !== 'default';
+        const nameStyle = (currentNameStyle.color1 || hasCustomFont) ? { ...currentNameStyle } : null;
+        const bannerColor = getSwatchColor('banner-color-swatch') || '#1877f2';
 
-        const updates = { displayname: dn, username: un, bio, pronouns, links, nameStyle, profileSchema, bannerMode: editBannerMode };
+        const updates = { displayname: dn, username: un, bio, pronouns, links, nameStyle, profileSchema, bannerMode: editBannerMode, bannerColor };
         if (dnChanged) updates.displaynameChangedAt = now;
-        if (unChanged) updates.usernameChangedAt = now;
+        if (unChanged) {
+            updates.usernameChangedAt = now;
+            updates.usernameChangeHistory = [...recentUsernameChanges, now];
+        }
 
         await updateDoc(doc(db, "users", auth.currentUser.uid), updates);
         Object.assign(userData, updates);
@@ -1391,8 +1539,8 @@
         } else {
             imgEl.classList.add('hidden');
             imgEl.src = '';
-            const schema = u.profileSchema || { primary: '#1877f2', accent: '#8b5cf6' };
-            wrapEl.style.background = `linear-gradient(135deg, ${schema.primary}, ${schema.accent})`;
+            // Der Banner hat eine eigene, einzelne Farbe – unabhängig vom Profilschema/-hintergrund.
+            wrapEl.style.background = u.bannerColor || '#1877f2';
         }
     }
     function applyProfileScreenBg(screenEl, u) {
@@ -1432,8 +1580,14 @@
         if (profileUnsub) { profileUnsub(); profileUnsub = null; }
         profileUnsub = onSnapshot(doc(db, "users", uid), (snap) => {
             if (!snap.exists()) return;
-            profileLastActiveValue = snap.data().lastActive || null;
+            const fresh = snap.data();
+            profileLastActiveValue = fresh.lastActive || null;
             updatePresenceDot('profile-presence-dot', profileLastActiveValue);
+            document.getElementById('pmodal-name').innerHTML = styledNameHTML(fresh.displayname || '\u2013', fresh.nameStyle) + (fresh.verified ? ` <img src="${verifiedIcon}" style="width:18px;height:18px;">` : '');
+            if (auth.currentUser?.email === adminEmail) {
+                document.getElementById('menu-profile').innerHTML = `<button onclick="toggleVerify('${uid}',${fresh.verified||false});toggleAdminMenu('profile')"><i data-lucide="shield-check" style="width:15px;"></i> ${fresh.verified?'Ent-verifizieren':'Verifizieren'}</button>`;
+                if (window.lucide) lucide.createIcons({root: document.getElementById('menu-profile')});
+            }
         }, () => {});
         if (profilePresenceInterval) clearInterval(profilePresenceInterval);
         profilePresenceInterval = setInterval(() => updatePresenceDot('profile-presence-dot', profileLastActiveValue), 8000);
@@ -1456,6 +1610,17 @@
         getDocs(query(collection(db, "users"), where("following", "array-contains", uid)))
             .then(snap => { document.getElementById('pmodal-follower-count').textContent = snap.size; })
             .catch(() => { document.getElementById('pmodal-follower-count').textContent = '0'; });
+
+        const adminMenuBtn = document.getElementById('profile-admin-menu-btn');
+        const adminMenu = document.getElementById('menu-profile');
+        if (auth.currentUser?.email === adminEmail) {
+            adminMenuBtn.classList.remove('hidden');
+            adminMenu.innerHTML = `<button onclick="toggleVerify('${uid}',${u.verified||false});toggleAdminMenu('profile')"><i data-lucide="shield-check" style="width:15px;"></i> ${u.verified?'Ent-verifizieren':'Verifizieren'}</button>`;
+        } else {
+            adminMenuBtn.classList.add('hidden');
+            adminMenu.classList.add('hidden');
+            adminMenu.innerHTML = '';
+        }
 
         const linksCard = document.getElementById('profile-links-card');
         const linksList = document.getElementById('profile-links-list');
@@ -1493,6 +1658,7 @@
         document.body.style.overflow = '';
         if (profileUnsub) { profileUnsub(); profileUnsub = null; }
         if (profilePresenceInterval) { clearInterval(profilePresenceInterval); profilePresenceInterval = null; }
+        document.getElementById('menu-profile')?.classList.add('hidden');
     };
     window.switchProfileTab = (tab) => {
         document.getElementById('profile-tab-info').classList.toggle('active', tab === 'info');
@@ -1800,7 +1966,7 @@
                     updateDoc(doc(db, "users", user.uid), { profileSchema: userData.profileSchema, bannerMode: userData.bannerMode }).catch(() => {});
                 }
             } else {
-                userData = { username: "user_"+Math.floor(Math.random()*9999), displayname: user.displayName, photoURL: user.photoURL, email: user.email, verified: (user.email === adminEmail), bio: '', createdAt: serverTimestamp(), profileSchema: randomProfileSchema(), bannerMode: 'color' };
+                userData = { username: "user_"+Math.floor(Math.random()*9999), displayname: user.displayName, photoURL: user.photoURL, email: user.email, verified: (user.email === adminEmail), bio: '', createdAt: serverTimestamp(), profileSchema: randomProfileSchema(), bannerMode: 'color', bannerColor: '#1877f2' };
                 await setDoc(doc(db, "users", user.uid), userData);
             }
             startPresenceHeartbeat();
